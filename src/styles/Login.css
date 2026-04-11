@@ -1,0 +1,20 @@
+.login {
+  max-width: 300px;
+  margin: 80px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.login input {
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+.login button {
+  background: #2b7a3d;
+  color: white;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+}

@@ -1,0 +1,91 @@
+.home.dark {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: #e2e8f0;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 100px 20px 60px;
+}
+
+.hero h1 {
+  font-size: 2.8rem;
+}
+
+.hero p {
+  margin-top: 10px;
+  opacity: 0.7;
+}
+
+.hero-actions {
+  margin-top: 30px;
+}
+
+.primary,
+.secondary {
+  padding: 12px 22px;
+  border-radius: 25px;
+  text-decoration: none;
+  margin: 6px;
+  display: inline-block;
+}
+
+.primary {
+  background: #22c55e;
+  color: white;
+  font-weight: bold;
+}
+
+.secondary {
+  border: 1px solid #22c55e;
+  color: #22c55e;
+}
+
+/* FEATURES */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 40px;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 25px;
+  border-radius: 18px;
+  text-align: center;
+  transition: 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  border-color: #22c55e;
+}
+
+.icon {
+  margin-bottom: 10px;
+  color: #22c55e;
+}
+
+.icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* CTA */
+.cta {
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.cta a {
+  background: #22c55e;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  text-decoration: none;
+}

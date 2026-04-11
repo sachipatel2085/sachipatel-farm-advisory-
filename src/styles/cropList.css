@@ -1,0 +1,119 @@
+.crop-main {
+  max-width: 1050px;
+  margin: auto;
+  padding: 20px;
+  gap: 18px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.crop-page {
+  max-width: 1050px;
+  margin: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.crop-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.primary-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.crop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+.crop-card-large {
+  background: white;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.crop-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stage {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: white;
+  text-transform: capitalize;
+}
+
+.stage.early {
+  background: #2196f3;
+}
+.stage.vegetative {
+  background: #4caf50;
+}
+.stage.flowering {
+  background: #ff9800;
+}
+.stage.harvest {
+  background: #9c27b0;
+}
+
+.farm-name {
+  color: #555;
+  font-size: 14px;
+}
+
+.progress-wrap {
+  background: #eee;
+  height: 8px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4caf50, #81c784);
+}
+
+.crop-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #444;
+}
+
+.crop-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.crop-actions button {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.crop-actions .danger {
+  background: #e53935;
+  color: white;
+}

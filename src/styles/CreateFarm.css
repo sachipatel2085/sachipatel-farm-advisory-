@@ -1,0 +1,47 @@
+.create-farm-container {
+  max-width: 450px;
+  margin: 60px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.create-farm-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #27ae60;
+}
+
+.farm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.farm-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+.farm-form input:focus {
+  outline: none;
+  border-color: #27ae60;
+}
+
+.farm-form button {
+  margin-top: 10px;
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.farm-form button:hover {
+  background: #219150;
+}
