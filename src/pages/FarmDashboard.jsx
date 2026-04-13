@@ -3,7 +3,7 @@ import api from "../api/axios";
 import Breadcrumb from "../components/Breadcrumb";
 import "../styles/FarmDashboard.css";
 import CropList from "../components/CropList";
-import { Leaf, Droplets, Activity, Sun } from "lucide-react";
+import { Leaf, Droplets, Activity, Sun, Wheat } from "lucide-react";
 
 const FarmDashboard = () => {
   const [farms, setFarms] = useState([]);
@@ -28,7 +28,9 @@ const FarmDashboard = () => {
     <div className="dashboard-container dark">
       <Breadcrumb />
 
-      <h1>🌾 Farm Insights</h1>
+      <h1 className="page-title">
+        <Wheat size={22} /> Farm Insights
+      </h1>
 
       {/* 🔥 TOP STATS */}
       <div className="stats-grid">

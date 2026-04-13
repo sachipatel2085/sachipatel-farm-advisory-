@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Tractor, Leaf, IndianRupee, LineChart } from "lucide-react";
+import { Tractor, Leaf, IndianRupee, LineChart, Wheat } from "lucide-react";
 import "../styles/dashboard.css";
 
 export default function Dashboard() {
@@ -16,7 +16,9 @@ export default function Dashboard() {
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <h1>🌾 Farm Dashboard</h1>
+        <h1 className="page-title">
+          <Wheat size={22} /> Farm Dashboard
+        </h1>
         <p>Welcome back! Here's your farm overview</p>
       </div>
 

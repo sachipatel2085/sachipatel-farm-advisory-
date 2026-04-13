@@ -6,7 +6,7 @@ import CreateFarmModal from "../components/CreateFarm";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 import { useNavigate } from "react-router-dom";
 import Breadcrumb from "../components/Breadcrumb";
-import { Plus, Pencil, Trash2, BarChart3, MapPin } from "lucide-react";
+import { Plus, Pencil, Trash2, BarChart3, MapPin, Wheat } from "lucide-react";
 
 const FarmPage = () => {
   const [farms, setFarms] = useState([]);
@@ -50,7 +50,9 @@ const FarmPage = () => {
           <Breadcrumb />
 
           <div className="farm-header">
-            <h1>🌾 My Farms</h1>
+            <h1 className="page-title">
+              <Wheat size={22} /> My Farms
+            </h1>
             <button
               className="add-farm-btn"
               onClick={() => setShowCreate(true)}
