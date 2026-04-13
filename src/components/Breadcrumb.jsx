@@ -35,18 +35,20 @@ const Breadcrumb = () => {
   return (
     <div className="breadcrumb">
       <Link to="/">Home</Link>
-
       {parts.map((p, i) => {
         path += `/${p}`;
         const label = names[p] || breadcrumbMap[p] || p;
+        const isLast = i === parts.length - 1;
 
         return (
-          <span key={i}>
+          <span key={i} className="crumb">
             {" › "}
-            <Link to={path}>{label}</Link>
+            <Link to={path} className={isLast ? "active" : ""}>
+              {label}
+            </Link>
           </span>
         );
-      })}
+      })}{" "}
     </div>
   );
 };

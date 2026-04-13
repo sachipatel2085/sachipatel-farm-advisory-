@@ -1,0 +1,37 @@
+/* PAGE WRAPPER */
+.crop-main.dark {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #020617);
+  color: #e2e8f0;
+}
+
+/* INNER CONTAINER */
+.crop-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* HEADER */
+.crop-header {
+  margin-bottom: 20px;
+}
+
+.crop-header h1 {
+  font-size: 1.6rem;
+}
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-title svg {
+  color: #22c55e;
+}
+
+.crop-header p {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin-top: 5px;
+}
