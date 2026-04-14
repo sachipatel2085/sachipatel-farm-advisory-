@@ -8,6 +8,7 @@ import EditTransactionModal from "../components/EditTransactionModal";
 import Breadcrumb from "../components/Breadcrumb";
 import { Sprout, MapPin, Activity, Wallet, History } from "lucide-react";
 import "../styles/cropDetails.css";
+import HarvestModal from "../components/HarvestModal";
 
 const CropDetails = () => {
   const { id } = useParams();
@@ -19,6 +20,7 @@ const CropDetails = () => {
   const [showExpense, setShowExpense] = useState(null);
   const [editTxn, setEditTxn] = useState(null);
   const [selectedTxn, setSelectedTxn] = useState(null);
+  const [harvestCropState, setHarvestCropState] = useState(null);
 
   const loadCrop = async () => {
     const res = await api.get(`/crops/${id}`);
@@ -159,13 +161,20 @@ const CropDetails = () => {
         </h3>
 
         <div className="timeline">
-          {crop.history.map((h, i) => (
-            <div key={i} className="timeline-item">
-              <strong>{h.title}</strong>
-              <p>{h.note}</p>
-              <small>{new Date(h.date).toLocaleDateString()}</small>
-            </div>
-          ))}
+          {crop.history.map((h, i) => {
+            const isHarvest = h.title.toLowerCase().includes("harvest");
+
+            return (
+              <div
+                key={i}
+                className={`timeline-item ${isHarvest ? "harvest" : ""}`}
+              >
+                <strong>{h.title}</strong>
+                <p>{h.note}</p>
+                <small>{new Date(h.date).toLocaleDateString()}</small>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -174,6 +183,12 @@ const CropDetails = () => {
         <button onClick={() => setEditCrop(crop)}>Edit</button>
         <button className="danger" onClick={() => setDeleteCrop(crop)}>
           Delete
+        </button>
+        <button
+          className="harvest-btn"
+          onClick={() => setHarvestCropState(crop)}
+        >
+          Harvest
         </button>
       </div>
 
@@ -207,6 +222,12 @@ const CropDetails = () => {
         cropId={id}
         transaction={selectedTxn}
         onClose={() => setSelectedTxn(null)}
+        onSuccess={loadCrop}
+      />
+      <HarvestModal
+        isOpen={!!harvestCropState}
+        crop={harvestCropState}
+        onClose={() => setHarvestCropState(null)}
         onSuccess={loadCrop}
       />
     </div>

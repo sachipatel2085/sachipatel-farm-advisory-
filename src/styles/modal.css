@@ -162,6 +162,7 @@
 /* TEXT */
 .modal-box p {
   font-size: 0.85rem;
+  margin-bottom: 10px;
   opacity: 0.8;
 }
 
@@ -199,4 +200,28 @@
   .txn-options {
     flex-direction: column;
   }
+}
+
+/* HARVEST SPECIAL */
+.modal-box h2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Highlight crop name */
+.modal-box strong {
+  color: #22c55e;
+}
+
+/* Input spacing fix */
+.modal-form label {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.modal-box h2 svg {
+  color: #22c55e;
 }

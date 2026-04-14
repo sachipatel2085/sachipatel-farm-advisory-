@@ -202,6 +202,16 @@
   border-radius: 8px;
 }
 
+/* HARVEST HIGHLIGHT */
+.timeline-item.harvest {
+  border-left: 3px solid #22c55e;
+  padding-left: 10px;
+}
+
+/* subtle green glow */
+.timeline-item.harvest strong {
+  color: #22c55e;
+}
 /* ACTION BUTTONS */
 .crop-actions {
   display: flex;
@@ -224,4 +234,20 @@
 
 .crop-actions .danger {
   background: #ef4444;
+}
+
+.harvest-btn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.harvest-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(34, 197, 94, 0.3);
 }
