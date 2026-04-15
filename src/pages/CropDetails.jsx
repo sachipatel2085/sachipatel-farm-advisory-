@@ -9,6 +9,8 @@ import Breadcrumb from "../components/Breadcrumb";
 import { Sprout, MapPin, Activity, Wallet, History } from "lucide-react";
 import "../styles/cropDetails.css";
 import HarvestModal from "../components/HarvestModal";
+import AddCropHistoryModal from "../components/AddCropHistoryModal";
+import EditCropHistoryModal from "../components/EditCropHistoryModal";
 
 const CropDetails = () => {
   const { id } = useParams();
@@ -21,15 +23,23 @@ const CropDetails = () => {
   const [editTxn, setEditTxn] = useState(null);
   const [selectedTxn, setSelectedTxn] = useState(null);
   const [harvestCropState, setHarvestCropState] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [showHistoryModal, setShowHistoryModal] = useState(null);
+  const [selectedHistory, setSelectedHistory] = useState(null);
 
-  const loadCrop = async () => {
-    const res = await api.get(`/crops/${id}`);
-    setCrop(res.data);
+  const loadHistory = async () => {
+    const res = await api.get(`/crop-history/${id}`);
+    setHistory(res.data);
   };
 
   useEffect(() => {
     loadCrop();
+    loadHistory();
   }, []);
+  const loadCrop = async () => {
+    const res = await api.get(`/crops/${id}`);
+    setCrop(res.data);
+  };
 
   if (!crop) return <p className="loading">Loading...</p>;
 
@@ -156,25 +166,31 @@ const CropDetails = () => {
 
       {/* HISTORY */}
       <div className="section card">
-        <h3 className="section-title">
-          <History size={18} /> Crop History
-        </h3>
+        <div className="section-header">
+          <h3 className="section-title">
+            <History size={18} /> Crop History
+          </h3>
+
+          <button
+            className="add-transaction-btn"
+            onClick={() => setShowHistoryModal(crop)}
+          >
+            + Add History
+          </button>
+        </div>
 
         <div className="timeline">
-          {crop.history.map((h, i) => {
-            const isHarvest = h.title.toLowerCase().includes("harvest");
-
-            return (
-              <div
-                key={i}
-                className={`timeline-item ${isHarvest ? "harvest" : ""}`}
-              >
-                <strong>{h.title}</strong>
-                <p>{h.note}</p>
-                <small>{new Date(h.date).toLocaleDateString()}</small>
-              </div>
-            );
-          })}
+          {history.map((h) => (
+            <div
+              key={h._id}
+              className={`timeline-item ${h.type}`}
+              onClick={() => setSelectedHistory(h)}
+            >
+              <strong>{h.title}</strong>
+              <p>{h.note}</p>
+              <small>{new Date(h.date).toLocaleDateString()}</small>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -229,6 +245,17 @@ const CropDetails = () => {
         crop={harvestCropState}
         onClose={() => setHarvestCropState(null)}
         onSuccess={loadCrop}
+      />
+      <AddCropHistoryModal
+        isOpen={!!showHistoryModal}
+        crop={showHistoryModal}
+        onClose={() => setShowHistoryModal(null)}
+        onSuccess={loadHistory}
+      />
+      <EditCropHistoryModal
+        history={selectedHistory}
+        onClose={() => setSelectedHistory(null)}
+        onSuccess={loadHistory}
       />
     </div>
   );
