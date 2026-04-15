@@ -1,0 +1,30 @@
+.finance-page {
+  padding: 20px;
+  color: #e2e8f0;
+}
+
+.finance-page svg {
+  color: #22c55e;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.shop-card {
+  background: #111;
+  padding: 16px;
+  border-radius: 12px;
+  color: #e2e8f0;
+}
+
+.remaining {
+  color: #ff4d4f;
+  font-weight: bold;
+}

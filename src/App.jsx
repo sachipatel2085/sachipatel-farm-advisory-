@@ -13,6 +13,7 @@ import Crops from "./pages/Crops";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Topbar from "./components/Topbar";
+import FinancePage from "./pages/FinancePage";
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
@@ -70,6 +71,7 @@ function App() {
             <Route path="/farms/dashboard" element={<FarmDashboard />} />
             <Route path="/crops" element={<Crops />} />
             <Route path="/crops/:id" element={<CropDetails />} />
+            <Route path="/finance" element={<FinancePage />} />
           </Routes>
         </div>
       </div>{" "}

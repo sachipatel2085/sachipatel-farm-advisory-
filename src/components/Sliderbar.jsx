@@ -55,10 +55,10 @@ export default function Sidebar({
         active={location.pathname === "/crops"}
       />
       <NavItem
-        to="/finence"
+        to="/finance"
         icon={<IndianRupee size={18} />}
-        label="Finences"
-        active={location.pathname === "/finence"}
+        label="Finance"
+        active={location.pathname === "/finance"}
       />
       <NavItem
         to="/advisory"
