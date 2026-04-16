@@ -14,6 +14,8 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Topbar from "./components/Topbar";
 import FinancePage from "./pages/FinancePage";
+import FinanceDetails from "./pages/FinanceDetails";
+import ShopDetails from "./pages/ShopDetails";
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
@@ -72,6 +74,8 @@ function App() {
             <Route path="/crops" element={<Crops />} />
             <Route path="/crops/:id" element={<CropDetails />} />
             <Route path="/finance" element={<FinancePage />} />
+            <Route path="/finance/details" element={<FinanceDetails />} />
+            <Route path="/finance/shop/:id" element={<ShopDetails />} />
           </Routes>
         </div>
       </div>{" "}
