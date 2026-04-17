@@ -154,6 +154,25 @@
   border-bottom: 1px solid #222;
 }
 
+.shop-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shop-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shop-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #aaa;
+}
+
 .debit {
   color: #ff4d4f;
 }
@@ -169,7 +188,7 @@
 .ledger-header,
 .ledger-row {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   padding: 10px;
   border-bottom: 1px solid #222;
 }
@@ -197,4 +216,9 @@
 
 .balance.positive {
   color: #4caf50; /* green = shop owes you */
+}
+
+.actions {
+  display: flex;
+  gap: 5px;
 }

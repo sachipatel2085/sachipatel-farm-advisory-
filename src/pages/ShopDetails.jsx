@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import "../styles/finance.css";
+import EditLedgerModal from "../components/EditLedgerModal";
+import { Store, MapPin, Phone } from "lucide-react";
 
 export default function ShopDetails() {
   const { id } = useParams();
@@ -10,6 +12,8 @@ export default function ShopDetails() {
   const [shop, setShop] = useState(null);
   const [ledger, setLedger] = useState([]);
   const [summary, setSummary] = useState({});
+  const [selected, setSelected] = useState(null);
+  const [editItem, setEditItem] = useState(null);
 
   const loadData = async () => {
     const res = await api.get(`/finance/shop/${id}`);
@@ -22,6 +26,21 @@ export default function ShopDetails() {
   useEffect(() => {
     loadData();
   }, []);
+  const handleDelete = async (item) => {
+    if (!window.confirm("Delete this entry?")) return;
+
+    try {
+      if (item.model === "credit") {
+        await api.delete(`/finance/credit/${item._id}`);
+      } else {
+        await api.delete(`/finance/payment/${item._id}`);
+      }
+
+      loadData(); // refresh
+    } catch (err) {
+      alert("Delete failed");
+    }
+  };
 
   if (!shop) return <p>Loading...</p>;
 
@@ -33,10 +52,18 @@ export default function ShopDetails() {
       </button>
 
       {/* SHOP INFO */}
-      <div className="card">
-        <h2>📒 {shop.name}</h2>
-        <p>📍 {shop.address || "—"}</p>
-        <p>📞 {shop.phone || "—"}</p>
+      <div className="card shop-info">
+        <h2 className="shop-title">
+          <Store size={20} /> {shop.name}
+        </h2>
+
+        <p className="shop-line">
+          <MapPin size={16} /> {shop.address || "—"}
+        </p>
+
+        <p className="shop-line">
+          <Phone size={16} /> {shop.phone || "—"}
+        </p>
       </div>
 
       {/* SUMMARY */}
@@ -57,10 +84,11 @@ export default function ShopDetails() {
             <span>Debit</span>
             <span>Credit</span>
             <span>Balance</span>
+            <span>Action</span>
           </div>
 
           {ledger.map((l, i) => (
-            <div key={i} className="ledger-row">
+            <div key={i} className="ledger-row" onClick={() => setSelected(l)}>
               <span>{new Date(l.date).toLocaleDateString()}</span>
               <span>{l.note}</span>
 
@@ -77,10 +105,36 @@ export default function ShopDetails() {
               >
                 {l.balance >= 0 ? `-₹${l.balance}` : `+₹${Math.abs(l.balance)}`}
               </span>
+              <div className="actions">
+                <button
+                  className="btn btn-sm btn-secondary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setEditItem(l);
+                  }}
+                >
+                  Edit
+                </button>
+
+                <button
+                  className="btn btn-sm btn-danger"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(l);
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
       </div>
+      <EditLedgerModal
+        item={editItem}
+        onClose={() => setEditItem(null)}
+        onSuccess={loadData}
+      />
     </div>
   );
 }

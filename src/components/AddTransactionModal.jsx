@@ -9,10 +9,46 @@ const AddTransactionModal = ({
   onClose,
   onSuccess,
 }) => {
-  const [mode, setMode] = useState(editingTxn?.type || null);
+  const [mode, setMode] = useState(null);
+  const [shops, setShops] = useState([]);
 
+  const [form, setForm] = useState({
+    title: "",
+    quantity: "",
+    price: "",
+    amount: "",
+    category: "seed",
+    note: "",
+    date: "",
+    shop: "",
+  });
+
+  // 🔥 LOAD SHOPS
   useEffect(() => {
-    if (isOpen) {
+    api.get("/finance/shops").then((res) => setShops(res.data));
+  }, []);
+
+  // 🔥 HANDLE OPEN (EDIT / ADD)
+  useEffect(() => {
+    if (!isOpen) return;
+
+    if (editingTxn) {
+      // ✅ EDIT MODE
+      setMode(editingTxn.type);
+      setForm({
+        title: editingTxn.title || "",
+        quantity: editingTxn.quantity || "",
+        price: editingTxn.price || "",
+        amount: editingTxn.amount || "",
+        category: editingTxn.category || "seed",
+        note: editingTxn.note || "",
+        date: editingTxn.date
+          ? editingTxn.date.split("T")[0]
+          : new Date().toISOString().split("T")[0],
+        shop: editingTxn.shop || "",
+      });
+    } else {
+      // ✅ ADD MODE
       setMode(null);
       setForm({
         title: "",
@@ -22,26 +58,18 @@ const AddTransactionModal = ({
         category: "seed",
         note: "",
         date: new Date().toISOString().split("T")[0],
+        shop: "",
       });
     }
-  }, [isOpen]);
+  }, [isOpen, editingTxn]);
 
-  const [form, setForm] = useState(
-    editingTxn || {
-      title: "",
-      quantity: "",
-      price: "",
-      amount: "",
-      category: "seed",
-    },
-  );
+  if (!crop || !isOpen) return null;
 
-  if (!crop) return null;
-
+  // 🔥 HANDLE CHANGE
   const handleChange = (e) => {
     const updated = { ...form, [e.target.name]: e.target.value };
 
-    // Auto calculate income
+    // auto calculate income
     if (mode === "income") {
       const qty = Number(updated.quantity || 0);
       const price = Number(updated.price || 0);
@@ -51,24 +79,30 @@ const AddTransactionModal = ({
     setForm(updated);
   };
 
+  // 🔥 DELETE
   const deleteTxn = async () => {
     await api.delete(`/crops/${crop._id}/transaction/${editingTxn._id}`);
     onSuccess();
     onClose();
   };
+
+  // 🔥 SUBMIT
   const submit = async () => {
+    const payload = {
+      ...form,
+      amount: Number(form.amount),
+      quantity: Number(form.quantity),
+      price: Number(form.price),
+      type: mode,
+    };
+
     if (editingTxn) {
-      await api.put(`/crops/${crop._id}/transaction/${editingTxn._id}`, {
-        ...form,
-        type: mode,
-      });
-      setMode(null);
+      await api.put(
+        `/crops/${crop._id}/transaction/${editingTxn._id}`,
+        payload,
+      );
     } else {
-      await api.post(`/crops/${crop._id}/transaction`, {
-        ...form,
-        type: mode,
-      });
-      setMode(null);
+      await api.post(`/crops/${crop._id}/transaction`, payload);
     }
 
     onSuccess();
@@ -78,7 +112,7 @@ const AddTransactionModal = ({
   return (
     <div className="modal-backdrop">
       <div className="modal-box">
-        {/* STEP 1 — SELECT TYPE */}
+        {/* STEP 1 */}
         {!mode && (
           <div className="txn-selection">
             <h3>Select Transaction Type</h3>
@@ -99,43 +133,38 @@ const AddTransactionModal = ({
               </div>
             </div>
 
-            <div className="modal-actions">
-              <button className="btn-cancel" onClick={onClose}>
-                Cancel
-              </button>
-
-              {editingTxn && (
-                <button className="btn-danger" onClick={deleteTxn}>
-                  Delete
-                </button>
-              )}
-
-              <button className="btn-primary" onClick={submit}>
-                {editingTxn ? "Update" : "Save"}
-              </button>
-            </div>
+            <button className="btn-cancel" onClick={onClose}>
+              Cancel
+            </button>
           </div>
         )}
 
-        {/* STEP 2 — SHOW FORM */}
+        {/* STEP 2 */}
         {mode && (
           <>
             <h3>{mode === "income" ? "Add Income" : "Add Expense"}</h3>
 
-            <input name="title" placeholder="Title" onChange={handleChange} />
+            <input
+              name="title"
+              placeholder="Title"
+              value={form.title}
+              onChange={handleChange}
+            />
+
+            <input
+              type="date"
+              name="date"
+              value={form.date}
+              onChange={handleChange}
+            />
 
             {mode === "income" && (
               <>
                 <input
-                  type="date"
-                  name="date"
-                  value={form.date}
-                  onChange={handleChange}
-                />
-                <input
                   type="number"
                   name="quantity"
                   placeholder="Quantity (kg)"
+                  value={form.quantity}
                   onChange={handleChange}
                 />
 
@@ -143,6 +172,7 @@ const AddTransactionModal = ({
                   type="number"
                   name="price"
                   placeholder="Price per kg"
+                  value={form.price}
                   onChange={handleChange}
                 />
 
@@ -155,25 +185,39 @@ const AddTransactionModal = ({
             {mode === "expense" && (
               <>
                 <input
-                  type="date"
-                  name="date"
-                  value={form.date}
-                  onChange={handleChange}
-                />
-                <input
                   type="number"
                   name="amount"
                   placeholder="Amount"
+                  value={form.amount}
                   onChange={handleChange}
                 />
 
-                <select name="category" onChange={handleChange}>
+                <select
+                  name="category"
+                  value={form.category}
+                  onChange={handleChange}
+                >
                   <option value="seed">Seed</option>
                   <option value="fertilizer">Fertilizer</option>
                   <option value="labor">Labor</option>
                   <option value="irrigation">Irrigation</option>
                   <option value="pesticide">Pesticide</option>
                   <option value="other">Other</option>
+                </select>
+
+                {/* 🔥 SHOP SELECT */}
+                <select
+                  name="shop"
+                  value={form.shop || ""}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Shop (Optional)</option>
+
+                  {shops.map((s) => (
+                    <option key={s.shop._id} value={s.shop._id}>
+                      {s.shop.name}
+                    </option>
+                  ))}
                 </select>
               </>
             )}
