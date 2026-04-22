@@ -98,9 +98,9 @@ const FarmPage = () => {
 
                   <button
                     className="dashboard-btn"
-                    onClick={() => navigate("/farms/dashboard")}
+                    onClick={() => navigate(`/farms/${farm._id}`)}
                   >
-                    Dashboard
+                    Details
                   </button>
 
                   <button

@@ -5,19 +5,30 @@ import "../styles/cropList.css";
 import { useNavigate } from "react-router-dom";
 import { Sprout, CalendarDays, Timer, Wheat } from "lucide-react";
 
-const CropList = () => {
+const CropList = ({ farmId }) => {
   const [crops, setCrops] = useState([]);
   const [showAdd, setShowAdd] = useState(false);
   const navigate = useNavigate();
 
   const loadCrops = async () => {
-    const res = await api.get("/crops");
-    setCrops(res.data);
+    try {
+      let url = "/crops";
+
+      // 🔥 if farmId exists → use farm-specific API
+      if (farmId) {
+        url = `/crops/farm/${farmId}`;
+      }
+
+      const res = await api.get(url);
+      setCrops(res.data);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
     loadCrops();
-  }, []);
+  }, [farmId]);
 
   const progress = (age, duration) =>
     Math.min(100, Math.round((age / duration) * 100));

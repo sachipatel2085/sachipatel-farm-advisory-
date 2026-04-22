@@ -251,3 +251,38 @@
   transform: translateY(-1px);
   box-shadow: 0 6px 14px rgba(34, 197, 94, 0.3);
 }
+
+.filter-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* SELECT */
+.filter-row select {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: #e2e8f0;
+  outline: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* HOVER */
+.filter-row select:hover {
+  border-color: #22c55e;
+}
+
+/* FOCUS */
+.filter-row select:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+/* OPTION (limited support) */
+.filter-row select option {
+  background: #020617;
+  color: #e2e8f0;
+}

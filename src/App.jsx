@@ -7,7 +7,7 @@ import Register from "./pages/Register";
 import Farms from "./pages/Farms";
 import Sidebar from "./components/Sliderbar";
 import CreateFarm from "./components/CreateFarm";
-import FarmDashboard from "./pages/FarmDashboard";
+import FarmDashboard from "./pages/FarmDetails";
 import CropDetails from "./pages/CropDetails";
 import Crops from "./pages/Crops";
 import Home from "./pages/Home";
@@ -70,7 +70,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/farms" element={<Farms />} />
             <Route path="/farms/new" element={<CreateFarm />} />
-            <Route path="/farms/dashboard" element={<FarmDashboard />} />
+            <Route path="/farms/:id" element={<FarmDashboard />} />
             <Route path="/crops" element={<Crops />} />
             <Route path="/crops/:id" element={<CropDetails />} />
             <Route path="/finance" element={<FinancePage />} />
