@@ -2,12 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import Breadcrumb from "../components/Breadcrumb";
-import "../styles/cropDetails.css"; // same theme
 import {
   Wheat,
   MapPin,
-  Activity,
-  History,
   Sprout,
   Calendar,
   Wallet,
@@ -18,156 +15,132 @@ import CropList from "../components/CropList";
 const FarmDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [analytics, setAnalytics] = useState(null);
   const [farm, setFarm] = useState(null);
   const [history, setHistory] = useState([]);
+
   const [seasonFilter, setSeasonFilter] = useState("");
   const [cropFilter, setCropFilter] = useState("");
   const [sortType, setSortType] = useState("profitDesc");
-
-  const loadHistory = async () => {
-    const res = await api.get(`/farms/${id}/history`);
-    setHistory(res.data);
-  };
-
-  const loadAnalytics = async () => {
-    const res = await api.get(`/farms/${id}/analytics`);
-    setAnalytics(res.data);
-  };
-  const loadFarm = async () => {
-    const res = await api.get(`/farms/${id}`);
-    setFarm(res.data);
-  };
 
   useEffect(() => {
     loadFarm();
     loadAnalytics();
     loadHistory();
   }, [id]);
+
+  const loadFarm = async () => {
+    const res = await api.get(`/farms/${id}`);
+    setFarm(res.data);
+  };
+
+  const loadAnalytics = async () => {
+    const res = await api.get(`/farms/${id}/analytics`);
+    setAnalytics(res.data);
+  };
+
+  const loadHistory = async () => {
+    const res = await api.get(`/farms/${id}/history`);
+    setHistory(res.data);
+  };
+
   const processedHistory = history
-    .filter((h) => {
-      return (
+    .filter(
+      (h) =>
         (!seasonFilter || h.season === seasonFilter) &&
-        (!cropFilter || h.cropName === cropFilter)
-      );
-    })
+        (!cropFilter || h.cropName === cropFilter),
+    )
     .sort((a, b) => {
       if (sortType === "profitDesc") return b.profit - a.profit;
       if (sortType === "profitAsc") return a.profit - b.profit;
       return 0;
     });
-  const topCrop =
-    history.length > 0
-      ? [...history].sort((a, b) => b.profit - a.profit)[0]
-      : null;
 
-  if (!farm) return <p className="loading">Loading...</p>;
-
-  const health = Math.floor(Math.random() * 30) + 70;
+  if (!farm)
+    return <p className="text-center text-gray-400 mt-10">Loading...</p>;
 
   return (
-    <div className="crop-details-page">
+    <div className="space-y-6 text-slate-200">
       <Breadcrumb currentName={farm.farmName} />
-      <button className="back-btn" onClick={() => navigate(-1)}>
+
+      <button
+        onClick={() => navigate(-1)}
+        className="text-sm text-green-400 hover:underline"
+      >
         ← Back
       </button>
+
       {/* HEADER */}
-      <div className="crop-header">
+      <div className="flex justify-between items-center flex-wrap gap-3">
         <div>
-          <h2 className="title">
-            <Wheat size={20} /> {farm.farmName}
+          <h2 className="flex items-center gap-2 text-xl font-semibold">
+            <Wheat size={18} /> {farm.farmName}
           </h2>
-          <p className="farm-name">
-            <MapPin size={14} /> {farm.location?.village},{" "}
-            {farm.location?.district}
+
+          <p className="text-sm text-gray-400 flex items-center gap-1">
+            <MapPin size={14} />
+            {farm.location?.village}, {farm.location?.district}
           </p>
         </div>
 
-        <span className="stage">Active</span>
+        <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-xs">
+          Active
+        </span>
       </div>
-      {/* FARM HEALTH */}
+
+      {/* ANALYTICS */}
       {analytics && (
-        <div className="section grid-3">
-          <div className="card">
-            <h4>Total Crops</h4>
-            <p>{analytics.totalCrops}</p>
+        <>
+          <div className="grid sm:grid-cols-3 gap-4">
+            <Stat title="Total Crops" value={analytics.totalCrops} />
+            <Stat title="Farm Health" value={`${analytics.avgHealth}%`} />
+            <Stat title="Total Yield" value={`${analytics.totalYield} kg`} />
           </div>
 
-          <div className="card">
-            <h4>Farm Health</h4>
-            <p>{analytics.avgHealth}%</p>
+          <div className="grid sm:grid-cols-3 gap-4">
+            <Stat title="Income" value={`₹ ${analytics.totalIncome}`} green />
+            <Stat title="Expense" value={`₹ ${analytics.totalExpense}`} red />
+            <Stat title="Profit" value={`₹ ${analytics.profit}`} green />
           </div>
 
-          <div className="card">
-            <h4>Total Yield</h4>
-            <p>{analytics.totalYield} kg</p>
-          </div>
-        </div>
-      )}{" "}
-      {/* BASIC INFO */}
-      {analytics && (
-        <div className="section grid-3">
-          <div className="card income-box">
-            <h4>Income</h4>
-            <p>₹ {analytics.totalIncome}</p>
-          </div>
+          {/* PROGRESS */}
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+            <div className="flex justify-between text-sm text-gray-400 mb-1">
+              <span>Farm Health</span>
+              <span>{analytics.avgHealth}%</span>
+            </div>
 
-          <div className="card expense-box">
-            <h4>Expense</h4>
-            <p>₹ {analytics.totalExpense}</p>
+            <div className="w-full h-2 bg-white/10 rounded-full">
+              <div
+                className="h-full bg-green-500 rounded-full"
+                style={{ width: `${analytics.avgHealth}%` }}
+              />
+            </div>
           </div>
+        </>
+      )}
 
-          <div className="card profit-box">
-            <h4>Profit</h4>
-            <p>₹ {analytics.profit}</p>
-          </div>
-        </div>
-      )}{" "}
-      {analytics && (
-        <div className="section card">
-          <h3 className="section-title">Farm Health</h3>
-
-          <div className="progress-wrap">
-            <div
-              className="progress-fill"
-              style={{ width: `${analytics.avgHealth}%` }}
-            />
-          </div>
-
-          <div className="progress-info">
-            <span>Overall Health</span>
-            <span>{analytics.avgHealth}%</span>
-          </div>
-        </div>
-      )}{" "}
       {/* EXTRA INFO */}
-      <div className="section grid-3">
-        <div className="card">
-          <h4>Water Usage</h4>
-          <p>1200L</p>
-        </div>
-
-        <div className="card">
-          <h4>Sunlight</h4>
-          <p>Good</p>
-        </div>
-
-        <div className="card">
-          <h4>Status</h4>
-          <p>Active</p>
-        </div>
+      <div className="grid sm:grid-cols-3 gap-4">
+        <Stat title="Water Usage" value="1200L" />
+        <Stat title="Sunlight" value="Good" />
+        <Stat title="Status" value="Active" />
       </div>
-      {/* croplist */}
+
+      {/* CROPS */}
       <CropList farmId={id} />
-      <div className="section card">
-        <div className="section-header">
-          <h3 className="section-title">📜 Farm History</h3>
-          {/* FILTERS */}
-          <div className="filter-row">
-            {/* Season Filter */}
+
+      {/* HISTORY */}
+      <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-4">
+        <div className="flex flex-wrap justify-between items-center gap-2">
+          <h3 className="font-semibold">📜 Farm History</h3>
+
+          <div className="flex gap-2 flex-wrap">
             <select
               value={seasonFilter}
               onChange={(e) => setSeasonFilter(e.target.value)}
+              className="input"
             >
               <option value="">All Seasons</option>
               {[...new Set(history.map((h) => h.season))].map((s) => (
@@ -175,10 +148,10 @@ const FarmDetails = () => {
               ))}
             </select>
 
-            {/* Crop Filter */}
             <select
               value={cropFilter}
               onChange={(e) => setCropFilter(e.target.value)}
+              className="input"
             >
               <option value="">All Crops</option>
               {[...new Set(history.map((h) => h.cropName))].map((c) => (
@@ -186,10 +159,10 @@ const FarmDetails = () => {
               ))}
             </select>
 
-            {/* Sort */}
             <select
               value={sortType}
               onChange={(e) => setSortType(e.target.value)}
+              className="input"
             >
               <option value="profitDesc">Profit ↓</option>
               <option value="profitAsc">Profit ↑</option>
@@ -197,50 +170,52 @@ const FarmDetails = () => {
           </div>
         </div>
 
-        <div className="timeline">
+        <div className="grid md:grid-cols-2 gap-4">
           {processedHistory.map((h) => (
-            <div key={h.cropId} className="timeline-item">
-              {/* HEADER */}
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <strong>
-                  <Sprout size={14} /> {h.cropName} ({h.season})
-                </strong>
-              </div>
+            <div
+              key={h.cropId}
+              className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-1"
+            >
+              <p className="font-medium flex items-center gap-1">
+                <Sprout size={14} /> {h.cropName} ({h.season})
+              </p>
 
-              {/* DATES */}
-              <p>
-                <Calendar size={14} />{" "}
+              <p className="text-sm text-gray-400 flex items-center gap-1">
+                <Calendar size={14} />
                 {new Date(h.sowingDate).toLocaleDateString()}
               </p>
 
-              {/* YIELD */}
-              <p>
-                <Wheat size={14} /> {h.production} kg
-              </p>
+              <p className="text-sm">🌾 {h.production} kg</p>
 
-              {/* FINANCE */}
-              <p>
-                <Wallet size={14} /> Income: ₹ {h.income}
-              </p>
-
-              <p>
-                <Wallet size={14} /> Expense: ₹ {h.expense}
-              </p>
+              <p className="text-sm">₹ Income: {h.income}</p>
+              <p className="text-sm">₹ Expense: {h.expense}</p>
 
               <p
-                style={{
-                  color: h.profit >= 0 ? "#22c55e" : "#ef4444",
-                  fontWeight: "500",
-                }}
+                className={`text-sm font-medium flex items-center gap-1 ${
+                  h.profit >= 0 ? "text-green-400" : "text-red-400"
+                }`}
               >
-                <TrendingUp size={14} /> Profit: ₹ {h.profit}
+                <TrendingUp size={14} /> ₹ {h.profit}
               </p>
             </div>
           ))}
         </div>
-      </div>{" "}
+      </div>
     </div>
   );
 };
+
+const Stat = ({ title, value, green, red }) => (
+  <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+    <p className="text-sm text-gray-400">{title}</p>
+    <h2
+      className={`text-lg font-semibold ${
+        green ? "text-green-400" : red ? "text-red-400" : ""
+      }`}
+    >
+      {value}
+    </h2>
+  </div>
+);
 
 export default FarmDetails;
