@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import api from "../api/axios";
-import "../styles/modal.css";
 
 const HarvestModal = ({ isOpen, crop, onClose, onSuccess }) => {
   const [qty, setQty] = useState("");
@@ -25,45 +24,55 @@ const HarvestModal = ({ isOpen, crop, onClose, onSuccess }) => {
   };
 
   return (
-    <div className="modal-backdrop">
-      <div className="modal-box">
-        <h2>🌾 Add Harvest Batch</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+      <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-2xl p-6 space-y-4 shadow-xl">
+        <h2 className="text-lg font-semibold">🌾 Add Harvest Batch</h2>
 
-        <p>
-          Total Harvest so far: <strong>{crop.actualYield || 0} kg</strong>
+        <p className="text-sm text-gray-400">
+          Total Harvest:{" "}
+          <span className="text-white font-medium">
+            {crop.actualYield || 0} kg
+          </span>
         </p>
 
-        <div className="modal-form">
+        <div className="space-y-3">
           <div>
-            <label>Quantity (kg)</label>
+            <label className="text-sm text-gray-400">Quantity (kg)</label>
             <input
               type="number"
               value={qty}
               onChange={(e) => setQty(e.target.value)}
+              className="input mt-1"
             />
           </div>
 
           <div>
-            <label>Price per kg (₹)</label>
+            <label className="text-sm text-gray-400">Price per kg (₹)</label>
             <input
               type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
+              className="input mt-1"
             />
           </div>
 
           <div>
-            <label>Total</label>
-            <input value={`₹ ${total}`} disabled />
+            <label className="text-sm text-gray-400">Total</label>
+            <input
+              value={`₹ ${total}`}
+              disabled
+              className="input mt-1 bg-slate-700"
+            />
           </div>
         </div>
 
-        <div className="modal-actions">
-          <button className="btn-cancel" onClick={onClose}>
+        {/* ACTIONS */}
+        <div className="flex justify-end gap-2 pt-2">
+          <button onClick={onClose} className="btn-secondary">
             Cancel
           </button>
 
-          <button className="btn-primary" onClick={handleSubmit}>
+          <button onClick={handleSubmit} className="btn-primary">
             Add Batch
           </button>
         </div>

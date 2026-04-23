@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
-import "../styles/modal.css";
 
 const AddCropModal = ({ isOpen, onClose, onSuccess }) => {
   const [farms, setFarms] = useState([]);
@@ -39,16 +38,18 @@ const AddCropModal = ({ isOpen, onClose, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-backdrop">
-      <div className="modal-box">
-        <h2>Add Crop</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+      <div className="w-full max-w-lg bg-slate-900 border border-white/10 rounded-2xl p-6 space-y-4 shadow-xl">
+        <h2 className="text-lg font-semibold">🌱 Add Crop</h2>
 
-        <form className="modal-form" onSubmit={submitCrop}>
+        <form onSubmit={submitCrop} className="space-y-3">
+          {/* FARM SELECT */}
           <select
             name="farmId"
             value={form.farmId}
             onChange={handleChange}
             required
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-green-500"
           >
             <option value="">Select Farm</option>
             {farms.map((f) => (
@@ -58,48 +59,76 @@ const AddCropModal = ({ isOpen, onClose, onSuccess }) => {
             ))}
           </select>
 
+          {/* CROP NAME */}
           <input
             name="cropName"
             placeholder="Crop name"
             onChange={handleChange}
             required
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
 
-          <input name="variety" placeholder="Variety" onChange={handleChange} />
+          {/* VARIETY */}
+          <input
+            name="variety"
+            placeholder="Variety"
+            onChange={handleChange}
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
 
-          <select name="season" onChange={handleChange}>
+          {/* SEASON */}
+          <select
+            name="season"
+            onChange={handleChange}
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-green-500"
+          >
             <option value="kharif">Kharif</option>
             <option value="rabi">Rabi</option>
             <option value="summer">Summer</option>
           </select>
 
+          {/* DATE */}
           <input
             type="date"
             name="sowingDate"
             onChange={handleChange}
             required
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
 
+          {/* DURATION */}
           <input
             type="number"
             name="expectedDurationDays"
             placeholder="Duration (days)"
             onChange={handleChange}
             required
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
 
+          {/* YIELD */}
           <input
             type="number"
             name="expectedYield"
             placeholder="Expected yield (kg)"
             onChange={handleChange}
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
 
-          <div className="modal-actions">
-            <button type="button" onClick={onClose} className="btn-cancel">
+          {/* ACTIONS */}
+          <div className="flex justify-end gap-2 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm"
+            >
               Cancel
             </button>
-            <button type="submit" className="btn-primary">
+
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-sm"
+            >
               Add Crop
             </button>
           </div>

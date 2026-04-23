@@ -1,24 +1,31 @@
 import React from "react";
-import "../styles/EditFarmModal.css"; // reuse modal styles
 
 const ConfirmDeleteModal = ({ title, message, onCancel, onConfirm }) => {
   return (
-    <div className="modal-overlay">
-      <div className="modal-box">
-        <h2>{title || "Confirm Delete"}</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+      <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-2xl p-6 space-y-4 shadow-xl text-center">
+        {/* TITLE */}
+        <h2 className="text-lg font-semibold text-red-400">
+          {title || "Confirm Delete"}
+        </h2>
 
-        <p style={{ textAlign: "center", marginBottom: "20px", color: "#555" }}>
+        {/* MESSAGE */}
+        <p className="text-sm text-gray-400">
           {message || "Are you sure you want to delete this item?"}
         </p>
 
-        <div className="modal-buttons">
-          <button className="cancel" onClick={onCancel}>
+        {/* ACTIONS */}
+        <div className="flex justify-center gap-3 pt-2">
+          <button
+            onClick={onCancel}
+            className="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm"
+          >
             Cancel
           </button>
+
           <button
-            className="save"
             onClick={onConfirm}
-            style={{ background: "#e74c3c" }}
+            className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-sm"
           >
             Delete
           </button>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
-import "../styles/modal.css";
 
 const EditCropModal = ({ isOpen, crop, onClose, onSuccess }) => {
   const [form, setForm] = useState({});
@@ -27,25 +26,35 @@ const EditCropModal = ({ isOpen, crop, onClose, onSuccess }) => {
   if (!isOpen || !crop) return null;
 
   return (
-    <div className="modal-backdrop">
-      <div className="modal-box">
-        <h2>Edit Crop</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+      <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-2xl p-6 space-y-4 shadow-xl">
+        {/* TITLE */}
+        <h2 className="text-lg font-semibold">✏️ Edit Crop</h2>
 
-        <form className="modal-form" onSubmit={updateCrop}>
+        <form onSubmit={updateCrop} className="space-y-3">
           <input
             name="cropName"
             value={form.cropName || ""}
             onChange={handleChange}
+            placeholder="Crop Name"
             required
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10 focus:ring-2 focus:ring-green-500"
           />
 
           <input
             name="variety"
             value={form.variety || ""}
             onChange={handleChange}
+            placeholder="Variety"
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
           />
 
-          <select name="season" value={form.season} onChange={handleChange}>
+          <select
+            name="season"
+            value={form.season}
+            onChange={handleChange}
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
+          >
             <option value="kharif">Kharif</option>
             <option value="rabi">Rabi</option>
             <option value="summer">Summer</option>
@@ -57,6 +66,7 @@ const EditCropModal = ({ isOpen, crop, onClose, onSuccess }) => {
             value={form.sowingDate?.slice(0, 10)}
             onChange={handleChange}
             required
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
           />
 
           <input
@@ -64,7 +74,9 @@ const EditCropModal = ({ isOpen, crop, onClose, onSuccess }) => {
             name="expectedDurationDays"
             value={form.expectedDurationDays}
             onChange={handleChange}
+            placeholder="Duration (days)"
             required
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
           />
 
           <input
@@ -72,19 +84,35 @@ const EditCropModal = ({ isOpen, crop, onClose, onSuccess }) => {
             name="expectedYield"
             value={form.expectedYield || ""}
             onChange={handleChange}
+            placeholder="Expected Yield (kg)"
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
           />
 
-          <select name="status" value={form.status} onChange={handleChange}>
-            <option value="growing">Growing</option>
-            <option value="harvested">Harvested</option>
-            <option value="failed">Failed</option>
+          <select
+            name="status"
+            value={form.status}
+            onChange={handleChange}
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
+          >
+            <option value="active">🌱 Active</option>
+            <option value="harvested">🌾 Harvested</option>
+            <option value="failed">❌ Failed</option>
           </select>
 
-          <div className="modal-actions">
-            <button type="button" className="btn-cancel" onClick={onClose}>
+          {/* ACTIONS */}
+          <div className="flex justify-end gap-2 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm"
+            >
               Cancel
             </button>
-            <button type="submit" className="btn-primary">
+
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-sm"
+            >
               Save
             </button>
           </div>

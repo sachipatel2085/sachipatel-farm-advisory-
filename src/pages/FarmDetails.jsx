@@ -157,45 +157,46 @@ const FarmDetails = () => {
           <p>Active</p>
         </div>
       </div>
+      {/* croplist */}
       <CropList farmId={id} />
       <div className="section card">
         <div className="section-header">
           <h3 className="section-title">📜 Farm History</h3>
+          {/* FILTERS */}
+          <div className="filter-row">
+            {/* Season Filter */}
+            <select
+              value={seasonFilter}
+              onChange={(e) => setSeasonFilter(e.target.value)}
+            >
+              <option value="">All Seasons</option>
+              {[...new Set(history.map((h) => h.season))].map((s) => (
+                <option key={s}>{s}</option>
+              ))}
+            </select>
+
+            {/* Crop Filter */}
+            <select
+              value={cropFilter}
+              onChange={(e) => setCropFilter(e.target.value)}
+            >
+              <option value="">All Crops</option>
+              {[...new Set(history.map((h) => h.cropName))].map((c) => (
+                <option key={c}>{c}</option>
+              ))}
+            </select>
+
+            {/* Sort */}
+            <select
+              value={sortType}
+              onChange={(e) => setSortType(e.target.value)}
+            >
+              <option value="profitDesc">Profit ↓</option>
+              <option value="profitAsc">Profit ↑</option>
+            </select>
+          </div>
         </div>
 
-        {/* FILTERS */}
-        <div className="filter-row">
-          {/* Season Filter */}
-          <select
-            value={seasonFilter}
-            onChange={(e) => setSeasonFilter(e.target.value)}
-          >
-            <option value="">All Seasons</option>
-            {[...new Set(history.map((h) => h.season))].map((s) => (
-              <option key={s}>{s}</option>
-            ))}
-          </select>
-
-          {/* Crop Filter */}
-          <select
-            value={cropFilter}
-            onChange={(e) => setCropFilter(e.target.value)}
-          >
-            <option value="">All Crops</option>
-            {[...new Set(history.map((h) => h.cropName))].map((c) => (
-              <option key={c}>{c}</option>
-            ))}
-          </select>
-
-          {/* Sort */}
-          <select
-            value={sortType}
-            onChange={(e) => setSortType(e.target.value)}
-          >
-            <option value="profitDesc">Profit ↓</option>
-            <option value="profitAsc">Profit ↑</option>
-          </select>
-        </div>
         <div className="timeline">
           {processedHistory.map((h) => (
             <div key={h.cropId} className="timeline-item">

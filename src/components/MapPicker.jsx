@@ -31,19 +31,21 @@ const MapPicker = ({ position, setPosition }) => {
   }, [position, setPosition]);
 
   return (
-    <MapContainer
-      center={position ? [position.lat, position.lng] : [23.02, 72.57]}
-      zoom={13}
-      style={{ height: "300px", borderRadius: "12px" }}
-    >
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+    <div className="rounded-xl overflow-hidden border border-white/10">
+      <MapContainer
+        center={position ? [position.lat, position.lng] : [23.02, 72.57]}
+        zoom={13}
+        className="h-[300px] w-full"
+      >
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-      {position && (
-        <Marker position={[position.lat, position.lng]} icon={icon} />
-      )}
+        {position && (
+          <Marker position={[position.lat, position.lng]} icon={icon} />
+        )}
 
-      <ClickHandler setPosition={setPosition} />
-    </MapContainer>
+        <ClickHandler setPosition={setPosition} />
+      </MapContainer>
+    </div>
   );
 };
 

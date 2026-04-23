@@ -1,4 +1,6 @@
-/* PAGE */
+/* =========================
+   PAGE
+========================= */
 .crop-details-page {
   padding: 20px;
   background: linear-gradient(135deg, #0f172a, #020617);
@@ -6,14 +8,18 @@
   min-height: 100vh;
 }
 
-/* LOADING */
+/* =========================
+   LOADING
+========================= */
 .loading {
   text-align: center;
   padding: 40px;
   opacity: 0.7;
 }
 
-/* BACK BUTTON */
+/* =========================
+   BACK BUTTON
+========================= */
 .back-btn {
   margin-bottom: 15px;
   background: rgba(255, 255, 255, 0.05);
@@ -28,12 +34,14 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 .crop-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  gap: 12px;
 }
 
 .title {
@@ -54,7 +62,6 @@
   gap: 5px;
 }
 
-/* STAGE BADGE */
 .stage {
   padding: 6px 10px;
   border-radius: 12px;
@@ -62,7 +69,9 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* SECTION */
+/* =========================
+   SECTION
+========================= */
 .section {
   margin-top: 20px;
 }
@@ -74,7 +83,9 @@
   margin-bottom: 10px;
 }
 
-/* CARD */
+/* =========================
+   CARD
+========================= */
 .card {
   background: rgba(255, 255, 255, 0.05);
   padding: 15px;
@@ -82,20 +93,24 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* GRID */
+/* =========================
+   GRID
+========================= */
 .grid-2 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
 }
 
 .grid-3 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
 }
 
-/* PROGRESS */
+/* =========================
+   PROGRESS
+========================= */
 .progress-wrap {
   height: 8px;
   background: rgba(255, 255, 255, 0.1);
@@ -109,7 +124,6 @@
   border-radius: 10px;
 }
 
-/* PROGRESS INFO */
 .progress-info {
   display: flex;
   justify-content: space-between;
@@ -118,7 +132,9 @@
   opacity: 0.8;
 }
 
-/* FINANCE COLORS */
+/* =========================
+   FINANCE COLORS
+========================= */
 .income-box {
   border-left: 3px solid #22c55e;
 }
@@ -131,88 +147,71 @@
   border-left: 3px solid #3b82f6;
 }
 
-/* TRANSACTION SECTION */
-.section-header {
+/* =========================
+   FILTERS
+========================= */
+.filter-row {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 10px;
 }
 
-.add-transaction-btn {
-  background: #22c55e;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.add-transaction-btn:hover {
-  background: #16a34a;
-}
-
-/* TRANSACTION LIST */
-.txn-list {
-  margin-top: 10px;
-}
-
-.txn-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  margin-top: 8px;
+.filter-row select {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.04);
+  color: #e2e8f0;
   cursor: pointer;
   transition: 0.2s;
 }
 
-.txn-row:hover {
-  background: rgba(255, 255, 255, 0.08);
+.filter-row select:hover {
+  border-color: #22c55e;
 }
 
-/* TYPE COLORS */
-.txn-row.income {
-  border-left: 3px solid #22c55e;
+.filter-row select:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
 }
 
-.txn-row.expense {
-  border-left: 3px solid #ef4444;
+.filter-row select option {
+  background: #020617;
+  color: #e2e8f0;
 }
 
-/* TAG */
-.tag {
-  font-size: 0.7rem;
-  padding: 3px 8px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* TIMELINE */
+/* =========================
+   TIMELINE
+========================= */
 .timeline {
-  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .timeline-item {
-  padding: 10px;
-  margin-top: 10px;
+  padding: 12px;
   border-left: 3px solid #22c55e;
   background: rgba(255, 255, 255, 0.03);
   border-radius: 8px;
+  font-size: 0.85rem;
 }
 
-/* HARVEST HIGHLIGHT */
-.timeline-item.harvest {
-  border-left: 3px solid #22c55e;
-  padding-left: 10px;
+/* =========================
+   BUTTONS
+========================= */
+.primary-btn {
+  background: #22c55e;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
-/* subtle green glow */
-.timeline-item.harvest strong {
-  color: #22c55e;
+.primary-btn:hover {
+  background: #16a34a;
 }
-/* ACTION BUTTONS */
+
 .crop-actions {
   display: flex;
   gap: 10px;
@@ -228,61 +227,70 @@
   color: white;
 }
 
-.crop-actions button:hover {
-  opacity: 0.9;
-}
-
 .crop-actions .danger {
   background: #ef4444;
 }
 
-.harvest-btn {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: 0.2s;
+/* =========================
+   🔥 RESPONSIVE DESIGN
+========================= */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .crop-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .filter-row {
+    flex-wrap: wrap;
+  }
+
+  .filter-row select {
+    flex: 1 1 48%;
+  }
 }
 
-.harvest-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(34, 197, 94, 0.3);
-}
+/* Mobile */
+@media (max-width: 480px) {
+  .crop-details-page {
+    padding: 12px;
+  }
 
-.filter-row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-}
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
 
-/* SELECT */
-.filter-row select {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 8px 12px;
-  border-radius: 10px;
-  color: #e2e8f0;
-  outline: none;
-  cursor: pointer;
-  transition: 0.2s;
-}
+  .filter-row {
+    flex-direction: column;
+  }
 
-/* HOVER */
-.filter-row select:hover {
-  border-color: #22c55e;
-}
+  .filter-row select {
+    width: 100%;
+  }
 
-/* FOCUS */
-.filter-row select:focus {
-  border-color: #22c55e;
-  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
-}
+  .primary-btn {
+    width: 100%;
+  }
 
-/* OPTION (limited support) */
-.filter-row select option {
-  background: #020617;
-  color: #e2e8f0;
+  .timeline-item {
+    font-size: 0.8rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+  }
+
+  p {
+    font-size: 0.85rem;
+  }
 }

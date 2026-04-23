@@ -1,6 +1,5 @@
 import React from "react";
 import api from "../api/axios";
-import "../styles/modal.css";
 
 const DeleteConfirmModal = ({ isOpen, crop, onClose, onSuccess }) => {
   const deleteCrop = async () => {
@@ -16,18 +15,30 @@ const DeleteConfirmModal = ({ isOpen, crop, onClose, onSuccess }) => {
   if (!isOpen || !crop) return null;
 
   return (
-    <div className="modal-backdrop">
-      <div className="modal-box">
-        <h3>Delete Crop</h3>
-        <p>
-          Are you sure you want to delete <b>{crop.cropName}</b>?
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+      <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-2xl p-6 space-y-4 shadow-xl text-center">
+        {/* TITLE */}
+        <h3 className="text-lg font-semibold text-red-400">Delete Crop</h3>
+
+        {/* MESSAGE */}
+        <p className="text-sm text-gray-400">
+          Are you sure you want to delete{" "}
+          <span className="text-white font-medium">{crop.cropName}</span>?
         </p>
 
-        <div className="modal-actions">
-          <button onClick={onClose} className="btn-cancel">
+        {/* ACTIONS */}
+        <div className="flex justify-center gap-3 pt-2">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm"
+          >
             Cancel
           </button>
-          <button onClick={deleteCrop} className="btn-danger">
+
+          <button
+            onClick={deleteCrop}
+            className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-sm"
+          >
             Delete
           </button>
         </div>

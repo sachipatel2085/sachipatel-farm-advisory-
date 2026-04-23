@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import api from "../api/axios";
-import "../styles/modal.css";
 
 const AddTransactionModal = ({
   crop,
@@ -23,17 +22,14 @@ const AddTransactionModal = ({
     shop: "",
   });
 
-  // 🔥 LOAD SHOPS
   useEffect(() => {
     api.get("/finance/shops").then((res) => setShops(res.data));
   }, []);
 
-  // 🔥 HANDLE OPEN (EDIT / ADD)
   useEffect(() => {
     if (!isOpen) return;
 
     if (editingTxn) {
-      // ✅ EDIT MODE
       setMode(editingTxn.type);
       setForm({
         title: editingTxn.title || "",
@@ -48,7 +44,6 @@ const AddTransactionModal = ({
         shop: editingTxn.shop || "",
       });
     } else {
-      // ✅ ADD MODE
       setMode(null);
       setForm({
         title: "",
@@ -65,11 +60,9 @@ const AddTransactionModal = ({
 
   if (!crop || !isOpen) return null;
 
-  // 🔥 HANDLE CHANGE
   const handleChange = (e) => {
     const updated = { ...form, [e.target.name]: e.target.value };
 
-    // auto calculate income
     if (mode === "income") {
       const qty = Number(updated.quantity || 0);
       const price = Number(updated.price || 0);
@@ -79,14 +72,12 @@ const AddTransactionModal = ({
     setForm(updated);
   };
 
-  // 🔥 DELETE
   const deleteTxn = async () => {
     await api.delete(`/crops/${crop._id}/transaction/${editingTxn._id}`);
     onSuccess();
     onClose();
   };
 
-  // 🔥 SUBMIT
   const submit = async () => {
     const payload = {
       ...form,
@@ -110,45 +101,53 @@ const AddTransactionModal = ({
   };
 
   return (
-    <div className="modal-backdrop">
-      <div className="modal-box">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+      <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-2xl p-6 space-y-4 shadow-xl">
         {/* STEP 1 */}
         {!mode && (
-          <div className="txn-selection">
-            <h3>Select Transaction Type</h3>
+          <>
+            <h3 className="text-lg font-semibold text-center">
+              Select Transaction Type
+            </h3>
 
-            <div className="txn-options">
-              <div
-                className="txn-card income"
+            <div className="grid grid-cols-2 gap-3">
+              <button
                 onClick={() => setMode("income")}
+                className="p-4 rounded-xl bg-green-500/10 border border-green-500/20 hover:bg-green-500/20 transition"
               >
-                🟢 Add Income
-              </div>
+                🟢 Income
+              </button>
 
-              <div
-                className="txn-card expense"
+              <button
                 onClick={() => setMode("expense")}
+                className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 transition"
               >
-                🔴 Add Expense
-              </div>
+                🔴 Expense
+              </button>
             </div>
 
-            <button className="btn-cancel" onClick={onClose}>
+            <button
+              onClick={onClose}
+              className="w-full mt-2 bg-slate-700 hover:bg-slate-600 py-2 rounded-lg text-sm"
+            >
               Cancel
             </button>
-          </div>
+          </>
         )}
 
         {/* STEP 2 */}
         {mode && (
           <>
-            <h3>{mode === "income" ? "Add Income" : "Add Expense"}</h3>
+            <h3 className="text-lg font-semibold">
+              {mode === "income" ? "Add Income" : "Add Expense"}
+            </h3>
 
             <input
               name="title"
               placeholder="Title"
               value={form.title}
               onChange={handleChange}
+              className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10 focus:ring-2 focus:ring-green-500"
             />
 
             <input
@@ -156,6 +155,7 @@ const AddTransactionModal = ({
               name="date"
               value={form.date}
               onChange={handleChange}
+              className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
             />
 
             {mode === "income" && (
@@ -166,6 +166,7 @@ const AddTransactionModal = ({
                   placeholder="Quantity (kg)"
                   value={form.quantity}
                   onChange={handleChange}
+                  className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
                 />
 
                 <input
@@ -174,11 +175,10 @@ const AddTransactionModal = ({
                   placeholder="Price per kg"
                   value={form.price}
                   onChange={handleChange}
+                  className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
                 />
 
-                <p>
-                  <b>Total:</b> ₹ {form.amount}
-                </p>
+                <p className="text-sm text-green-400">Total: ₹ {form.amount}</p>
               </>
             )}
 
@@ -190,12 +190,14 @@ const AddTransactionModal = ({
                   placeholder="Amount"
                   value={form.amount}
                   onChange={handleChange}
+                  className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
                 />
 
                 <select
                   name="category"
                   value={form.category}
                   onChange={handleChange}
+                  className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
                 >
                   <option value="seed">Seed</option>
                   <option value="fertilizer">Fertilizer</option>
@@ -205,14 +207,13 @@ const AddTransactionModal = ({
                   <option value="other">Other</option>
                 </select>
 
-                {/* 🔥 SHOP SELECT */}
                 <select
                   name="shop"
                   value={form.shop || ""}
                   onChange={handleChange}
+                  className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
                 >
                   <option value="">Select Shop (Optional)</option>
-
                   {shops.map((s) => (
                     <option key={s.shop._id} value={s.shop._id}>
                       {s.shop.name}
@@ -222,18 +223,28 @@ const AddTransactionModal = ({
               </>
             )}
 
-            <div className="modal-actions">
-              <button className="btn-cancel" onClick={onClose}>
+            {/* ACTIONS */}
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                onClick={onClose}
+                className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm"
+              >
                 Cancel
               </button>
 
               {editingTxn && (
-                <button className="btn-danger" onClick={deleteTxn}>
+                <button
+                  onClick={deleteTxn}
+                  className="px-3 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-sm"
+                >
                   Delete
                 </button>
               )}
 
-              <button className="btn-primary" onClick={submit}>
+              <button
+                onClick={submit}
+                className="px-3 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-sm"
+              >
                 {editingTxn ? "Update" : "Save"}
               </button>
             </div>

@@ -1,18 +1,64 @@
-/* PAGE */
+/* =========================
+   PAGE
+========================= */
 .crop-page.dark {
   padding: 20px;
   background: linear-gradient(135deg, #0f172a, #020617);
   color: #e2e8f0;
 }
 
-/* TOPBAR */
+/* =========================
+   TOPBAR (DESKTOP FIRST)
+========================= */
 .crop-topbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  gap: 12px;
 }
 
+/* TITLE */
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* =========================
+   FILTERS
+========================= */
+.filter-row {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-row select {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.filter-row select:hover {
+  border-color: #22c55e;
+}
+
+.filter-row select:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+.filter-row select option {
+  background: #020617;
+  color: #e2e8f0;
+}
+
+/* =========================
+   BUTTON
+========================= */
 .primary-btn {
   background: #22c55e;
   color: white;
@@ -20,16 +66,26 @@
   padding: 8px 14px;
   border-radius: 10px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
-/* GRID */
+.primary-btn:hover {
+  background: #16a34a;
+}
+
+/* =========================
+   GRID
+========================= */
 .crop-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+  margin-top: 15px;
 }
 
-/* CARD */
+/* =========================
+   CARD
+========================= */
 .crop-card {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 16px;
@@ -40,7 +96,7 @@
 }
 
 .crop-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px);
   border-color: #22c55e;
 }
 
@@ -57,12 +113,27 @@
   gap: 6px;
 }
 
-/* STAGE BADGE */
-.stage {
-  font-size: 0.7rem;
+/* STATUS */
+.status {
   padding: 4px 8px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-size: 0.7rem;
+  text-transform: capitalize;
+}
+
+.status.active {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.status.harvested {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+.status.failed {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
 }
 
 /* FARM */
@@ -72,7 +143,9 @@
   margin: 8px 0;
 }
 
-/* PROGRESS */
+/* =========================
+   PROGRESS
+========================= */
 .progress-section {
   margin-top: 10px;
 }
@@ -96,7 +169,9 @@
   border-radius: 10px;
 }
 
-/* STATS */
+/* =========================
+   STATS
+========================= */
 .crop-stats {
   display: flex;
   justify-content: space-between;
@@ -108,4 +183,76 @@
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+/* =========================
+   FILTER DROPDOWN (MOBILE)
+========================= */
+.filter-toggle {
+  display: none;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.filter-wrapper {
+  width: 100%;
+}
+
+/* =========================
+   🔥 RESPONSIVE DESIGN
+========================= */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .crop-topbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-toggle {
+    display: block;
+  }
+
+  .filter-row {
+    flex-wrap: wrap;
+  }
+
+  .filter-row select {
+    flex: 1 1 48%;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .crop-page.dark {
+    padding: 12px;
+  }
+
+  .filter-row {
+    flex-direction: column;
+  }
+
+  .filter-row select {
+    width: 100%;
+  }
+
+  .primary-btn {
+    width: 100%;
+  }
+
+  .crop-card {
+    padding: 12px;
+  }
+
+  .crop-title h3 {
+    font-size: 0.95rem;
+  }
+
+  .crop-stats {
+    font-size: 0.7rem;
+  }
 }

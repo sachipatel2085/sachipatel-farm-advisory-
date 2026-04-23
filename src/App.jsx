@@ -1,5 +1,4 @@
 import { useState, useLayoutEffect } from "react";
-import "./App.css";
 import { Menu, X } from "lucide-react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
@@ -45,7 +44,8 @@ function App() {
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       )}
-      <div className="app-wrapper">
+      <div className="flex min-h-screen bg-slate-900 text-white">
+        {/* Sidebar */}
         <Sidebar
           collapsed={collapsed}
           setCollapsed={setCollapsed}
@@ -54,29 +54,40 @@ function App() {
           isMobile={isMobile}
         />
 
-        <div className="main-content">
-          <Topbar /> {/* ✅ correct position */}
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route
-              path="/dashboard"
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route path="/register" element={<Register />} />
-            <Route path="/farms" element={<Farms />} />
-            <Route path="/farms/new" element={<CreateFarm />} />
-            <Route path="/farms/:id" element={<FarmDashboard />} />
-            <Route path="/crops" element={<Crops />} />
-            <Route path="/crops/:id" element={<CropDetails />} />
-            <Route path="/finance" element={<FinancePage />} />
-            <Route path="/finance/details" element={<FinanceDetails />} />
-            <Route path="/finance/shop/:id" element={<ShopDetails />} />
-          </Routes>
+        {/* Main */}
+        <div
+          className={`
+      flex-1 flex flex-col transition-all duration-300
+      ${isMobile ? "ml-0" : collapsed ? "ml-16" : "ml-64"}
+    `}
+        >
+          <Topbar />
+
+          <div className="flex-1 p-4 sm:p-6">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+
+              <Route
+                path="/dashboard"
+                element={
+                  <PrivateRoute>
+                    <Dashboard />
+                  </PrivateRoute>
+                }
+              />
+
+              <Route path="/register" element={<Register />} />
+              <Route path="/farms" element={<Farms />} />
+              <Route path="/farms/new" element={<CreateFarm />} />
+              <Route path="/farms/:id" element={<FarmDashboard />} />
+              <Route path="/crops" element={<Crops />} />
+              <Route path="/crops/:id" element={<CropDetails />} />
+              <Route path="/finance" element={<FinancePage />} />
+              <Route path="/finance/details" element={<FinanceDetails />} />
+              <Route path="/finance/shop/:id" element={<ShopDetails />} />
+            </Routes>
+          </div>
         </div>
       </div>{" "}
       {mobileOpen && isMobile && (

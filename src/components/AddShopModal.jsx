@@ -1,6 +1,5 @@
 import { useState } from "react";
 import api from "../api/axios";
-import "../styles/modal.css";
 
 export default function AddShopModal({ isOpen, onClose, onSuccess }) {
   const [form, setForm] = useState({
@@ -23,7 +22,7 @@ export default function AddShopModal({ isOpen, onClose, onSuccess }) {
         openingBalance: Number(form.openingBalance || 0),
       });
 
-      onSuccess(); // reload shops
+      onSuccess();
       onClose();
     } catch (err) {
       console.error(err);
@@ -32,45 +31,60 @@ export default function AddShopModal({ isOpen, onClose, onSuccess }) {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal">
-        <h2>Add Shop</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+      <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-2xl p-6 space-y-4 shadow-xl">
+        {/* TITLE */}
+        <h2 className="text-lg font-semibold">🏪 Add Shop</h2>
 
-        <input
-          name="name"
-          placeholder="Shop Name"
-          value={form.name}
-          onChange={handleChange}
-        />
+        {/* FORM */}
+        <div className="space-y-3">
+          <input
+            name="name"
+            placeholder="Shop Name"
+            value={form.name}
+            onChange={handleChange}
+            className="w-full px-4 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
 
-        <input
-          name="phone"
-          placeholder="Phone"
-          value={form.phone}
-          onChange={handleChange}
-        />
+          <input
+            name="phone"
+            placeholder="Phone"
+            value={form.phone}
+            onChange={handleChange}
+            className="w-full px-4 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
 
-        <input
-          name="address"
-          placeholder="Address"
-          value={form.address}
-          onChange={handleChange}
-        />
+          <input
+            name="address"
+            placeholder="Address"
+            value={form.address}
+            onChange={handleChange}
+            className="w-full px-4 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
 
-        <input
-          name="openingBalance"
-          placeholder="Opening Udhar (₹)"
-          type="number"
-          value={form.openingBalance}
-          onChange={handleChange}
-        />
+          <input
+            type="number"
+            name="openingBalance"
+            placeholder="Opening Udhar (₹)"
+            value={form.openingBalance}
+            onChange={handleChange}
+            className="w-full px-4 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+        </div>
 
-        <div className="modal-actions">
-          <button className="btn btn-secondary" onClick={onClose}>
+        {/* ACTIONS */}
+        <div className="flex justify-end gap-2 pt-2">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm"
+          >
             Cancel
           </button>
 
-          <button className="btn btn-primary" onClick={handleSubmit}>
+          <button
+            onClick={handleSubmit}
+            className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-sm"
+          >
             Add Shop
           </button>
         </div>

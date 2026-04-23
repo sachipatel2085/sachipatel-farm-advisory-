@@ -26,20 +26,32 @@ const ExpenseChart = ({ expenses }) => {
       {
         data: totals,
         backgroundColor: [
-          "#4caf50",
-          "#ff9800",
-          "#2196f3",
-          "#00bcd4",
-          "#e53935",
-          "#9e9e9e",
+          "#22c55e",
+          "#f59e0b",
+          "#3b82f6",
+          "#06b6d4",
+          "#ef4444",
+          "#9ca3af",
         ],
-        hoverOffset: 8,
-        borderWidth: 1,
+        borderWidth: 0,
       },
     ],
   };
-  if (!expenses.length) return <p>No expenses yet</p>;
-  return <Pie data={data} />;
+
+  if (!expenses.length)
+    return <p className="text-sm text-gray-400 text-center">No expenses yet</p>;
+
+  return (
+    <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+      <h3 className="text-sm font-semibold mb-3 text-gray-300">
+        Expense Breakdown
+      </h3>
+
+      <div className="max-w-xs mx-auto">
+        <Pie data={data} />
+      </div>
+    </div>
+  );
 };
 
 export default ExpenseChart;

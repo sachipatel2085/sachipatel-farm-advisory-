@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "../styles/home.css";
 import { Link, useNavigate } from "react-router-dom";
 import { Leaf, BarChart3, IndianRupee, Brain } from "lucide-react";
 
@@ -17,21 +16,33 @@ export default function Home() {
     }
   }, [navigate]);
 
-  if (checking) return null; // 🔥 prevents flicker
+  if (checking) return null;
 
   return (
-    <div className="home dark">
+    <div className="min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-slate-200 font-sans">
       {/* HERO */}
-      <section className="hero">
-        <div className="hero-content">
-          <h1>🌾 Smart Farm Advisory</h1>
-          <p>Grow smarter. Track crops. Maximize your profit.</p>
+      <section className="text-center px-4 pt-24 pb-16">
+        <div className="max-w-2xl mx-auto">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold">
+            🌾 Smart Farm Advisory
+          </h1>
 
-          <div className="hero-actions">
-            <Link to="/register" className="primary">
+          <p className="mt-3 opacity-70 text-sm sm:text-base">
+            Grow smarter. Track crops. Maximize your profit.
+          </p>
+
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link
+              to="/register"
+              className="px-5 py-3 rounded-full bg-green-500 text-white font-semibold hover:bg-green-600 transition"
+            >
               Get Started
             </Link>
-            <Link to="/login" className="secondary">
+
+            <Link
+              to="/login"
+              className="px-5 py-3 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition"
+            >
               Login
             </Link>
           </div>
@@ -39,7 +50,7 @@ export default function Home() {
       </section>
 
       {/* FEATURES */}
-      <section className="feature-grid">
+      <section className="grid gap-5 px-5 sm:px-8 md:px-12 pb-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Feature
           icon={<Leaf />}
           title="Farm Management"
@@ -63,18 +74,30 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="cta">
-        <h2>Start Smart Farming Today</h2>
-        <Link to="/register">Create Free Account</Link>
+      <section className="text-center py-12 px-4">
+        <h2 className="text-xl sm:text-2xl font-semibold">
+          Start Smart Farming Today
+        </h2>
+
+        <Link
+          to="/register"
+          className="inline-block mt-5 bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition"
+        >
+          Create Free Account
+        </Link>
       </section>
     </div>
   );
 }
 
+/* Feature Card */
 const Feature = ({ icon, title, desc }) => (
-  <div className="feature-card">
-    <div className="icon">{icon}</div>
-    <h3>{title}</h3>
-    <p>{desc}</p>
+  <div className="bg-white/5 border border-white/10 p-6 rounded-xl text-center transition hover:-translate-y-1 hover:border-green-500">
+    <div className="mb-2 text-green-500 flex justify-center">
+      <div className="w-6 h-6">{icon}</div>
+    </div>
+
+    <h3 className="text-lg font-medium">{title}</h3>
+    <p className="text-sm opacity-70 mt-1">{desc}</p>
   </div>
 );

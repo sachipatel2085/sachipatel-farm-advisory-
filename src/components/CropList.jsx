@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
 import AddCropModal from "../components/AddCropModal";
-import "../styles/cropList.css";
 import { useNavigate } from "react-router-dom";
 import { Sprout, CalendarDays, Timer, Wheat } from "lucide-react";
 
 const CropList = ({ farmId }) => {
   const [crops, setCrops] = useState([]);
   const [showAdd, setShowAdd] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("");
+  const [seasonFilter, setSeasonFilter] = useState("");
+  const [cropFilter, setCropFilter] = useState("");
+  const [sortType, setSortType] = useState("latest");
+  const [showFilters, setShowFilters] = useState(false);
   const navigate = useNavigate();
 
   const loadCrops = async () => {
     try {
       let url = "/crops";
 
-      // 🔥 if farmId exists → use farm-specific API
       if (farmId) {
         url = `/crops/farm/${farmId}`;
+        if (statusFilter) url += `?status=${statusFilter}`;
       }
 
       const res = await api.get(url);
@@ -28,73 +32,156 @@ const CropList = ({ farmId }) => {
 
   useEffect(() => {
     loadCrops();
-  }, [farmId]);
+  }, [farmId, statusFilter]);
+
+  const processedCrops = crops
+    .filter(
+      (c) =>
+        (!seasonFilter || c.season === seasonFilter) &&
+        (!cropFilter || c.cropName === cropFilter),
+    )
+    .sort((a, b) => {
+      if (sortType === "latest")
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      if (sortType === "oldest")
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      return 0;
+    });
 
   const progress = (age, duration) =>
     Math.min(100, Math.round((age / duration) * 100));
 
   return (
-    <div className="crop-page dark">
-      <div className="crop-topbar">
-        <h2 className="page-title">
-          <Wheat size={22} /> Crops
+    <div className="space-y-5 text-slate-200">
+      {/* TOP BAR */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="flex items-center gap-2 text-xl font-semibold">
+          <Wheat size={20} /> Crops
         </h2>
 
-        <button className="primary-btn" onClick={() => setShowAdd(true)}>
-          + Add Crop
-        </button>
+        <div className="flex gap-2 flex-wrap">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm"
+          >
+            ⚙️ Filters
+          </button>
+
+          <button
+            onClick={() => setShowAdd(true)}
+            className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-sm"
+          >
+            + Add Crop
+          </button>
+        </div>
       </div>
 
-      <div className="crop-grid">
-        {crops.map((crop) => {
+      {/* FILTERS */}
+      {showFilters && (
+        <div className="bg-white/5 border border-white/10 p-4 rounded-xl grid sm:grid-cols-4 gap-3">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
+          >
+            <option value="">All Status</option>
+            <option value="active">🌱 Active</option>
+            <option value="harvested">🌾 Harvested</option>
+            <option value="failed">❌ Failed</option>
+          </select>
+
+          <select
+            value={seasonFilter}
+            onChange={(e) => setSeasonFilter(e.target.value)}
+            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
+          >
+            <option value="">All Seasons</option>
+            {[...new Set(crops.map((c) => c.season))].map((s) => (
+              <option key={s}>{s}</option>
+            ))}
+          </select>
+
+          <select
+            value={cropFilter}
+            onChange={(e) => setCropFilter(e.target.value)}
+            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
+          >
+            <option value="">All Crops</option>
+            {[...new Set(crops.map((c) => c.cropName))].map((c) => (
+              <option key={c}>{c}</option>
+            ))}
+          </select>
+
+          <select
+            value={sortType}
+            onChange={(e) => setSortType(e.target.value)}
+            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
+          >
+            <option value="latest">Latest</option>
+            <option value="oldest">Oldest</option>
+          </select>
+        </div>
+      )}
+
+      {/* GRID */}
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {processedCrops.map((crop) => {
           const prog = progress(crop.cropAgeDays, crop.expectedDurationDays);
 
           return (
             <div
               key={crop._id}
-              className="crop-card"
               onClick={() => navigate(`/crops/${crop._id}`)}
+              className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-green-500 transition cursor-pointer"
             >
               {/* HEADER */}
-              <div className="crop-header">
-                <div className="crop-title">
-                  <Sprout size={18} />
-                  <h3>{crop.cropName}</h3>
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2 font-semibold">
+                  <Sprout size={16} />
+                  {crop.cropName}
                 </div>
 
-                <span className={`stage ${crop.growthStage}`}>
-                  {crop.growthStage}
+                <span
+                  className={`text-xs px-2 py-1 rounded-full ${
+                    crop.status === "active"
+                      ? "bg-green-500/20 text-green-400"
+                      : crop.status === "harvested"
+                        ? "bg-yellow-500/20 text-yellow-400"
+                        : "bg-red-500/20 text-red-400"
+                  }`}
+                >
+                  {crop.status}
                 </span>
               </div>
 
               {/* FARM */}
-              <p className="farm-name">📍 {crop.farmName}</p>
+              <p className="text-sm text-gray-400 mt-1">📍 {crop.farmName}</p>
 
               {/* PROGRESS */}
-              <div className="progress-section">
-                <div className="progress-label">
+              <div className="mt-4">
+                <div className="flex justify-between text-xs text-gray-400">
                   <span>Growth</span>
                   <span>{prog}%</span>
                 </div>
 
-                <div className="progress-bar">
+                <div className="w-full h-2 bg-white/10 rounded-full mt-1">
                   <div
-                    className="progress-fill"
+                    className="h-full bg-green-500 rounded-full"
                     style={{ width: `${prog}%` }}
                   />
                 </div>
               </div>
 
               {/* STATS */}
-              <div className="crop-stats">
-                <div>
-                  <CalendarDays size={14} />
-                  <span>{crop.cropAgeDays} days</span>
+              <div className="flex justify-between mt-4 text-xs text-gray-400">
+                <div className="flex items-center gap-1">
+                  <CalendarDays size={12} />
+                  {crop.cropAgeDays} days
                 </div>
 
-                <div>
-                  <Timer size={14} />
-                  <span>{crop.expectedDurationDays} days</span>
+                <div className="flex items-center gap-1">
+                  <Timer size={12} />
+                  {crop.expectedDurationDays} days
                 </div>
               </div>
             </div>
