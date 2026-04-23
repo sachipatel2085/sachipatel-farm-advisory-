@@ -21,9 +21,7 @@ const Crops = () => {
         </div>
 
         {/* CONTENT */}
-        <div className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5">
-          <CropList />
-        </div>
+        <CropList />
       </div>
     </div>
   );

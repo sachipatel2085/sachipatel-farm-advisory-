@@ -16,11 +16,16 @@ const CropList = ({ farmId }) => {
 
   const loadCrops = async () => {
     try {
-      let url = "/crops";
+      let url = farmId ? `/crops/farm/${farmId}` : `/crops`;
 
-      if (farmId) {
-        url = `/crops/farm/${farmId}`;
-        if (statusFilter) url += `?status=${statusFilter}`;
+      const params = new URLSearchParams();
+
+      if (statusFilter) {
+        params.append("status", statusFilter);
+      }
+
+      if (params.toString()) {
+        url += `?${params.toString()}`;
       }
 
       const res = await api.get(url);
@@ -29,7 +34,6 @@ const CropList = ({ farmId }) => {
       console.error(err);
     }
   };
-
   useEffect(() => {
     loadCrops();
   }, [farmId, statusFilter]);
@@ -52,11 +56,11 @@ const CropList = ({ farmId }) => {
     Math.min(100, Math.round((age / duration) * 100));
 
   return (
-    <div className="space-y-5 text-slate-200">
-      {/* TOP BAR */}
+    <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-5 text-slate-200">
+      {/* HEADER */}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="flex items-center gap-2 text-xl font-semibold">
-          <Wheat size={20} /> Crops
+        <h2 className="flex items-center gap-2 text-lg font-semibold">
+          <Wheat size={18} /> Crops
         </h2>
 
         <div className="flex gap-2 flex-wrap">
@@ -76,7 +80,7 @@ const CropList = ({ farmId }) => {
         </div>
       </div>
 
-      {/* FILTERS */}
+      {/* FILTER PANEL (same style as history) */}
       {showFilters && (
         <div className="bg-white/5 border border-white/10 p-4 rounded-xl grid sm:grid-cols-4 gap-3">
           <select
@@ -124,7 +128,7 @@ const CropList = ({ farmId }) => {
       )}
 
       {/* GRID */}
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {processedCrops.map((crop) => {
           const prog = progress(crop.cropAgeDays, crop.expectedDurationDays);
 
@@ -132,11 +136,11 @@ const CropList = ({ farmId }) => {
             <div
               key={crop._id}
               onClick={() => navigate(`/crops/${crop._id}`)}
-              className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-green-500 transition cursor-pointer"
+              className="bg-white/5 border border-white/10 rounded-xl p-4 hover:border-green-500 transition cursor-pointer"
             >
               {/* HEADER */}
               <div className="flex justify-between items-center">
-                <div className="flex items-center gap-2 font-semibold">
+                <div className="flex items-center gap-2 font-medium">
                   <Sprout size={16} />
                   {crop.cropName}
                 </div>
@@ -155,10 +159,10 @@ const CropList = ({ farmId }) => {
               </div>
 
               {/* FARM */}
-              <p className="text-sm text-gray-400 mt-1">📍 {crop.farmName}</p>
+              <p className="text-xs text-gray-400 mt-1">📍 {crop.farmName}</p>
 
               {/* PROGRESS */}
-              <div className="mt-4">
+              <div className="mt-3">
                 <div className="flex justify-between text-xs text-gray-400">
                   <span>Growth</span>
                   <span>{prog}%</span>
@@ -173,7 +177,7 @@ const CropList = ({ farmId }) => {
               </div>
 
               {/* STATS */}
-              <div className="flex justify-between mt-4 text-xs text-gray-400">
+              <div className="flex justify-between mt-3 text-xs text-gray-400">
                 <div className="flex items-center gap-1">
                   <CalendarDays size={12} />
                   {crop.cropAgeDays} days
