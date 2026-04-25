@@ -12,9 +12,14 @@ const CropList = ({ farmId }) => {
   const [cropFilter, setCropFilter] = useState("");
   const [sortType, setSortType] = useState("latest");
   const [showFilters, setShowFilters] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const loadCrops = async () => {
+    setLoading(true);
+
+    const startTime = Date.now();
+
     try {
       let url = farmId ? `/crops/farm/${farmId}` : `/crops`;
 
@@ -32,6 +37,16 @@ const CropList = ({ farmId }) => {
       setCrops(res.data);
     } catch (err) {
       console.error(err);
+    } finally {
+      const elapsed = Date.now() - startTime;
+      const minTime = 400; // 👈 smooth skeleton time
+
+      setTimeout(
+        () => {
+          setLoading(false);
+        },
+        elapsed < minTime ? minTime - elapsed : 0,
+      );
     }
   };
   useEffect(() => {
@@ -129,68 +144,99 @@ const CropList = ({ farmId }) => {
 
       {/* GRID */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {processedCrops.map((crop) => {
-          const prog = progress(crop.cropAgeDays, crop.expectedDurationDays);
+        {loading
+          ? [...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="bg-white/5 border border-white/10 rounded-xl p-4 animate-pulse"
+              >
+                {/* TITLE */}
+                <div className="h-4 w-2/3 bg-white/10 rounded mb-3"></div>
 
-          return (
-            <div
-              key={crop._id}
-              onClick={() => navigate(`/crops/${crop._id}`)}
-              className="bg-white/5 border border-white/10 rounded-xl p-4 hover:border-green-500 transition cursor-pointer"
-            >
-              {/* HEADER */}
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-2 font-medium">
-                  <Sprout size={16} />
-                  {crop.cropName}
+                {/* STATUS */}
+                <div className="h-4 w-16 bg-white/10 rounded mb-3"></div>
+
+                {/* FARM */}
+                <div className="h-3 w-1/2 bg-white/10 rounded mb-3"></div>
+
+                {/* PROGRESS */}
+                <div className="h-2 w-full bg-white/10 rounded mb-2"></div>
+                <div className="h-2 w-5/6 bg-white/10 rounded mb-4"></div>
+
+                {/* STATS */}
+                <div className="flex justify-between">
+                  <div className="h-3 w-16 bg-white/10 rounded"></div>
+                  <div className="h-3 w-16 bg-white/10 rounded"></div>
                 </div>
+              </div>
+            ))
+          : processedCrops.map((crop) => {
+              const prog = progress(
+                crop.cropAgeDays,
+                crop.expectedDurationDays,
+              );
 
-                <span
-                  className={`text-xs px-2 py-1 rounded-full ${
-                    crop.status === "active"
-                      ? "bg-green-500/20 text-green-400"
-                      : crop.status === "harvested"
-                        ? "bg-yellow-500/20 text-yellow-400"
-                        : "bg-red-500/20 text-red-400"
-                  }`}
+              return (
+                <div
+                  key={crop._id}
+                  onClick={() => navigate(`/crops/${crop._id}`)}
+                  className="bg-white/5 border border-white/10 rounded-xl p-4 hover:border-green-500 transition cursor-pointer"
                 >
-                  {crop.status}
-                </span>
-              </div>
+                  {/* HEADER */}
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2 font-medium">
+                      <Sprout size={16} />
+                      {crop.cropName}
+                    </div>
 
-              {/* FARM */}
-              <p className="text-xs text-gray-400 mt-1">📍 {crop.farmName}</p>
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full ${
+                        crop.status === "active"
+                          ? "bg-green-500/20 text-green-400"
+                          : crop.status === "harvested"
+                            ? "bg-yellow-500/20 text-yellow-400"
+                            : "bg-red-500/20 text-red-400"
+                      }`}
+                    >
+                      {crop.status}
+                    </span>
+                  </div>
 
-              {/* PROGRESS */}
-              <div className="mt-3">
-                <div className="flex justify-between text-xs text-gray-400">
-                  <span>Growth</span>
-                  <span>{prog}%</span>
+                  {/* FARM */}
+                  <p className="text-xs text-gray-400 mt-1">
+                    📍 {crop.farmName}
+                  </p>
+
+                  {/* PROGRESS */}
+                  <div className="mt-3">
+                    <div className="flex justify-between text-xs text-gray-400">
+                      <span>Growth</span>
+                      <span>{prog}%</span>
+                    </div>
+
+                    <div className="w-full h-2 bg-white/10 rounded-full mt-1">
+                      <div
+                        className="h-full bg-green-500 rounded-full"
+                        style={{ width: `${prog}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* STATS */}
+                  <div className="flex justify-between mt-3 text-xs text-gray-400">
+                    <div className="flex items-center gap-1">
+                      <CalendarDays size={12} />
+                      {crop.cropAgeDays} days
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <Timer size={12} />
+                      {crop.expectedDurationDays} days
+                    </div>
+                  </div>
                 </div>
-
-                <div className="w-full h-2 bg-white/10 rounded-full mt-1">
-                  <div
-                    className="h-full bg-green-500 rounded-full"
-                    style={{ width: `${prog}%` }}
-                  />
-                </div>
-              </div>
-
-              {/* STATS */}
-              <div className="flex justify-between mt-3 text-xs text-gray-400">
-                <div className="flex items-center gap-1">
-                  <CalendarDays size={12} />
-                  {crop.cropAgeDays} days
-                </div>
-
-                <div className="flex items-center gap-1">
-                  <Timer size={12} />
-                  {crop.expectedDurationDays} days
-                </div>
-              </div>
-            </div>
-          );
-        })}
+              );
+            })}
       </div>
 
       <AddCropModal

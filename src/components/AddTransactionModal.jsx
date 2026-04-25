@@ -73,11 +73,15 @@ const AddTransactionModal = ({
   };
 
   const deleteTxn = async () => {
-    await api.delete(`/crops/${crop._id}/transaction/${editingTxn._id}`);
-    onSuccess();
-    onClose();
+    try {
+      await api.delete(`/crops/${crop._id}/transaction/${editingTxn._id}`);
+      onSuccess();
+      onClose();
+    } catch (err) {
+      console.error(err);
+      alert("Delete failed");
+    }
   };
-
   const submit = async () => {
     const payload = {
       ...form,

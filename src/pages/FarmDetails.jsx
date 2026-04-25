@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import Breadcrumb from "../components/Breadcrumb";
+import EditFarmModal from "../components/EditFarmModal";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 import {
   Wheat,
   MapPin,
@@ -9,6 +11,8 @@ import {
   Calendar,
   Wallet,
   TrendingUp,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import CropList from "../components/CropList";
 
@@ -24,7 +28,8 @@ const FarmDetails = () => {
   const [cropFilter, setCropFilter] = useState("");
   const [sortType, setSortType] = useState("profitDesc");
   const [showHistoryFilters, setShowHistoryFilters] = useState(false);
-
+  const [showEdit, setShowEdit] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
   useEffect(() => {
     loadFarm();
     loadAnalytics();
@@ -45,6 +50,14 @@ const FarmDetails = () => {
     const res = await api.get(`/farms/${id}/history`);
     setHistory(res.data);
   };
+  const handleDelete = async () => {
+    try {
+      await api.delete(`/farms/${id}`);
+      navigate("/farms"); // redirect after delete
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const processedHistory = history
     .filter(
@@ -58,9 +71,42 @@ const FarmDetails = () => {
       return 0;
     });
 
-  if (!farm)
-    return <p className="text-center text-gray-400 mt-10">Loading...</p>;
+  if (!farm) {
+    return (
+      <div className="space-y-6 animate-pulse text-slate-200">
+        <div className="h-6 w-40 bg-white/10 rounded"></div>
 
+        {/* HEADER */}
+        <div className="flex justify-between">
+          <div className="space-y-2">
+            <div className="h-5 w-48 bg-white/10 rounded"></div>
+            <div className="h-4 w-32 bg-white/10 rounded"></div>
+          </div>
+          <div className="h-6 w-16 bg-white/10 rounded-full"></div>
+        </div>
+
+        {/* STATS */}
+        <div className="grid sm:grid-cols-3 gap-4">
+          {[...Array(6)].map((_, i) => (
+            <div
+              key={i}
+              className="h-20 bg-white/10 rounded-xl border border-white/10"
+            />
+          ))}
+        </div>
+
+        {/* HISTORY */}
+        <div className="grid md:grid-cols-2 gap-4">
+          {[...Array(4)].map((_, i) => (
+            <div
+              key={i}
+              className="h-32 bg-white/10 rounded-xl border border-white/10"
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="space-y-6 text-slate-200">
       <Breadcrumb currentName={farm.farmName} />
@@ -211,7 +257,41 @@ const FarmDetails = () => {
             </div>
           ))}
         </div>
-      </div>{" "}
+      </div>
+      <div className="flex flex-wrap gap-3">
+        <button
+          onClick={() => setShowEdit(true)}
+          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-sm flex items-center gap-2"
+        >
+          <Pencil size={16} /> Edit
+        </button>
+
+        <button
+          onClick={() => setShowDelete(true)}
+          className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-sm flex items-center gap-2"
+        >
+          <Trash2 size={16} /> Delete
+        </button>
+      </div>
+
+      {showEdit && (
+        <EditFarmModal
+          farm={farm}
+          onClose={() => setShowEdit(false)}
+          onUpdated={() => {
+            loadFarm();
+            setShowEdit(false);
+          }}
+        />
+      )}
+      {showDelete && (
+        <ConfirmDeleteModal
+          title="Delete Farm"
+          message="This farm will be permanently removed."
+          onCancel={() => setShowDelete(false)}
+          onConfirm={handleDelete}
+        />
+      )}
     </div>
   );
 };

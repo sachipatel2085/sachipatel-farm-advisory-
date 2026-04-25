@@ -8,38 +8,42 @@ export default function ShopDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(true);
+
   const [shop, setShop] = useState(null);
   const [ledger, setLedger] = useState([]);
   const [summary, setSummary] = useState({});
   const [editItem, setEditItem] = useState(null);
 
   const loadData = async () => {
-    const res = await api.get(`/finance/shop/${id}`);
-    setShop(res.data.shop);
-    setLedger(res.data.ledger);
-    setSummary(res.data.summary);
+    setLoading(true);
+    const start = Date.now();
+
+    try {
+      const res = await api.get(`/finance/shop/${id}`);
+      setShop(res.data.shop);
+      setLedger(res.data.ledger);
+      setSummary(res.data.summary);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      const elapsed = Date.now() - start;
+      const minTime = 400;
+
+      setTimeout(
+        () => {
+          setLoading(false);
+        },
+        elapsed < minTime ? minTime - elapsed : 0,
+      );
+    }
   };
 
   useEffect(() => {
     loadData();
   }, []);
 
-  const handleDelete = async (item) => {
-    if (!window.confirm("Delete this entry?")) return;
-
-    try {
-      if (item.model === "credit") {
-        await api.delete(`/finance/credit/${item._id}`);
-      } else {
-        await api.delete(`/finance/payment/${item._id}`);
-      }
-      loadData();
-    } catch {
-      alert("Delete failed");
-    }
-  };
-
-  if (!shop) return <div className="p-6 text-gray-400">Loading...</div>;
+  if (!shop && !loading) return null;
 
   return (
     <div className="p-4 sm:p-6 space-y-6 text-slate-200">
@@ -53,28 +57,60 @@ export default function ShopDetails() {
 
       {/* SHOP INFO */}
       <div className="bg-white/5 border border-white/10 rounded-xl p-5">
-        <h2 className="flex items-center gap-2 text-lg font-semibold">
-          <Store size={20} /> {shop.name}
-        </h2>
+        {loading ? (
+          <div className="space-y-3 animate-pulse">
+            <div className="h-5 w-40 bg-white/10 rounded"></div>
+            <div className="h-4 w-60 bg-white/10 rounded"></div>
+            <div className="h-4 w-40 bg-white/10 rounded"></div>
+          </div>
+        ) : (
+          <>
+            <h2 className="flex items-center gap-2 text-lg font-semibold">
+              <Store size={20} /> {shop.name}
+            </h2>
 
-        <p className="flex items-center gap-2 text-sm text-gray-400 mt-2">
-          <MapPin size={16} /> {shop.address || "—"}
-        </p>
+            <p className="flex items-center gap-2 text-sm text-gray-400 mt-2">
+              <MapPin size={16} /> {shop.address || "—"}
+            </p>
 
-        <p className="flex items-center gap-2 text-sm text-gray-400">
-          <Phone size={16} /> {shop.phone || "—"}
-        </p>
+            <p className="flex items-center gap-2 text-sm text-gray-400">
+              <Phone size={16} /> {shop.phone || "—"}
+            </p>
+          </>
+        )}
       </div>
 
       {/* SUMMARY */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card title="Udhar" value={`₹${summary.totalUdhar || 0}`} color="red" />
-        <Card title="Paid" value={`₹${summary.totalPaid || 0}`} color="green" />
-        <Card
-          title="Balance"
-          value={`₹${summary.remaining || 0}`}
-          color="blue"
-        />
+        {loading ? (
+          [1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="p-4 rounded-xl border bg-white/5 space-y-2 animate-pulse"
+            >
+              <div className="h-3 w-20 bg-white/10 rounded"></div>
+              <div className="h-5 w-24 bg-white/10 rounded"></div>
+            </div>
+          ))
+        ) : (
+          <>
+            <Card
+              title="Udhar"
+              value={`₹${summary.totalUdhar || 0}`}
+              color="red"
+            />
+            <Card
+              title="Paid"
+              value={`₹${summary.totalPaid || 0}`}
+              color="green"
+            />
+            <Card
+              title="Balance"
+              value={`₹${summary.remaining || 0}`}
+              color="blue"
+            />
+          </>
+        )}
       </div>
 
       {/* LEDGER */}
@@ -92,51 +128,62 @@ export default function ShopDetails() {
         </div>
 
         <div className="space-y-2">
-          {ledger.map((l, i) => (
-            <div
-              key={i}
-              className="grid sm:grid-cols-6 gap-2 items-center bg-white/5 p-3 rounded-lg hover:bg-white/10"
-            >
-              <span className="text-xs text-gray-400">
-                {new Date(l.date).toLocaleDateString()}
-              </span>
-
-              <span>{l.note}</span>
-
-              <span className="text-red-400">
-                {l.type === "debit" ? `₹${l.amount}` : "-"}
-              </span>
-
-              <span className="text-green-400">
-                {l.type === "credit" ? `₹${l.amount}` : "-"}
-              </span>
-
-              <span
-                className={`font-semibold ${
-                  l.balance >= 0 ? "text-red-400" : "text-green-400"
-                }`}
+          {loading ? (
+            [...Array(6)].map((_, i) => (
+              <div key={i} className="h-12 bg-white/10 rounded animate-pulse" />
+            ))
+          ) : ledger.length === 0 ? (
+            <p className="text-center text-gray-400 py-6">
+              No transactions yet
+            </p>
+          ) : (
+            ledger.map((l, i) => (
+              <div
+                key={i}
+                className="grid sm:grid-cols-6 gap-2 items-center bg-white/5 p-3 rounded-lg hover:bg-white/10"
               >
-                {l.balance >= 0 ? `-₹${l.balance}` : `+₹${Math.abs(l.balance)}`}
-              </span>
+                <span className="text-xs text-gray-400">
+                  {new Date(l.date).toLocaleDateString()}
+                </span>
 
-              {/* ACTIONS */}
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setEditItem(l)}
-                  className="px-2 py-1 text-xs bg-blue-500 hover:bg-blue-600 rounded"
-                >
-                  Edit
-                </button>
+                <span>{l.note}</span>
 
-                <button
-                  onClick={() => handleDelete(l)}
-                  className="px-2 py-1 text-xs bg-red-500 hover:bg-red-600 rounded"
+                <span className="text-red-400">
+                  {l.type === "debit" ? `₹${l.amount}` : "-"}
+                </span>
+
+                <span className="text-green-400">
+                  {l.type === "credit" ? `₹${l.amount}` : "-"}
+                </span>
+
+                <span
+                  className={`font-semibold ${
+                    l.balance >= 0 ? "text-red-400" : "text-green-400"
+                  }`}
                 >
-                  Delete
-                </button>
+                  {l.balance >= 0
+                    ? `-₹${l.balance}`
+                    : `+₹${Math.abs(l.balance)}`}
+                </span>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setEditItem(l)}
+                    className="px-2 py-1 text-xs bg-blue-500 hover:bg-blue-600 rounded"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(l)}
+                    className="px-2 py-1 text-xs bg-red-500 hover:bg-red-600 rounded"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 

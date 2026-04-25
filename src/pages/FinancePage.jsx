@@ -5,22 +5,45 @@ import AddShopModal from "../components/AddShopModal";
 import AddPaymentModal from "../components/AddPaymentModal";
 
 export default function FinancePage() {
+  const [loading, setLoading] = useState(true);
+
   const [summary, setSummary] = useState({});
   const [transactions, setTransactions] = useState([]);
   const [shops, setShops] = useState([]);
+
   const [showShopModal, setShowShopModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedShop, setSelectedShop] = useState(null);
+
   const navigate = useNavigate();
 
   const loadData = async () => {
-    const res1 = await api.get("/finance/summary");
-    const res2 = await api.get("/finance/transactions");
-    const res3 = await api.get("/finance/shops");
+    setLoading(true);
+    const start = Date.now();
 
-    setSummary(res1.data);
-    setTransactions(res2.data.slice(0, 5));
-    setShops(res3.data);
+    try {
+      const [res1, res2, res3] = await Promise.all([
+        api.get("/finance/summary"),
+        api.get("/finance/transactions"),
+        api.get("/finance/shops"),
+      ]);
+
+      setSummary(res1.data);
+      setTransactions(res2.data.slice(0, 5));
+      setShops(res3.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      const elapsed = Date.now() - start;
+      const minTime = 400;
+
+      setTimeout(
+        () => {
+          setLoading(false);
+        },
+        elapsed < minTime ? minTime - elapsed : 0,
+      );
+    }
   };
 
   useEffect(() => {
@@ -31,9 +54,35 @@ export default function FinancePage() {
     <div className="p-4 sm:p-6 space-y-6 text-slate-200">
       {/* ===== SUMMARY ===== */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card title="Income" value={`₹${summary.income || 0}`} color="green" />
-        <Card title="Expense" value={`₹${summary.expense || 0}`} color="red" />
-        <Card title="Profit" value={`₹${summary.profit || 0}`} color="blue" />
+        {loading ? (
+          [1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="p-4 rounded-xl border bg-white/5 space-y-2 animate-pulse"
+            >
+              <div className="h-3 w-20 bg-white/10 rounded"></div>
+              <div className="h-5 w-24 bg-white/10 rounded"></div>
+            </div>
+          ))
+        ) : (
+          <>
+            <Card
+              title="Income"
+              value={`₹${summary.income || 0}`}
+              color="green"
+            />
+            <Card
+              title="Expense"
+              value={`₹${summary.expense || 0}`}
+              color="red"
+            />
+            <Card
+              title="Profit"
+              value={`₹${summary.profit || 0}`}
+              color="blue"
+            />
+          </>
+        )}
       </div>
 
       {/* ===== TRANSACTIONS ===== */}
@@ -41,34 +90,43 @@ export default function FinancePage() {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">Latest Transactions</h2>
 
-          <button
-            onClick={() => navigate("/finance/details")}
-            className="text-sm text-green-400 hover:underline"
-          >
-            See More →
-          </button>
+          {!loading && (
+            <button
+              onClick={() => navigate("/finance/details")}
+              className="text-sm text-green-400 hover:underline"
+            >
+              See More →
+            </button>
+          )}
         </div>
 
         <div className="space-y-2">
-          {transactions.map((t) => (
-            <div
-              key={t._id}
-              className="flex justify-between items-center p-3 rounded-lg bg-white/5 hover:bg-white/10"
-            >
-              <div>
-                <p className="font-medium">{t.title}</p>
-                <p className="text-xs text-gray-400">{t.cropName}</p>
-              </div>
+          {loading
+            ? [...Array(4)].map((_, i) => (
+                <div
+                  key={i}
+                  className="h-12 bg-white/10 rounded animate-pulse"
+                />
+              ))
+            : transactions.map((t) => (
+                <div
+                  key={t._id}
+                  className="flex justify-between items-center p-3 rounded-lg bg-white/5 hover:bg-white/10"
+                >
+                  <div>
+                    <p className="font-medium">{t.title}</p>
+                    <p className="text-xs text-gray-400">{t.cropName}</p>
+                  </div>
 
-              <p
-                className={`font-semibold ${
-                  t.type === "income" ? "text-green-400" : "text-red-400"
-                }`}
-              >
-                ₹ {t.amount}
-              </p>
-            </div>
-          ))}
+                  <p
+                    className={`font-semibold ${
+                      t.type === "income" ? "text-green-400" : "text-red-400"
+                    }`}
+                  >
+                    ₹ {t.amount}
+                  </p>
+                </div>
+              ))}
         </div>
       </div>
 
@@ -77,15 +135,32 @@ export default function FinancePage() {
         <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
           <h2 className="text-lg font-semibold">🏪 Shop Balance (Udhar)</h2>
 
-          <button
-            onClick={() => setShowShopModal(true)}
-            className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-sm"
-          >
-            + Add Shop
-          </button>
+          {!loading && (
+            <button
+              onClick={() => setShowShopModal(true)}
+              className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-sm"
+            >
+              + Add Shop
+            </button>
+          )}
         </div>
 
-        {shops.length === 0 ? (
+        {loading ? (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3 animate-pulse"
+              >
+                <div className="h-4 w-24 bg-white/10 rounded"></div>
+                <div className="h-3 w-20 bg-white/10 rounded"></div>
+                <div className="h-3 w-20 bg-white/10 rounded"></div>
+                <div className="h-4 w-24 bg-white/10 rounded"></div>
+                <div className="h-8 w-full bg-white/10 rounded"></div>
+              </div>
+            ))}
+          </div>
+        ) : shops.length === 0 ? (
           <p className="text-gray-400">No shop data yet</p>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

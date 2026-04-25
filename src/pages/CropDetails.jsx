@@ -15,34 +15,51 @@ const CropDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(true);
   const [crop, setCrop] = useState(null);
+  const [history, setHistory] = useState([]);
+
   const [editCrop, setEditCrop] = useState(null);
   const [deleteCrop, setDeleteCrop] = useState(null);
   const [showExpense, setShowExpense] = useState(null);
   const [editTxn, setEditTxn] = useState(null);
   const [selectedTxn, setSelectedTxn] = useState(null);
   const [harvestCropState, setHarvestCropState] = useState(null);
-  const [history, setHistory] = useState([]);
   const [showHistoryModal, setShowHistoryModal] = useState(null);
   const [selectedHistory, setSelectedHistory] = useState(null);
 
-  const loadCrop = async () => {
-    const res = await api.get(`/crops/${id}`);
-    setCrop(res.data);
-  };
+  const loadAll = async () => {
+    setLoading(true);
+    const start = Date.now();
 
-  const loadHistory = async () => {
-    const res = await api.get(`/crop-history/${id}`);
-    setHistory(res.data);
+    try {
+      const [cropRes, historyRes] = await Promise.all([
+        api.get(`/crops/${id}`),
+        api.get(`/crop-history/${id}`),
+      ]);
+
+      setCrop(cropRes.data);
+      setHistory(historyRes.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      const elapsed = Date.now() - start;
+      const minTime = 600;
+
+      setTimeout(
+        () => {
+          setLoading(false);
+        },
+        elapsed < minTime ? minTime - elapsed : 0,
+      );
+    }
   };
 
   useEffect(() => {
-    loadCrop();
-    loadHistory();
+    loadAll();
   }, []);
 
-  if (!crop)
-    return <div className="p-6 text-gray-400 animate-pulse">Loading...</div>;
+  if (!crop) return null;
 
   const progress = Math.min(
     100,
@@ -73,17 +90,28 @@ const CropDetails = () => {
       {/* HEADER */}
       <div className="flex justify-between items-center flex-wrap gap-3">
         <div>
-          <h2 className="flex items-center gap-2 text-xl font-semibold">
-            <Sprout size={20} /> {crop.cropName}
-          </h2>
-          <p className="flex items-center gap-1 text-sm text-gray-400">
-            <MapPin size={14} /> {crop.farmName}
-          </p>
+          {loading ? (
+            <>
+              <div className="h-5 w-40 bg-white/10 rounded animate-pulse mb-2" />
+              <div className="h-4 w-24 bg-white/10 rounded animate-pulse" />
+            </>
+          ) : (
+            <>
+              <h2 className="flex items-center gap-2 text-xl font-semibold">
+                <Sprout size={20} /> {crop.cropName}
+              </h2>
+              <p className="flex items-center gap-1 text-sm text-gray-400">
+                <MapPin size={14} /> {crop.farmName}
+              </p>
+            </>
+          )}
         </div>
 
-        <span className="px-3 py-1 rounded-full text-sm bg-green-500/20 text-green-400 capitalize">
-          {crop.growthStage}
-        </span>
+        {!loading && (
+          <span className="px-3 py-1 rounded-full text-sm bg-green-500/20 text-green-400 capitalize">
+            {crop.growthStage}
+          </span>
+        )}
       </div>
 
       {/* PROGRESS */}
@@ -92,53 +120,46 @@ const CropDetails = () => {
           <Activity size={18} /> Crop Progress
         </h3>
 
-        <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-green-500 transition-all"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
+        {loading ? (
+          <div className="h-3 w-full bg-white/10 rounded animate-pulse" />
+        ) : (
+          <>
+            <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-green-500"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
 
-        <div className="flex justify-between text-sm text-gray-400 mt-2">
-          <span>Age: {crop.cropAgeDays} days</span>
-          <span>
-            Remaining:{" "}
-            {Math.max(0, crop.expectedDurationDays - crop.cropAgeDays)} days
-          </span>
-        </div>
-      </div>
-
-      {/* YIELD */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-          <h4 className="text-sm text-gray-400">Expected Yield</h4>
-          <p className="text-lg font-semibold">
-            {crop.expectedYield || "—"} kg
-          </p>
-        </div>
-
-        <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-          <h4 className="text-sm text-gray-400">Actual Yield</h4>
-          <p className="text-lg font-semibold">{crop.actualYield || "—"} kg</p>
-        </div>
+            <div className="flex justify-between text-sm text-gray-400 mt-2">
+              <span>Age: {crop.cropAgeDays} days</span>
+              <span>
+                Remaining:{" "}
+                {Math.max(0, crop.expectedDurationDays - crop.cropAgeDays)} days
+              </span>
+            </div>
+          </>
+        )}
       </div>
 
       {/* FINANCE */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-green-500/10 border border-green-500/20 p-4 rounded-xl">
-          <h4 className="text-sm text-gray-400">Income</h4>
-          <p className="text-lg font-semibold text-green-400">₹ {income}</p>
-        </div>
-
-        <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl">
-          <h4 className="text-sm text-gray-400">Expense</h4>
-          <p className="text-lg font-semibold text-red-400">₹ {expense}</p>
-        </div>
-
-        <div className="bg-blue-500/10 border border-blue-500/20 p-4 rounded-xl">
-          <h4 className="text-sm text-gray-400">Profit</h4>
-          <p className="text-lg font-semibold text-blue-400">₹ {profit}</p>
-        </div>
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="p-4 rounded-xl border border-white/10 bg-white/5"
+          >
+            {loading ? (
+              <div className="h-5 w-20 bg-white/10 rounded animate-pulse" />
+            ) : i === 1 ? (
+              <p className="text-green-400">₹ {income}</p>
+            ) : i === 2 ? (
+              <p className="text-red-400">₹ {expense}</p>
+            ) : (
+              <p className="text-blue-400">₹ {profit}</p>
+            )}
+          </div>
+        ))}
       </div>
 
       {/* TRANSACTIONS */}
@@ -148,40 +169,42 @@ const CropDetails = () => {
             <Wallet size={18} /> Transactions
           </h3>
 
-          <button
-            onClick={() => setShowExpense(crop)}
-            className="bg-green-500 hover:bg-green-600 px-3 py-1 rounded-lg text-sm"
-          >
-            + Add
-          </button>
+          {!loading && (
+            <button
+              onClick={() => setShowExpense(crop)}
+              className="bg-green-500 hover:bg-green-600 px-3 py-1 rounded-lg text-sm"
+            >
+              + Add
+            </button>
+          )}
         </div>
 
         <div className="space-y-2">
-          {crop.transactions.map((t) => (
-            <div
-              key={t._id}
-              onClick={() => setSelectedTxn(t)}
-              className="flex justify-between items-center p-3 rounded-lg bg-white/5 hover:bg-white/10 cursor-pointer"
-            >
-              <div>
-                <p className="font-medium">{t.title}</p>
-                <p className="text-xs text-gray-400">
-                  {new Date(t.date).toLocaleDateString()}
-                </p>
-              </div>
-
-              <div className="text-right">
-                <p>₹ {t.amount}</p>
-                <span
-                  className={`text-xs ${
-                    t.type === "income" ? "text-green-400" : "text-red-400"
-                  }`}
+          {loading
+            ? [...Array(3)].map((_, i) => (
+                <div
+                  key={i}
+                  className="h-12 bg-white/10 rounded animate-pulse"
+                />
+              ))
+            : crop.transactions.map((t) => (
+                <div
+                  key={t._id}
+                  onClick={() => setSelectedTxn(t)}
+                  className="flex justify-between items-center p-3 rounded-lg bg-white/5 hover:bg-white/10 cursor-pointer"
                 >
-                  {t.type}
-                </span>
-              </div>
-            </div>
-          ))}
+                  <div>
+                    <p className="font-medium">{t.title}</p>
+                    <p className="text-xs text-gray-400">
+                      {new Date(t.date).toLocaleDateString()}
+                    </p>
+                  </div>
+
+                  <div className="text-right">
+                    <p>₹ {t.amount}</p>
+                  </div>
+                </div>
+              ))}
         </div>
       </div>
 
@@ -192,61 +215,60 @@ const CropDetails = () => {
             <History size={18} /> Crop History
           </h3>
 
-          <button
-            onClick={() => setShowHistoryModal(crop)}
-            className="bg-green-500 hover:bg-green-600 px-3 py-1 rounded-lg text-sm"
-          >
-            + Add History
-          </button>
+          {!loading && (
+            <button
+              onClick={() => setShowHistoryModal(crop)}
+              className="bg-green-500 hover:bg-green-600 px-3 py-1 rounded-lg text-sm"
+            >
+              + Add History
+            </button>
+          )}
         </div>
 
         <div className="space-y-3">
-          {history.map((h) => (
-            <div
-              key={h._id}
-              onClick={() => setSelectedHistory(h)}
-              className="p-3 rounded-lg bg-white/5 hover:bg-white/10 cursor-pointer"
-            >
-              <p className="font-medium">{h.title}</p>
-              <p className="text-sm text-gray-400">{h.note}</p>
-              <p className="text-xs text-gray-500">
-                {new Date(h.date).toLocaleDateString()}
-              </p>
-            </div>
-          ))}
+          {loading
+            ? [...Array(3)].map((_, i) => (
+                <div
+                  key={i}
+                  className="h-14 bg-white/10 rounded animate-pulse"
+                />
+              ))
+            : history.map((h) => (
+                <div
+                  key={h._id}
+                  onClick={() => setSelectedHistory(h)}
+                  className="p-3 rounded-lg bg-white/5 hover:bg-white/10 cursor-pointer"
+                >
+                  <p className="font-medium">{h.title}</p>
+                </div>
+              ))}
         </div>
       </div>
 
       {/* ACTIONS */}
-      <div className="flex flex-wrap gap-3">
-        <button
-          onClick={() => setEditCrop(crop)}
-          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg"
-        >
-          Edit
-        </button>
+      {!loading && (
+        <div className="flex flex-wrap gap-3">
+          <button
+            onClick={() => setEditCrop(crop)}
+            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-sm flex items-center gap-2"
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => setDeleteCrop(crop)}
+            className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-sm flex items-center gap-2"
+          >
+            Delete
+          </button>
+        </div>
+      )}
 
-        <button
-          onClick={() => setDeleteCrop(crop)}
-          className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg"
-        >
-          Delete
-        </button>
-
-        <button
-          onClick={() => setHarvestCropState(crop)}
-          className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg"
-        >
-          Harvest
-        </button>
-      </div>
-
-      {/* MODALS */}
+      {/* MODALS (unchanged) */}
       <EditCropModal
         isOpen={!!editCrop}
         crop={editCrop}
         onClose={() => setEditCrop(null)}
-        onSuccess={loadCrop}
+        onSuccess={loadAll}
       />
 
       <DeleteConfirmModal
@@ -258,40 +280,36 @@ const CropDetails = () => {
 
       <AddTransactionModal
         crop={showExpense}
-        editingTxn={editTxn}
         isOpen={!!showExpense}
-        onClose={() => {
-          setShowExpense(null);
-          setEditTxn(null);
-        }}
-        onSuccess={loadCrop}
+        onClose={() => setShowExpense(null)}
+        onSuccess={loadAll}
       />
 
       <EditTransactionModal
         cropId={id}
         transaction={selectedTxn}
         onClose={() => setSelectedTxn(null)}
-        onSuccess={loadCrop}
+        onSuccess={loadAll}
       />
 
       <HarvestModal
         isOpen={!!harvestCropState}
         crop={harvestCropState}
         onClose={() => setHarvestCropState(null)}
-        onSuccess={loadCrop}
+        onSuccess={loadAll}
       />
 
       <AddCropHistoryModal
         isOpen={!!showHistoryModal}
         crop={showHistoryModal}
         onClose={() => setShowHistoryModal(null)}
-        onSuccess={loadHistory}
+        onSuccess={loadAll}
       />
 
       <EditCropHistoryModal
         history={selectedHistory}
         onClose={() => setSelectedHistory(null)}
-        onSuccess={loadHistory}
+        onSuccess={loadAll}
       />
     </div>
   );

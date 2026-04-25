@@ -1,12 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import api from "../api/axios";
+import { X, Sprout, Leaf, Calendar, Timer, Wheat, Layers } from "lucide-react";
 
 const EditCropModal = ({ isOpen, crop, onClose, onSuccess }) => {
-  const [form, setForm] = useState({});
+  const [form, setForm] = React.useState({});
 
   useEffect(() => {
     if (crop) setForm(crop);
   }, [crop]);
+
+  /* ===== PREVENT BACKGROUND SCROLL ===== */
+  useEffect(() => {
+    if (isOpen) document.body.style.overflow = "hidden";
+    return () => (document.body.style.overflow = "auto");
+  }, [isOpen]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -26,97 +33,142 @@ const EditCropModal = ({ isOpen, crop, onClose, onSuccess }) => {
   if (!isOpen || !crop) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
-      <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-2xl p-6 space-y-4 shadow-xl">
-        {/* TITLE */}
-        <h2 className="text-lg font-semibold">✏️ Edit Crop</h2>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-3">
+      <div className="bg-[#0f172a] w-full max-w-md rounded-xl border border-white/10 shadow-xl max-h-[90vh] flex flex-col">
+        {/* HEADER */}
+        <div className="px-5 py-4 border-b border-white/10 flex justify-between items-center">
+          <h2 className="flex items-center gap-2 text-lg font-semibold">
+            <Sprout size={18} /> Edit Crop
+          </h2>
 
-        <form onSubmit={updateCrop} className="space-y-3">
-          <input
-            name="cropName"
-            value={form.cropName || ""}
-            onChange={handleChange}
-            placeholder="Crop Name"
-            required
-            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10 focus:ring-2 focus:ring-green-500"
-          />
+          <button onClick={onClose} className="text-gray-400 hover:text-white">
+            <X size={18} />
+          </button>
+        </div>
 
-          <input
-            name="variety"
-            value={form.variety || ""}
-            onChange={handleChange}
-            placeholder="Variety"
-            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
-          />
+        {/* BODY */}
+        <div className="p-5 overflow-y-auto flex-1">
+          <form onSubmit={updateCrop} className="space-y-4">
+            {/* NAME */}
+            <div className="relative">
+              <Leaf size={16} className="absolute left-3 top-3 text-gray-400" />
+              <input
+                name="cropName"
+                value={form.cropName || ""}
+                onChange={handleChange}
+                placeholder="Crop Name"
+                required
+                className="w-full pl-9 pr-3 py-2 rounded-lg bg-slate-800 border border-white/10 focus:ring-2 focus:ring-green-500 outline-none"
+              />
+            </div>
 
-          <select
-            name="season"
-            value={form.season}
-            onChange={handleChange}
-            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
-          >
-            <option value="kharif">Kharif</option>
-            <option value="rabi">Rabi</option>
-            <option value="summer">Summer</option>
-          </select>
+            {/* VARIETY */}
+            <div className="relative">
+              <Layers
+                size={16}
+                className="absolute left-3 top-3 text-gray-400"
+              />
+              <input
+                name="variety"
+                value={form.variety || ""}
+                onChange={handleChange}
+                placeholder="Variety"
+                className="w-full pl-9 pr-3 py-2 rounded-lg bg-slate-800 border border-white/10 outline-none"
+              />
+            </div>
 
-          <input
-            type="date"
-            name="sowingDate"
-            value={form.sowingDate?.slice(0, 10)}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
-          />
-
-          <input
-            type="number"
-            name="expectedDurationDays"
-            value={form.expectedDurationDays}
-            onChange={handleChange}
-            placeholder="Duration (days)"
-            required
-            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
-          />
-
-          <input
-            type="number"
-            name="expectedYield"
-            value={form.expectedYield || ""}
-            onChange={handleChange}
-            placeholder="Expected Yield (kg)"
-            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
-          />
-
-          <select
-            name="status"
-            value={form.status}
-            onChange={handleChange}
-            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
-          >
-            <option value="active">🌱 Active</option>
-            <option value="harvested">🌾 Harvested</option>
-            <option value="failed">❌ Failed</option>
-          </select>
-
-          {/* ACTIONS */}
-          <div className="flex justify-end gap-2 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm"
+            {/* SEASON */}
+            <select
+              name="season"
+              value={form.season}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10 outline-none"
             >
-              Cancel
-            </button>
+              <option value="kharif">Kharif</option>
+              <option value="rabi">Rabi</option>
+              <option value="summer">Summer</option>
+            </select>
 
-            <button
-              type="submit"
-              className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-sm"
+            {/* DATE */}
+            <div className="relative">
+              <Calendar
+                size={16}
+                className="absolute left-3 top-3 text-gray-400"
+              />
+              <input
+                type="date"
+                name="sowingDate"
+                value={form.sowingDate?.slice(0, 10)}
+                onChange={handleChange}
+                required
+                className="w-full pl-9 pr-3 py-2 rounded-lg bg-slate-800 border border-white/10 outline-none"
+              />
+            </div>
+
+            {/* DURATION */}
+            <div className="relative">
+              <Timer
+                size={16}
+                className="absolute left-3 top-3 text-gray-400"
+              />
+              <input
+                type="number"
+                name="expectedDurationDays"
+                value={form.expectedDurationDays}
+                onChange={handleChange}
+                placeholder="Duration (days)"
+                required
+                className="w-full pl-9 pr-3 py-2 rounded-lg bg-slate-800 border border-white/10 outline-none"
+              />
+            </div>
+
+            {/* YIELD */}
+            <div className="relative">
+              <Wheat
+                size={16}
+                className="absolute left-3 top-3 text-gray-400"
+              />
+              <input
+                type="number"
+                name="expectedYield"
+                value={form.expectedYield || ""}
+                onChange={handleChange}
+                placeholder="Expected Yield (kg)"
+                className="w-full pl-9 pr-3 py-2 rounded-lg bg-slate-800 border border-white/10 outline-none"
+              />
+            </div>
+
+            {/* STATUS */}
+            <select
+              name="status"
+              value={form.status}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10 outline-none"
             >
-              Save
-            </button>
-          </div>
-        </form>
+              <option value="active">🌱 Active</option>
+              <option value="harvested">🌾 Harvested</option>
+              <option value="failed">❌ Failed</option>
+            </select>
+          </form>
+        </div>
+
+        {/* FOOTER */}
+        <div className="px-5 py-4 border-t border-white/10 flex justify-end gap-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm"
+          >
+            Cancel
+          </button>
+
+          <button
+            onClick={updateCrop}
+            className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-sm flex items-center gap-2"
+          >
+            Save
+          </button>
+        </div>
       </div>
     </div>
   );

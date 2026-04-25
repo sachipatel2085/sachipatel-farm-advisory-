@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios";
+import { X, FileText, Calendar, Tag, Trash2, Pencil } from "lucide-react";
 
 const EditCropHistoryModal = ({ history, onClose, onSuccess }) => {
   const [form, setForm] = useState({
@@ -51,32 +52,44 @@ const EditCropHistoryModal = ({ history, onClose, onSuccess }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
-      <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-2xl p-6 space-y-4 shadow-xl">
-        {/* TITLE */}
-        <h2 className="text-lg font-semibold">✏️ Edit History</h2>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-3">
+      <div className="bg-[#0f172a] w-full max-w-md rounded-xl border border-white/10 shadow-xl max-h-[90vh] flex flex-col">
+        {/* HEADER */}
+        <div className="px-5 py-4 border-b border-white/10 flex justify-between items-center">
+          <h2 className="flex items-center gap-2 text-lg font-semibold">
+            <Pencil size={18} /> Edit History
+          </h2>
 
-        {/* FORM */}
-        <div className="space-y-3">
+          <button onClick={onClose} className="text-gray-400 hover:text-white">
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* BODY */}
+        <div className="p-5 overflow-y-auto flex-1 space-y-4">
           {/* TITLE */}
-          <div>
-            <label className="text-sm text-gray-400">Title</label>
+          <div className="relative">
+            <FileText
+              size={16}
+              className="absolute left-3 top-3 text-gray-400"
+            />
             <input
               name="title"
               value={form.title}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 rounded-lg bg-slate-800 border border-white/10 focus:ring-2 focus:ring-green-500"
+              placeholder="Title"
+              className="w-full pl-9 pr-3 py-2 rounded-lg bg-slate-800 border border-white/10 focus:ring-2 focus:ring-green-500 outline-none"
             />
           </div>
 
           {/* TYPE */}
-          <div>
-            <label className="text-sm text-gray-400">Type</label>
+          <div className="relative">
+            <Tag size={16} className="absolute left-3 top-3 text-gray-400" />
             <select
               name="type"
               value={form.type}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 rounded-lg bg-slate-800 border border-white/10 focus:ring-2 focus:ring-green-500"
+              className="w-full pl-9 pr-3 py-2 rounded-lg bg-slate-800 border border-white/10 focus:ring-2 focus:ring-green-500 outline-none"
             >
               <option value="general">General</option>
               <option value="activity">Activity</option>
@@ -87,53 +100,57 @@ const EditCropHistoryModal = ({ history, onClose, onSuccess }) => {
           </div>
 
           {/* DATE */}
-          <div>
-            <label className="text-sm text-gray-400">Date</label>
+          <div className="relative">
+            <Calendar
+              size={16}
+              className="absolute left-3 top-3 text-gray-400"
+            />
             <input
               type="date"
               name="date"
               value={form.date}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
+              className="w-full pl-9 pr-3 py-2 rounded-lg bg-slate-800 border border-white/10 outline-none"
             />
           </div>
 
           {/* NOTE */}
           <div>
-            <label className="text-sm text-gray-400">Note</label>
-            <input
+            <textarea
               name="note"
               value={form.note}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
+              placeholder="Note..."
+              rows={3}
+              className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-white/10 outline-none"
             />
           </div>
         </div>
 
-        {/* ACTIONS */}
-        <div className="flex justify-between pt-2">
+        {/* FOOTER */}
+        <div className="px-5 py-4 border-t border-white/10 flex justify-between items-center">
           {/* DELETE */}
           <button
             onClick={handleDelete}
-            className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-sm"
+            className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-sm"
           >
-            Delete
+            <Trash2 size={14} /> Delete
           </button>
 
-          {/* RIGHT ACTIONS */}
+          {/* RIGHT */}
           <div className="flex gap-2">
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm"
+              className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm"
             >
               Cancel
             </button>
 
             <button
               onClick={handleUpdate}
-              className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-sm"
             >
-              Update
+              <Pencil size={14} /> Update
             </button>
           </div>
         </div>
