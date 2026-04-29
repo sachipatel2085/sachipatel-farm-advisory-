@@ -86,6 +86,7 @@ function App() {
               <Route path="/finance" element={<FinancePage />} />
               <Route path="/finance/details" element={<FinanceDetails />} />
               <Route path="/finance/shop/:id" element={<ShopDetails />} />
+              <Route path="/scanner" element={<DiseaseScanner />} />
             </Routes>
           </div>
         </div>

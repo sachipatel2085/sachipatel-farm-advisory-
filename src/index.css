@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+/* add in global.css */
+.btn {
+  background: #374151;
+  padding: 8px 16px;
+  border-radius: 10px;
+}
+
+.btn-green {
+  background: #22c55e;
+  padding: 8px 16px;
+  border-radius: 10px;
+  color: black;
+}
