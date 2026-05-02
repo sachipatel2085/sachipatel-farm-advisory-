@@ -10,6 +10,7 @@ import {
   Plus,
   TrendingUp,
   Clock,
+  Camera,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -147,6 +148,19 @@ export default function Dashboard() {
             <ActivityItem text="Harvest completed" time="1 day ago" />
           </div>
         </div>
+      </div>
+      <div
+        onClick={() => navigate("/scanner")}
+        className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-green-500 transition cursor-pointer"
+      >
+        <div className="flex items-center gap-3">
+          <Camera className="text-green-400" />
+          <p className="text-sm text-gray-400">AI Disease Scanner</p>
+        </div>
+
+        <h2 className="text-2xl mt-2 text-green-400 font-semibold">
+          Scan Crop
+        </h2>
       </div>
 
       {/* QUICK LINKS */}

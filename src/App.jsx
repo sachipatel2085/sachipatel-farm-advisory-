@@ -15,6 +15,7 @@ import Topbar from "./components/Topbar";
 import FinancePage from "./pages/FinancePage";
 import FinanceDetails from "./pages/FinanceDetails";
 import ShopDetails from "./pages/ShopDetails";
+import DiseaseScanner from "./pages/DiseaseScanner";
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
