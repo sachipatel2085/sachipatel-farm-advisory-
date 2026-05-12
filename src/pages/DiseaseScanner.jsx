@@ -43,7 +43,7 @@ export default function DiseaseScanner() {
     formData.append("image", image);
 
     try {
-      const res = await fetch("http://localhost:5000/api/ai/detect", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/predict`, {
         method: "POST",
         body: formData,
       });
