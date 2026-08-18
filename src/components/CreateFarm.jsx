@@ -14,9 +14,6 @@ const CreateFarmModal = ({ onClose, onCreated }) => {
 
   const [position, setPosition] = useState(null);
 
-  const [photos, setPhotos] = useState([]);
-  const [preview, setPreview] = useState([]);
-
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -31,12 +28,6 @@ const CreateFarmModal = ({ onClose, onCreated }) => {
 
     fetchAddress();
   }, [position]);
-
-  const handlePhotoSelect = (e) => {
-    const files = Array.from(e.target.files);
-    setPhotos(files);
-    setPreview(files.map((file) => URL.createObjectURL(file)));
-  };
 
   const createFarm = async (e) => {
     e.preventDefault();
@@ -54,17 +45,6 @@ const CreateFarmModal = ({ onClose, onCreated }) => {
           longitude: position?.lng,
         },
       });
-
-      const farmId = res.data._id;
-
-      if (photos.length > 0) {
-        const formData = new FormData();
-        photos.forEach((p) => formData.append("photos", p));
-
-        await api.post(`/farms/${farmId}/photos`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-      }
 
       onCreated();
       onClose();
@@ -155,35 +135,6 @@ const CreateFarmModal = ({ onClose, onCreated }) => {
                 <MapPin size={12} />
                 {position.lat.toFixed(5)}, {position.lng.toFixed(5)}
               </p>
-            )}
-
-            {/* PHOTO */}
-            <div>
-              <label className="flex items-center gap-2 text-sm text-gray-400 mb-1">
-                <ImagePlus size={14} /> Upload Photos
-              </label>
-
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handlePhotoSelect}
-                className="text-sm text-gray-400"
-              />
-            </div>
-
-            {/* PREVIEW */}
-            {preview.length > 0 && (
-              <div className="grid grid-cols-3 gap-2">
-                {preview.map((img, i) => (
-                  <img
-                    key={i}
-                    src={img}
-                    alt="preview"
-                    className="w-full h-20 object-cover rounded-lg border border-white/10"
-                  />
-                ))}
-              </div>
             )}
           </form>
         </div>
