@@ -61,9 +61,13 @@ export default function Dashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    loadDashboard();
 
-    if (!token) navigate("/");
+    if (!token) {
+      navigate("/", { replace: true });
+      return;
+    }
+
+    loadDashboard();
   }, [navigate]);
 
   return (

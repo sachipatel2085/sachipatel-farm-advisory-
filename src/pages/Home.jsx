@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import { Leaf, BarChart3, IndianRupee, Brain } from "lucide-react";
 
 export default function Home() {
@@ -9,9 +10,27 @@ export default function Home() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    if (token) {
-      navigate("/dashboard");
-    } else {
+    if (!token) {
+      setChecking(false);
+      return;
+    }
+
+    try {
+      const decoded = jwtDecode(token);
+
+      // JWT exp is in seconds, Date.now() is in milliseconds
+      if (decoded.exp && decoded.exp * 1000 > Date.now()) {
+        navigate("/dashboard", { replace: true });
+      } else {
+        // Token expired
+        localStorage.removeItem("token");
+        setChecking(false);
+      }
+    } catch (error) {
+      // Invalid JWT
+      console.error("Invalid token:", error);
+
+      localStorage.removeItem("token");
       setChecking(false);
     }
   }, [navigate]);
