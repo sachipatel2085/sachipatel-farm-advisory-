@@ -2,6 +2,7 @@ import { useState } from "react";
 import API from "../api/axios.js";
 import { useAuth } from "../context/Authcontext";
 import { useNavigate } from "react-router-dom";
+import GoogleLoginButton from "../components/GoogleLoginButton.jsx";
 
 export default function Login() {
   const [phone, setPhone] = useState("");
@@ -53,6 +54,16 @@ export default function Login() {
         >
           Login
         </button>
+
+        <div className="my-4 flex items-center gap-3">
+          <div className="h-px flex-1 bg-gray-300" />
+
+          <span className="text-gray-500">OR</span>
+
+          <div className="h-px flex-1 bg-gray-300" />
+        </div>
+
+        <GoogleLoginButton />
 
         {/* FOOTER */}
         <p className="text-center text-sm text-gray-400">

@@ -37,14 +37,6 @@ function App() {
 
   return (
     <BrowserRouter>
-      {isMobile && (
-        <button
-          className="mobile-menu"
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
-      )}
       <div className="flex min-h-screen bg-slate-900 text-white">
         {/* Sidebar */}
         <Sidebar
@@ -62,7 +54,11 @@ function App() {
       ${isMobile ? "ml-0" : collapsed ? "ml-16" : "ml-64"}
     `}
         >
-          <Topbar />
+          <Topbar
+            isMobile={isMobile}
+            setMobileOpen={setMobileOpen}
+            mobileOpen={mobileOpen}
+          />
 
           <div className="flex-1 p-4 sm:p-6">
             <Routes>
