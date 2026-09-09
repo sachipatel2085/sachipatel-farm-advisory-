@@ -16,6 +16,7 @@ import FinancePage from "./pages/FinancePage";
 import FinanceDetails from "./pages/FinanceDetails";
 import ShopDetails from "./pages/ShopDetails";
 import DiseaseScanner from "./pages/DiseaseScanner";
+import MandiRates from "./pages/MandiRates";
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
@@ -84,7 +85,9 @@ function App() {
               <Route path="/finance/details" element={<FinanceDetails />} />
               <Route path="/finance/shop/:id" element={<ShopDetails />} />
               <Route path="/scanner" element={<DiseaseScanner />} />
+              <Route path="/mandi" element={<MandiRates />} />
             </Routes>
+
           </div>
         </div>
       </div>{" "}

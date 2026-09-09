@@ -4,10 +4,13 @@ import {
   Leaf,
   Sprout,
   IndianRupee,
+  TrendingUp,
   Brain,
   Menu,
   X,
 } from "lucide-react";
+
+
 
 export default function Sidebar({
   collapsed,
@@ -116,7 +119,17 @@ export default function Sidebar({
             collapsed={collapsed && !isMobile}
             onClick={handleNavClick}
           />
+
+          <NavItem
+            to="/mandi"
+            icon={<TrendingUp size={18} />}
+            label="Mandi Rates"
+            active={location.pathname === "/mandi"}
+            collapsed={collapsed && !isMobile}
+            onClick={handleNavClick}
+          />
         </nav>
+
       </aside>
     </>
   );

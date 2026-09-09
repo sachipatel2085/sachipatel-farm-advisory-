@@ -11,7 +11,9 @@ import {
   TrendingUp,
   Clock,
   Camera,
+  Store,
 } from "lucide-react";
+
 import { useState } from "react";
 
 export default function Dashboard() {
@@ -153,25 +155,45 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      <div
-        onClick={() => navigate("/scanner")}
-        className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-green-500 transition cursor-pointer"
-      >
-        <div className="flex items-center gap-3">
-          <Camera className="text-green-400" />
-          <p className="text-sm text-gray-400">AI Disease Scanner</p>
+      <div className="grid sm:grid-cols-2 gap-5 mt-6">
+        <div
+          onClick={() => navigate("/scanner")}
+          className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-green-500 transition cursor-pointer"
+        >
+          <div className="flex items-center gap-3">
+            <Camera className="text-green-400" />
+            <p className="text-sm text-gray-400">AI Disease Scanner</p>
+          </div>
+
+          <h2 className="text-2xl mt-2 text-green-400 font-semibold">
+            Scan Crop
+          </h2>
         </div>
 
-        <h2 className="text-2xl mt-2 text-green-400 font-semibold">
-          Scan Crop
-        </h2>
+        <div
+          onClick={() => navigate("/mandi")}
+          className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-emerald-500 transition cursor-pointer"
+        >
+          <div className="flex items-center gap-3">
+            <Store className="text-emerald-400" />
+            <p className="text-sm text-gray-400">Mandi Market Rates</p>
+          </div>
+
+          <div className="flex items-baseline justify-between mt-2">
+            <h2 className="text-2xl text-emerald-400 font-semibold">
+              Live Mandi Rates
+            </h2>
+            <span className="text-xs text-slate-400">APMC Trends →</span>
+          </div>
+        </div>
       </div>
 
       {/* QUICK LINKS */}
-      <div className="grid sm:grid-cols-3 gap-5 mt-10">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
         <QuickCard title="Manage Farms" onClick={() => navigate("/farms")} />
         <QuickCard title="View Crops" onClick={() => navigate("/crops")} />
-        <QuickCard title="Finance" onClick={() => navigate("/finance")} />
+        <QuickCard title="Finance & Ledger" onClick={() => navigate("/finance")} />
+        <QuickCard title="Mandi Prices & Trends" onClick={() => navigate("/mandi")} />
       </div>
     </div>
   );
