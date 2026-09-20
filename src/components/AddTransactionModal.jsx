@@ -10,6 +10,8 @@ const AddTransactionModal = ({
 }) => {
   const [mode, setMode] = useState(null);
   const [shops, setShops] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const [form, setForm] = useState({
     title: "",
@@ -23,11 +25,14 @@ const AddTransactionModal = ({
   });
 
   useEffect(() => {
-    api.get("/finance/shops").then((res) => setShops(res.data));
+    api.get("/finance/shops").then((res) => setShops(res.data)).catch(() => {});
   }, []);
 
   useEffect(() => {
     if (!isOpen) return;
+
+    setError(null);
+    setLoading(false);
 
     if (editingTxn) {
       setMode(editingTxn.type);
@@ -58,6 +63,7 @@ const AddTransactionModal = ({
     }
   }, [isOpen, editingTxn]);
 
+
   if (!crop || !isOpen) return null;
 
   const handleChange = (e) => {
@@ -73,36 +79,72 @@ const AddTransactionModal = ({
   };
 
   const deleteTxn = async () => {
+    if (!window.confirm("Are you sure you want to delete this transaction?")) return;
+    setLoading(true);
+    setError(null);
     try {
       await api.delete(`/crops/${crop._id}/transaction/${editingTxn._id}`);
       onSuccess();
       onClose();
     } catch (err) {
       console.error(err);
-      alert("Delete failed");
+      setError(err.response?.data?.message || "Delete failed");
+    } finally {
+      setLoading(false);
     }
   };
+
   const submit = async () => {
+    if (!form.title || !form.title.trim()) {
+      setError("Please enter a transaction title");
+      return;
+    }
+
+    const numAmount = Number(form.amount);
+    if (isNaN(numAmount) || numAmount <= 0) {
+      setError("Please enter a valid amount greater than 0");
+      return;
+    }
+
     const payload = {
-      ...form,
-      amount: Number(form.amount),
-      quantity: Number(form.quantity),
-      price: Number(form.price),
+      title: form.title.trim(),
+      amount: numAmount,
+      quantity: Number(form.quantity) || 0,
+      price: Number(form.price) || 0,
       type: mode,
+      category: form.category || (mode === "income" ? "cropSale" : "other"),
+      note: form.note || "",
+      date: form.date || new Date().toISOString().split("T")[0],
     };
 
-    if (editingTxn) {
-      await api.put(
-        `/crops/${crop._id}/transaction/${editingTxn._id}`,
-        payload,
-      );
-    } else {
-      await api.post(`/crops/${crop._id}/transaction`, payload);
+    // Only include shop if a valid shop was actually selected
+    if (mode === "expense" && form.shop && form.shop.trim() !== "") {
+      payload.shop = form.shop;
     }
 
-    onSuccess();
-    onClose();
+    setLoading(true);
+    setError(null);
+
+    try {
+      if (editingTxn) {
+        await api.put(
+          `/crops/${crop._id}/transaction/${editingTxn._id}`,
+          payload,
+        );
+      } else {
+        await api.post(`/crops/${crop._id}/transaction`, payload);
+      }
+
+      onSuccess();
+      onClose();
+    } catch (err) {
+      console.error("Transaction save failed:", err);
+      setError(err.response?.data?.message || "Failed to save transaction. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
@@ -227,31 +269,44 @@ const AddTransactionModal = ({
               </>
             )}
 
+            {error && (
+              <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs">
+                {error}
+              </div>
+            )}
+
             {/* ACTIONS */}
             <div className="flex justify-end gap-2 pt-2">
               <button
+                type="button"
                 onClick={onClose}
-                className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm"
+                disabled={loading}
+                className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm disabled:opacity-50"
               >
                 Cancel
               </button>
 
               {editingTxn && (
                 <button
+                  type="button"
                   onClick={deleteTxn}
-                  className="px-3 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-sm"
+                  disabled={loading}
+                  className="px-3 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-sm disabled:opacity-50"
                 >
-                  Delete
+                  {loading ? "Deleting..." : "Delete"}
                 </button>
               )}
 
               <button
+                type="button"
                 onClick={submit}
-                className="px-3 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-sm"
+                disabled={loading}
+                className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-sm font-semibold disabled:opacity-50 flex items-center gap-1.5"
               >
-                {editingTxn ? "Update" : "Save"}
+                {loading ? "Saving..." : editingTxn ? "Update" : "Save"}
               </button>
             </div>
+
           </>
         )}
       </div>

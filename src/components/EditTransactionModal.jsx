@@ -4,9 +4,14 @@ import { X, Pencil, Calendar, IndianRupee, Package, Tag } from "lucide-react";
 
 const EditTransactionModal = ({ cropId, transaction, onClose, onSuccess }) => {
   const [form, setForm] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (transaction) setForm({ ...transaction });
+    if (transaction) {
+      setForm({ ...transaction, shop: transaction.shop?._id || transaction.shop || "" });
+      setError(null);
+    }
   }, [transaction]);
 
   /* ===== PREVENT BACKGROUND SCROLL ===== */
@@ -21,16 +26,40 @@ const EditTransactionModal = ({ cropId, transaction, onClose, onSuccess }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const update = async () => {
-    await api.put(`/crops/${cropId}/transaction/${transaction._id}`, form);
-    onSuccess();
-    onClose();
+    setLoading(true);
+    setError(null);
+    try {
+      const payload = { ...form };
+      if (!payload.shop || payload.shop.trim() === "") {
+        delete payload.shop;
+      }
+      await api.put(`/crops/${cropId}/transaction/${transaction._id}`, payload);
+      onSuccess();
+      onClose();
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Failed to update transaction");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const remove = async () => {
-    await api.delete(`/crops/${cropId}/transaction/${transaction._id}`);
-    onSuccess();
-    onClose();
+    if (!window.confirm("Are you sure you want to delete this transaction?")) return;
+    setLoading(true);
+    setError(null);
+    try {
+      await api.delete(`/crops/${cropId}/transaction/${transaction._id}`);
+      onSuccess();
+      onClose();
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Failed to delete transaction");
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-3">
@@ -178,33 +207,45 @@ const EditTransactionModal = ({ cropId, transaction, onClose, onSuccess }) => {
               </div>
             </>
           )}
+          {error && (
+            <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs">
+              {error}
+            </div>
+          )}
         </div>
 
         {/* FOOTER */}
         <div className="px-5 py-4 border-t border-white/10 flex justify-between items-center">
           <button
+            type="button"
             onClick={remove}
-            className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-sm"
+            disabled={loading}
+            className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-sm disabled:opacity-50"
           >
-            Delete
+            {loading ? "Deleting..." : "Delete"}
           </button>
 
           <div className="flex gap-2">
             <button
+              type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm"
+              disabled={loading}
+              className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm disabled:opacity-50"
             >
               Cancel
             </button>
 
             <button
+              type="button"
               onClick={update}
-              className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-sm flex items-center gap-2"
+              disabled={loading}
+              className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-sm flex items-center gap-2 font-semibold disabled:opacity-50"
             >
-              <Pencil size={14} /> Update
+              <Pencil size={14} /> {loading ? "Updating..." : "Update"}
             </button>
           </div>
         </div>
+
       </div>
     </div>
   );
