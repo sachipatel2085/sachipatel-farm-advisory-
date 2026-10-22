@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
 import {
   LayoutDashboard,
   Leaf,
@@ -6,11 +7,13 @@ import {
   IndianRupee,
   TrendingUp,
   Brain,
+  Sparkles,
+  Calendar,
+  Compass,
+  Users,
   Menu,
   X,
 } from "lucide-react";
-
-
 
 export default function Sidebar({
   collapsed,
@@ -20,6 +23,7 @@ export default function Sidebar({
   isMobile,
 }) {
   const location = useLocation();
+  const { t } = useLanguage();
 
   const toggle = () => {
     if (isMobile) {
@@ -87,7 +91,7 @@ export default function Sidebar({
           <NavItem
             to="/dashboard"
             icon={<LayoutDashboard size={18} />}
-            label="Dashboard"
+            label={t("nav.dashboard", "Dashboard")}
             active={location.pathname === "/dashboard"}
             collapsed={collapsed && !isMobile}
             onClick={handleNavClick}
@@ -96,7 +100,7 @@ export default function Sidebar({
           <NavItem
             to="/farms"
             icon={<Leaf size={18} />}
-            label="Farms"
+            label={t("nav.farms", "Farms")}
             active={location.pathname === "/farms"}
             collapsed={collapsed && !isMobile}
             onClick={handleNavClick}
@@ -105,8 +109,44 @@ export default function Sidebar({
           <NavItem
             to="/crops"
             icon={<Sprout size={18} />}
-            label="Crops"
+            label={t("nav.crops", "Crops")}
             active={location.pathname === "/crops"}
+            collapsed={collapsed && !isMobile}
+            onClick={handleNavClick}
+          />
+
+          <NavItem
+            to="/planning"
+            icon={<Compass size={18} />}
+            label={t("nav.planning", "Crop Planning")}
+            active={location.pathname === "/planning"}
+            collapsed={collapsed && !isMobile}
+            onClick={handleNavClick}
+          />
+
+          <NavItem
+            to="/activities"
+            icon={<Calendar size={18} />}
+            label={t("nav.activities", "Tasks & Calendar")}
+            active={location.pathname === "/activities"}
+            collapsed={collapsed && !isMobile}
+            onClick={handleNavClick}
+          />
+
+          <NavItem
+            to="/advisory"
+            icon={<Sparkles size={18} />}
+            label={t("nav.advisory", "Advisory & Care")}
+            active={location.pathname === "/advisory"}
+            collapsed={collapsed && !isMobile}
+            onClick={handleNavClick}
+          />
+
+          <NavItem
+            to="/community"
+            icon={<Users size={18} />}
+            label={t("nav.community", "Community")}
+            active={location.pathname.startsWith("/community")}
             collapsed={collapsed && !isMobile}
             onClick={handleNavClick}
           />
@@ -114,7 +154,7 @@ export default function Sidebar({
           <NavItem
             to="/finance"
             icon={<IndianRupee size={18} />}
-            label="Finance"
+            label={t("nav.finance", "Finance")}
             active={location.pathname === "/finance"}
             collapsed={collapsed && !isMobile}
             onClick={handleNavClick}
@@ -123,13 +163,12 @@ export default function Sidebar({
           <NavItem
             to="/mandi"
             icon={<TrendingUp size={18} />}
-            label="Mandi Rates"
+            label={t("nav.mandi", "Mandi Rates")}
             active={location.pathname === "/mandi"}
             collapsed={collapsed && !isMobile}
             onClick={handleNavClick}
           />
         </nav>
-
       </aside>
     </>
   );

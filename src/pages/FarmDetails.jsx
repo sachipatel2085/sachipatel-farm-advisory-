@@ -37,17 +37,20 @@ const FarmDetails = () => {
   }, [id]);
 
   const loadFarm = async () => {
-    const res = await api.get(`/farms/${id}`);
+    const res = await api.get(`/farms/${id}`).catch((err) => console.error("Load farm error:", err));
+    if (!res) return;
     setFarm(res.data);
   };
 
   const loadAnalytics = async () => {
-    const res = await api.get(`/farms/${id}/analytics`);
+    const res = await api.get(`/farms/${id}/analytics`).catch((err) => console.error("Load analytics error:", err));
+    if (!res) return;
     setAnalytics(res.data);
   };
 
   const loadHistory = async () => {
-    const res = await api.get(`/farms/${id}/history`);
+    const res = await api.get(`/farms/${id}/history`).catch((err) => console.error("Load history error:", err));
+    if (!res) return;
     setHistory(res.data);
   };
   const handleDelete = async () => {
@@ -171,7 +174,7 @@ const FarmDetails = () => {
         <Stat title="Status" value="Active" />
       </div>
       {/* CROPS */}
-      <CropList farmId={id} />
+      <CropList farmId={farm?._id || id} />
       {/* HISTORY */}
       {/* HISTORY */}
       <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-4">

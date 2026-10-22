@@ -167,7 +167,7 @@ export default function FinancePage() {
             {shops.map((s) => (
               <div
                 key={s.shop._id}
-                onClick={() => navigate(`/finance/shop/${s.shop._id}`)}
+                onClick={() => navigate(`/finance/shop/${s.shop.slug || s.shop._id}`)}
                 className="bg-white/5 border border-white/10 rounded-xl p-4 hover:border-green-500 transition cursor-pointer"
               >
                 <h3 className="font-semibold">{s.shop.name}</h3>

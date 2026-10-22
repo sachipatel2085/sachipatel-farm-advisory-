@@ -14,12 +14,12 @@ const Breadcrumb = () => {
       const result = {};
 
       for (let p of parts) {
-        if (p.length > 10) {
+        if (!breadcrumbMap[p] && p !== "new" && p !== "details" && p !== "shop") {
           try {
             const res = await api.get(`/resolve/${p}`);
             result[p] = res.data.name;
           } catch {
-            result[p] = p;
+            result[p] = p.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
           }
         }
       }

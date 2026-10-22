@@ -17,6 +17,11 @@ import FinanceDetails from "./pages/FinanceDetails";
 import ShopDetails from "./pages/ShopDetails";
 import DiseaseScanner from "./pages/DiseaseScanner";
 import MandiRates from "./pages/MandiRates";
+import Advisory from "./pages/Advisory";
+import ActivitiesCalendar from "./pages/ActivitiesCalendar";
+import CropPlanning from "./pages/CropPlanning";
+import Community from "./pages/Community";
+import CommunityPostDetails from "./pages/CommunityPostDetails";
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
@@ -81,13 +86,46 @@ function App() {
               <Route path="/farms/:id" element={<FarmDashboard />} />
               <Route path="/crops" element={<Crops />} />
               <Route path="/crops/:id" element={<CropDetails />} />
+              <Route
+                path="/planning"
+                element={
+                  <PrivateRoute>
+                    <CropPlanning />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/activities"
+                element={
+                  <PrivateRoute>
+                    <ActivitiesCalendar />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/calendar"
+                element={
+                  <PrivateRoute>
+                    <ActivitiesCalendar />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/advisory"
+                element={
+                  <PrivateRoute>
+                    <Advisory />
+                  </PrivateRoute>
+                }
+              />
               <Route path="/finance" element={<FinancePage />} />
               <Route path="/finance/details" element={<FinanceDetails />} />
               <Route path="/finance/shop/:id" element={<ShopDetails />} />
               <Route path="/scanner" element={<DiseaseScanner />} />
               <Route path="/mandi" element={<MandiRates />} />
+              <Route path="/community" element={<Community />} />
+              <Route path="/community/:id" element={<CommunityPostDetails />} />
             </Routes>
-
           </div>
         </div>
       </div>{" "}

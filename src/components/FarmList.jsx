@@ -127,7 +127,7 @@ const FarmList = () => {
           : processedFarms.map((farm) => (
               <div
                 key={farm._id}
-                onClick={() => navigate(`/farms/${farm._id}`)}
+                onClick={() => navigate(`/farms/${farm.slug || farm._id}`)}
                 className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-green-500 transition cursor-pointer"
               >
                 {/* TOP */}
