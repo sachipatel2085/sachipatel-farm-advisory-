@@ -76,23 +76,23 @@ export default function WeatherAlertBanner({ alerts = [], location = null }) {
   };
 
   return (
-    <div className="space-y-3 mb-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold flex items-center gap-2 text-white">
-          <Sparkles size={16} className="text-amber-400" />
-          {t("weather.smartAlerts", "Weather-Triggered Smart Alerts")}
-          <span className="text-xs px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
+    <div className="space-y-3 mb-4 sm:mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h3 className="text-xs sm:text-sm font-semibold flex items-center gap-2 text-white">
+          <Sparkles size={16} className="text-amber-400 shrink-0" />
+          <span>{t("weather.smartAlerts", "Weather-Triggered Smart Alerts")}</span>
+          <span className="text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
             {visibleAlerts.length}
           </span>
         </h3>
         {location && (
-          <span className="text-xs text-slate-400">
+          <span className="text-[11px] sm:text-xs text-slate-400">
             📍 {location.district || location.village}, {location.state}
           </span>
         )}
       </div>
 
-      <div className="grid gap-3">
+      <div className="grid gap-2.5 sm:gap-3">
         {visibleAlerts.map((alert) => {
           const isExpanded = expandedId === alert.id;
           const styles = getAlertStyling(alert.severity, alert.type);
@@ -104,25 +104,25 @@ export default function WeatherAlertBanner({ alerts = [], location = null }) {
           return (
             <div
               key={alert.id}
-              className={`rounded-2xl border p-4 sm:p-5 transition-all duration-200 backdrop-blur-sm ${styles.card}`}
+              className={`rounded-xl sm:rounded-2xl border p-3.5 sm:p-5 transition-all duration-200 backdrop-blur-sm ${styles.card}`}
             >
               <div
-                className="flex items-start justify-between gap-3 cursor-pointer"
+                className="flex items-start justify-between gap-2 sm:gap-3 cursor-pointer"
                 onClick={() => setExpandedId(isExpanded ? null : alert.id)}
               >
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5">{getAlertIcon(alert.type)}</div>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h4 className="font-semibold text-sm sm:text-base text-white">
+                <div className="flex items-start gap-2.5 sm:gap-3 min-w-0 flex-1">
+                  <div className="mt-0.5 shrink-0">{getAlertIcon(alert.type)}</div>
+                  <div className="space-y-1 min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                      <h4 className="font-semibold text-xs sm:text-sm md:text-base text-white">
                         {title}
                       </h4>
                       {alert.metric && (
-                        <span className={`text-[11px] px-2 py-0.5 rounded-md font-mono border ${styles.badge}`}>
+                        <span className={`text-[10px] sm:text-[11px] px-1.5 sm:px-2 py-0.5 rounded font-mono border ${styles.badge}`}>
                           {alert.metric}
                         </span>
                       )}
-                      <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${styles.badge}`}>
+                      <span className={`text-[9px] sm:text-[10px] uppercase font-bold px-1.5 sm:px-2 py-0.5 rounded-full border ${styles.badge}`}>
                         {alert.severity === "high"
                           ? t("weather.highSeverity", "Critical")
                           : alert.severity === "medium"
@@ -137,7 +137,7 @@ export default function WeatherAlertBanner({ alerts = [], location = null }) {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                   <button
                     onClick={(e) => handleDismiss(alert.id, e)}
                     className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition"

@@ -71,37 +71,37 @@ const CropList = ({ farmId }) => {
     Math.min(100, Math.round((age / duration) * 100));
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-5 text-slate-200">
+    <div className="bg-white/5 border border-white/10 rounded-xl p-3.5 sm:p-5 space-y-4 sm:space-y-5 text-slate-200">
       {/* HEADER */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="flex items-center gap-2 text-lg font-semibold">
-          <Wheat size={18} /> Crops
+      <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3">
+        <h2 className="flex items-center gap-2 text-base sm:text-lg font-semibold text-white">
+          <Wheat size={18} className="text-emerald-400 shrink-0" /> Crops
         </h2>
 
         <div className="flex gap-2 flex-wrap">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm"
+            className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs sm:text-sm font-medium transition"
           >
             ⚙️ Filters
           </button>
 
           <button
             onClick={() => setShowAdd(true)}
-            className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-sm"
+            className="px-3.5 py-1.5 bg-green-500 hover:bg-green-600 rounded-lg text-xs sm:text-sm font-semibold transition shadow-lg shadow-green-500/20"
           >
             + Add Crop
           </button>
         </div>
       </div>
 
-      {/* FILTER PANEL (same style as history) */}
+      {/* FILTER PANEL */}
       {showFilters && (
-        <div className="bg-white/5 border border-white/10 p-4 rounded-xl grid sm:grid-cols-4 gap-3">
+        <div className="bg-white/5 border border-white/10 p-3 sm:p-4 rounded-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
+            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10 text-xs sm:text-sm text-gray-200"
           >
             <option value="">All Status</option>
             <option value="active">🌱 Active</option>
@@ -112,7 +112,7 @@ const CropList = ({ farmId }) => {
           <select
             value={seasonFilter}
             onChange={(e) => setSeasonFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
+            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10 text-xs sm:text-sm text-gray-200"
           >
             <option value="">All Seasons</option>
             {[...new Set(crops.map((c) => c.season))].map((s) => (
@@ -123,7 +123,7 @@ const CropList = ({ farmId }) => {
           <select
             value={cropFilter}
             onChange={(e) => setCropFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
+            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10 text-xs sm:text-sm text-gray-200"
           >
             <option value="">All Crops</option>
             {[...new Set(crops.map((c) => c.cropName))].map((c) => (
@@ -134,7 +134,7 @@ const CropList = ({ farmId }) => {
           <select
             value={sortType}
             onChange={(e) => setSortType(e.target.value)}
-            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
+            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10 text-xs sm:text-sm text-gray-200"
           >
             <option value="latest">Latest</option>
             <option value="oldest">Oldest</option>
@@ -143,7 +143,7 @@ const CropList = ({ farmId }) => {
       )}
 
       {/* GRID */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {loading
           ? [...Array(6)].map((_, i) => (
               <div

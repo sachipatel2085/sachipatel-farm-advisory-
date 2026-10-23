@@ -111,64 +111,64 @@ const FarmDetails = () => {
     );
   }
   return (
-    <div className="space-y-6 text-slate-200">
+    <div className="space-y-4 sm:space-y-6 text-slate-200 w-full min-w-0">
       <Breadcrumb currentName={farm.farmName} />
       <button
         onClick={() => navigate(-1)}
-        className="text-sm text-green-400 hover:underline"
+        className="text-xs sm:text-sm text-green-400 hover:underline"
       >
         ← Back
       </button>
       {/* HEADER */}
       <div className="flex justify-between items-center flex-wrap gap-3">
         <div>
-          <h2 className="flex items-center gap-2 text-xl font-semibold">
-            <Wheat size={18} /> {farm.farmName}
+          <h2 className="flex items-center gap-2 text-lg sm:text-xl font-semibold">
+            <Wheat size={20} className="text-emerald-400 shrink-0" /> {farm.farmName}
           </h2>
 
-          <p className="text-sm text-gray-400 flex items-center gap-1">
-            <MapPin size={14} />
+          <p className="text-xs sm:text-sm text-gray-400 flex items-center gap-1 mt-0.5">
+            <MapPin size={14} className="shrink-0" />
             {farm.location?.village}, {farm.location?.district}
           </p>
         </div>
 
-        <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-xs">
+        <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-xs font-medium">
           Active
         </span>
       </div>
       {/* ANALYTICS */}
       {analytics && (
-        <>
-          <div className="grid sm:grid-cols-3 gap-4">
+        <div className="space-y-3 sm:space-y-4">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
             <Stat title="Total Crops" value={analytics.totalCrops} />
             <Stat title="Farm Health" value={`${analytics.avgHealth}%`} />
             <Stat title="Total Yield" value={`${analytics.totalYield} kg`} />
           </div>
 
-          <div className="grid sm:grid-cols-3 gap-4">
-            <Stat title="Income" value={`₹ ${analytics.totalIncome}`} green />
-            <Stat title="Expense" value={`₹ ${analytics.totalExpense}`} red />
-            <Stat title="Profit" value={`₹ ${analytics.profit}`} green />
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+            <Stat title="Income" value={`₹${analytics.totalIncome}`} green />
+            <Stat title="Expense" value={`₹${analytics.totalExpense}`} red />
+            <Stat title="Profit" value={`₹${analytics.profit}`} green />
           </div>
 
           {/* PROGRESS */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-            <div className="flex justify-between text-sm text-gray-400 mb-1">
-              <span>Farm Health</span>
-              <span>{analytics.avgHealth}%</span>
+          <div className="bg-white/5 border border-white/10 rounded-xl p-3.5 sm:p-4">
+            <div className="flex justify-between text-xs sm:text-sm text-gray-400 mb-1.5">
+              <span>Farm Health Index</span>
+              <span className="font-semibold text-emerald-400">{analytics.avgHealth}%</span>
             </div>
 
-            <div className="w-full h-2 bg-white/10 rounded-full">
+            <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
               <div
-                className="h-full bg-green-500 rounded-full"
+                className="h-full bg-green-500 rounded-full transition-all duration-500"
                 style={{ width: `${analytics.avgHealth}%` }}
               />
             </div>
           </div>
-        </>
+        </div>
       )}
       {/* EXTRA INFO */}
-      <div className="grid sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4">
         <Stat title="Water Usage" value="1200L" />
         <Stat title="Sunlight" value="Good" />
         <Stat title="Status" value="Active" />
@@ -176,28 +176,29 @@ const FarmDetails = () => {
       {/* CROPS */}
       <CropList farmId={farm?._id || id} />
       {/* HISTORY */}
-      {/* HISTORY */}
-      <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-4">
+      <div className="bg-white/5 border border-white/10 rounded-xl p-3.5 sm:p-5 space-y-4">
         {/* HEADER */}
         <div className="flex justify-between items-center flex-wrap gap-2">
-          <h3 className="font-semibold">📜 Farm History</h3>
+          <h3 className="font-semibold text-sm sm:text-base flex items-center gap-1.5">
+            <span>📜</span> Farm History
+          </h3>
 
           <button
             onClick={() => setShowHistoryFilters(!showHistoryFilters)}
-            className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm"
+            className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs sm:text-sm font-medium"
           >
             ⚙️ Filters
           </button>
         </div>
 
-        {/* FILTER PANEL (same as CropList) */}
+        {/* FILTER PANEL */}
         {showHistoryFilters && (
-          <div className="bg-white/5 border border-white/10 p-4 rounded-xl grid sm:grid-cols-3 gap-3">
+          <div className="bg-white/5 border border-white/10 p-3 sm:p-4 rounded-xl grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
             {/* SEASON */}
             <select
               value={seasonFilter}
               onChange={(e) => setSeasonFilter(e.target.value)}
-              className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
+              className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10 text-xs sm:text-sm text-gray-200"
             >
               <option value="">All Seasons</option>
               {[...new Set(history.map((h) => h.season))].map((s) => (
@@ -209,7 +210,7 @@ const FarmDetails = () => {
             <select
               value={cropFilter}
               onChange={(e) => setCropFilter(e.target.value)}
-              className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
+              className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10 text-xs sm:text-sm text-gray-200"
             >
               <option value="">All Crops</option>
               {[...new Set(history.map((h) => h.cropName))].map((c) => (
@@ -221,59 +222,71 @@ const FarmDetails = () => {
             <select
               value={sortType}
               onChange={(e) => setSortType(e.target.value)}
-              className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10"
+              className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10 text-xs sm:text-sm text-gray-200"
             >
-              <option value="profitDesc">Profit ↓</option>
-              <option value="profitAsc">Profit ↑</option>
+              <option value="profitDesc">Profit (High → Low)</option>
+              <option value="profitAsc">Profit (Low → High)</option>
             </select>
           </div>
         )}
 
         {/* HISTORY GRID */}
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
           {processedHistory.map((h) => (
             <div
               key={h.cropId}
-              className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-1"
+              className="bg-white/5 border border-white/10 rounded-xl p-3.5 sm:p-4 space-y-1.5"
             >
-              <p className="font-medium flex items-center gap-1">
-                <Sprout size={14} /> {h.cropName} ({h.season})
-              </p>
+              <div className="flex justify-between items-center">
+                <p className="font-semibold text-sm sm:text-base flex items-center gap-1.5 text-white">
+                  <Sprout size={16} className="text-emerald-400 shrink-0" /> {h.cropName} ({h.season})
+                </p>
+                <p
+                  className={`text-xs sm:text-sm font-semibold flex items-center gap-1 ${
+                    h.profit >= 0 ? "text-emerald-400" : "text-rose-400"
+                  }`}
+                >
+                  <TrendingUp size={14} /> ₹{h.profit}
+                </p>
+              </div>
 
-              <p className="text-sm text-gray-400 flex items-center gap-1">
-                <Calendar size={14} />
+              <p className="text-xs text-gray-400 flex items-center gap-1">
+                <Calendar size={13} />
                 {new Date(h.sowingDate).toLocaleDateString()}
               </p>
 
-              <p className="text-sm">🌾 {h.production} kg</p>
-
-              <p className="text-sm">₹ Income: {h.income}</p>
-              <p className="text-sm">₹ Expense: {h.expense}</p>
-
-              <p
-                className={`text-sm font-medium flex items-center gap-1 ${
-                  h.profit >= 0 ? "text-green-400" : "text-red-400"
-                }`}
-              >
-                <TrendingUp size={14} /> ₹ {h.profit}
-              </p>
+              <div className="grid grid-cols-3 gap-1 pt-1 border-t border-white/5 text-xs text-slate-300">
+                <div>
+                  <span className="text-[10px] text-gray-400 block">Yield</span>
+                  <span className="font-medium">{h.production} kg</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-gray-400 block">Income</span>
+                  <span className="font-medium text-emerald-400">₹{h.income}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-gray-400 block">Expense</span>
+                  <span className="font-medium text-rose-400">₹{h.expense}</span>
+                </div>
+              </div>
             </div>
           ))}
         </div>
       </div>
-      <div className="flex flex-wrap gap-3">
+
+      <div className="flex items-center gap-3">
         <button
           onClick={() => setShowEdit(true)}
-          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-sm flex items-center gap-2"
+          className="flex-1 sm:flex-initial justify-center px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-xs sm:text-sm flex items-center gap-2 font-medium transition"
         >
-          <Pencil size={16} /> Edit
+          <Pencil size={15} /> Edit Farm
         </button>
 
         <button
           onClick={() => setShowDelete(true)}
-          className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-sm flex items-center gap-2"
+          className="flex-1 sm:flex-initial justify-center px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-xs sm:text-sm flex items-center gap-2 font-medium transition"
         >
-          <Trash2 size={16} /> Delete
+          <Trash2 size={15} /> Delete Farm
         </button>
       </div>
 
@@ -300,11 +313,11 @@ const FarmDetails = () => {
 };
 
 const Stat = ({ title, value, green, red }) => (
-  <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-    <p className="text-sm text-gray-400">{title}</p>
+  <div className="bg-white/5 border border-white/10 rounded-xl p-2.5 sm:p-4 text-center sm:text-left flex flex-col justify-center">
+    <p className="text-[11px] sm:text-xs text-gray-400 truncate">{title}</p>
     <h2
-      className={`text-lg font-semibold ${
-        green ? "text-green-400" : red ? "text-red-400" : ""
+      className={`text-sm sm:text-lg font-semibold mt-0.5 truncate ${
+        green ? "text-green-400" : red ? "text-red-400" : "text-white"
       }`}
     >
       {value}

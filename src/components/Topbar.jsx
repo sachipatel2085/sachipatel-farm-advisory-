@@ -83,37 +83,37 @@ export default function Topbar({ isMobile, setMobileOpen, mobileOpen }) {
   const currentLang = languages.find((l) => l.code === language) || languages[0];
 
   return (
-    <header className="sticky top-0 z-30 w-full flex items-center justify-between px-4 sm:px-6 py-3 bg-slate-900 border-b border-white/10 backdrop-blur-md">
+    <header className="sticky top-0 z-30 w-full flex items-center justify-between px-3 sm:px-6 py-2.5 sm:py-3 bg-slate-900/95 border-b border-white/10 backdrop-blur-md">
       {/* Left */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
         {isMobile && (
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="flex items-center justify-center w-10 h-10 rounded-lg text-white hover:bg-white/10 active:bg-white/20 transition"
+            className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg text-white hover:bg-white/10 active:bg-white/20 transition shrink-0"
             aria-label="Toggle menu"
           >
-            <Menu size={24} />
+            <Menu size={22} />
           </button>
         )}
 
-        <h2 className="text-lg sm:text-xl font-semibold text-white">
+        <h2 className="text-sm sm:text-base md:text-xl font-semibold text-white truncate max-w-[150px] xs:max-w-[220px] sm:max-w-none">
           {t("dashboard.title", "Farm Command Center")}
         </h2>
       </div>
 
       {/* Right */}
-      <div className="flex items-center gap-2 sm:gap-4">
+      <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
         {/* Language Selector Dropdown */}
         <div className="relative" ref={langRef}>
           <button
             onClick={() => setShowLangMenu(!showLangMenu)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-gray-200 transition font-medium"
+            className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-gray-200 transition font-medium"
             title="Change Language"
           >
-            <Globe size={14} className="text-emerald-400" />
+            <Globe size={14} className="text-emerald-400 shrink-0" />
             <span className="hidden sm:inline">{currentLang.nativeName}</span>
-            <span className="sm:hidden uppercase">{currentLang.code}</span>
-            <ChevronDown size={12} className="text-gray-400" />
+            <span className="sm:hidden uppercase text-[11px] font-semibold">{currentLang.code}</span>
+            <ChevronDown size={12} className="text-gray-400 shrink-0" />
           </button>
 
           {showLangMenu && (
@@ -143,19 +143,19 @@ export default function Topbar({ isMobile, setMobileOpen, mobileOpen }) {
         <div className="relative" ref={notifRef}>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
-            className="relative flex items-center justify-center w-9 h-9 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition"
+            className="relative flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition"
             aria-label="View Weather Notifications"
           >
-            <Bell size={19} />
+            <Bell size={18} />
             {alerts.length > 0 && (
-              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full text-[10px] font-bold bg-rose-500 text-white border-2 border-slate-900 shadow">
+              <span className="absolute -top-1 -right-1 min-w-[17px] h-[17px] px-1 flex items-center justify-center rounded-full text-[10px] font-bold bg-rose-500 text-white border-2 border-slate-900 shadow">
                 {alerts.length}
               </span>
             )}
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-slate-900 border border-white/10 rounded-2xl shadow-2xl p-4 z-50 text-white space-y-3 animate-in fade-in zoom-in-95 duration-150">
+            <div className="fixed inset-x-3 top-14 sm:absolute sm:inset-x-auto sm:right-0 sm:top-auto sm:mt-2 w-auto sm:w-96 max-w-sm sm:max-w-none bg-slate-900 border border-white/10 rounded-2xl shadow-2xl p-4 z-50 text-white space-y-3 animate-in fade-in zoom-in-95 duration-150">
               <div className="flex items-center justify-between pb-2 border-b border-white/10">
                 <h4 className="font-semibold text-xs sm:text-sm flex items-center gap-1.5 text-white">
                   <Sparkles size={14} className="text-amber-400" />

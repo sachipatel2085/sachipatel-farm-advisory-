@@ -51,17 +51,17 @@ export default function FinancePage() {
   }, []);
 
   return (
-    <div className="p-4 sm:p-6 space-y-6 text-slate-200">
+    <div className="space-y-4 sm:space-y-6 text-slate-200 w-full min-w-0">
       {/* ===== SUMMARY ===== */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4">
         {loading ? (
           [1, 2, 3].map((i) => (
             <div
               key={i}
-              className="p-4 rounded-xl border bg-white/5 space-y-2 animate-pulse"
+              className="p-2.5 sm:p-4 rounded-xl border bg-white/5 space-y-2 animate-pulse"
             >
-              <div className="h-3 w-20 bg-white/10 rounded"></div>
-              <div className="h-5 w-24 bg-white/10 rounded"></div>
+              <div className="h-3 w-16 bg-white/10 rounded"></div>
+              <div className="h-4 sm:h-5 w-20 bg-white/10 rounded"></div>
             </div>
           ))
         ) : (
@@ -223,9 +223,9 @@ const Card = ({ title, value, color }) => {
   };
 
   return (
-    <div className={`p-4 rounded-xl border ${colorMap[color]} bg-white/5`}>
-      <p className="text-sm text-gray-400">{title}</p>
-      <h2 className="text-lg font-semibold mt-1">{value}</h2>
+    <div className={`p-2.5 sm:p-4 rounded-xl border ${colorMap[color]} bg-white/5 text-center sm:text-left flex flex-col justify-center`}>
+      <p className="text-[11px] sm:text-sm text-gray-400 truncate">{title}</p>
+      <h2 className="text-sm sm:text-lg font-semibold mt-0.5 truncate">{value}</h2>
     </div>
   );
 };

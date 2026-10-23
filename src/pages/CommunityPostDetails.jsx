@@ -130,7 +130,7 @@ export default function CommunityPostDetails() {
 
   if (loading) {
     return (
-      <div className="p-4 sm:p-6 space-y-6 animate-pulse max-w-4xl mx-auto">
+      <div className="space-y-4 sm:space-y-6 animate-pulse max-w-4xl mx-auto w-full min-w-0">
         <div className="h-6 w-32 bg-white/10 rounded" />
         <div className="h-44 bg-white/5 rounded-2xl border border-white/10" />
         <div className="h-32 bg-white/5 rounded-2xl border border-white/10" />
@@ -158,7 +158,7 @@ export default function CommunityPostDetails() {
   const authorRole = post.author?.role || "farmer";
 
   return (
-    <div className="p-4 sm:p-6 space-y-6 text-slate-200 max-w-4xl mx-auto">
+    <div className="space-y-4 sm:space-y-6 text-slate-200 max-w-4xl mx-auto w-full min-w-0">
       <Breadcrumb currentName={post.title} />
 
       {/* Back button */}

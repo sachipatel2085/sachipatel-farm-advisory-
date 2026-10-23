@@ -137,19 +137,19 @@ export default function Advisory() {
   );
 
   return (
-    <div className="p-4 sm:p-6 space-y-6 text-slate-200">
+    <div className="space-y-4 sm:space-y-6 text-slate-200 w-full min-w-0">
       <Breadcrumb currentName="Farm Advisory & Care" />
 
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2.5">
+          <h1 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
             <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-              <Sparkles size={22} />
+              <Sparkles size={20} />
             </div>
             Farm Advisory & Care
           </h1>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-xs sm:text-sm text-gray-400 mt-1">
             Personalized crop management, real-time protection alerts, and agronomic guidance.
           </p>
         </div>
@@ -157,9 +157,9 @@ export default function Advisory() {
         <button
           onClick={fetchAdvisories}
           disabled={loading}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-sm text-gray-300 hover:text-white transition disabled:opacity-50"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs sm:text-sm text-gray-300 hover:text-white transition disabled:opacity-50"
         >
-          <RefreshCw size={15} className={loading ? "animate-spin" : ""} />
+          <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
           Refresh Advisory
         </button>
       </div>

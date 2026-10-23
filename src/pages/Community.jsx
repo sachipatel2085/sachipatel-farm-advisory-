@@ -79,19 +79,19 @@ export default function Community() {
   };
 
   return (
-    <div className="p-4 sm:p-6 space-y-6 text-slate-200">
+    <div className="space-y-4 sm:space-y-6 text-slate-200 w-full min-w-0">
       <Breadcrumb currentName="Farmer Community" />
 
       {/* Hero Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2.5">
+          <h1 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
             <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-              <Users size={22} />
+              <Users size={20} />
             </div>
             Farmer Community & Agricultural Q&A
           </h1>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-xs sm:text-sm text-gray-400 mt-1">
             Exchange field insights, seek expert pest diagnosis, and discuss Mandi market conditions.
           </p>
         </div>

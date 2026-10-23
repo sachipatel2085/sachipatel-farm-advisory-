@@ -137,19 +137,19 @@ export default function CropPlanning() {
   }, [activeTab]);
 
   return (
-    <div className="p-4 sm:p-6 space-y-6 text-slate-200">
+    <div className="space-y-4 sm:space-y-6 text-slate-200 w-full min-w-0">
       <Breadcrumb currentName="Crop Planning & Calendar" />
 
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2.5">
+          <h1 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
             <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-              <Compass size={22} />
+              <Compass size={20} />
             </div>
             Crop Planning & Agronomic Calendar
           </h1>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-xs sm:text-sm text-gray-400 mt-1">
             Pre-sowing decisions, scientific crop rotation, input cost estimation, and seasonal windows.
           </p>
         </div>

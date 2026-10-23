@@ -110,14 +110,14 @@ export default function Dashboard() {
   const activeRate = Math.min(100, Math.round((activeCropsCount / totalCropsCount) * 100));
 
   return (
-    <div className="min-h-screen p-6 sm:p-8 bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-slate-200">
+    <div className="space-y-5 sm:space-y-6 text-slate-200 w-full min-w-0">
       {/* HEADER */}
-      <div className="flex justify-between items-center flex-wrap gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="flex items-center gap-2 text-2xl sm:text-3xl font-semibold">
-            <Wheat size={22} className="text-emerald-400" /> {t("dashboard.title", "Farm Command Center")}
+          <h1 className="flex items-center gap-2 text-xl sm:text-2xl md:text-3xl font-semibold">
+            <Wheat size={22} className="text-emerald-400 shrink-0" /> {t("dashboard.title", "Farm Command Center")}
           </h1>
-          <p className="opacity-70 mt-1 text-sm">
+          <p className="opacity-70 mt-1 text-xs sm:text-sm">
             {t("dashboard.subtitle", "Real-time crop telemetry, financial trends & automated farm care")}
           </p>
         </div>
@@ -125,7 +125,7 @@ export default function Dashboard() {
         {/* QUICK ACTION */}
         <button
           onClick={() => navigate("/farms")}
-          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-lg shadow-green-500/20"
+          className="self-start sm:self-auto flex items-center gap-2 bg-green-500 hover:bg-green-600 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition shadow-lg shadow-green-500/20 shrink-0"
         >
           <Plus size={16} /> {t("farms.addFarm", "Add Farm")}
         </button>
@@ -133,53 +133,53 @@ export default function Dashboard() {
 
       {/* WEATHER-TRIGGERED SMART ALERTS BANNER */}
       {weatherData?.alerts && weatherData.alerts.length > 0 && (
-        <div className="mt-6">
+        <div className="mt-4 sm:mt-6">
           <WeatherAlertBanner alerts={weatherData.alerts} location={weatherData.location} />
         </div>
       )}
 
       {/* STATS */}
-      <div className="grid gap-5 mt-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 mt-4 sm:mt-6">
         <Card
           title={t("dashboard.totalFarms", "Total Farms")}
           value={loading ? "..." : stats.farms}
-          icon={<Tractor />}
+          icon={<Tractor size={20} />}
         />
 
         <Card
           title={t("dashboard.activeCrops", "Active Crops")}
           value={loading ? "..." : stats.crops}
-          icon={<Leaf />}
+          icon={<Leaf size={20} />}
         />
 
         <Card
           title={t("dashboard.revenue", "Revenue")}
           value={loading ? "..." : `₹${stats.revenue.toLocaleString("en-IN")}`}
-          icon={<IndianRupee />}
+          icon={<IndianRupee size={20} />}
         />
 
         <Card
           title={t("dashboard.growth", "Profit Margin")}
           value={loading ? "..." : `${stats.growth}%`}
-          icon={<TrendingUp />}
+          icon={<TrendingUp size={20} />}
         />
       </div>
 
       {/* ANALYTICS + ACTIVITY + WEATHER */}
-      <div className="grid lg:grid-cols-3 gap-6 mt-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 mt-6 sm:mt-8">
         {/* LEFT SIDE (CHARTS & PERFORMANCE) */}
-        <div className="lg:col-span-2 space-y-5">
+        <div className="lg:col-span-2 space-y-4 sm:space-y-5">
           {/* RECHARTS CASH FLOW CHART */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-5 space-y-3">
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5 space-y-3">
             <div className="flex items-center justify-between flex-wrap gap-2">
-              <h2 className="flex items-center gap-2 text-base font-semibold text-white">
-                <LineChart size={18} className="text-emerald-400" />
+              <h2 className="flex items-center gap-2 text-sm sm:text-base font-semibold text-white">
+                <LineChart size={18} className="text-emerald-400 shrink-0" />
                 {t("dashboard.monthlyTrends", "Monthly Cash Flow (Income vs Expenses)")}
               </h2>
               <span className="text-xs text-slate-400">Past 6 Months</span>
             </div>
 
-            <div className="h-[240px] w-full pt-2">
+            <div className="h-[220px] sm:h-[260px] w-full pt-2">
               {loading ? (
                 <div className="h-full flex items-center justify-center text-xs text-slate-400 animate-pulse">
                   Loading financial trends...
@@ -188,7 +188,7 @@ export default function Dashboard() {
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={dashboardData.financialTrends}
-                    margin={{ top: 10, right: 10, left: -5, bottom: 0 }}
+                    margin={{ top: 10, right: 10, left: -15, bottom: 0 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
                     <XAxis
@@ -237,9 +237,9 @@ export default function Dashboard() {
           </div>
 
           {/* MINI ANALYTICS */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-5">
-            <h2 className="flex items-center gap-2 text-base font-semibold mb-4 text-white">
-              <Leaf size={18} className="text-emerald-400" /> Farm & Crop Performance
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5">
+            <h2 className="flex items-center gap-2 text-sm sm:text-base font-semibold mb-4 text-white">
+              <Leaf size={18} className="text-emerald-400 shrink-0" /> Farm & Crop Performance
             </h2>
 
             <Progress label="Active Growing Crops Ratio" value={activeRate || 0} />
@@ -252,17 +252,17 @@ export default function Dashboard() {
         </div>
 
         {/* RIGHT SIDE (DYNAMIC ACTIVITY FEED + LIVE WEATHER) */}
-        <div className="space-y-5 flex flex-col">
+        <div className="space-y-4 sm:space-y-5 flex flex-col">
           {/* LIVE WEATHER TELEMETRY WIDGET */}
           <WeatherWidget weatherData={weatherData} loading={loading} />
 
           {/* DYNAMIC ACTIVITY FEED */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-5 flex flex-col flex-1">
-            <h2 className="flex items-center gap-2 text-base font-semibold mb-4 text-white">
-              <Clock size={18} className="text-emerald-400" /> {t("dashboard.recentActivity", "Recent Farm Activity")}
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5 flex flex-col flex-1">
+            <h2 className="flex items-center gap-2 text-sm sm:text-base font-semibold mb-4 text-white">
+              <Clock size={18} className="text-emerald-400 shrink-0" /> {t("dashboard.recentActivity", "Recent Farm Activity")}
             </h2>
 
-            <div className="space-y-4 text-sm flex-1">
+            <div className="space-y-3 sm:space-y-4 text-sm flex-1">
               {loading ? (
                 [...Array(4)].map((_, i) => (
                   <div key={i} className="h-8 bg-white/5 rounded animate-pulse" />
@@ -284,17 +284,17 @@ export default function Dashboard() {
       </div>
 
       {/* ACTION WIDGETS */}
-      <div className="grid sm:grid-cols-2 gap-5 mt-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5 mt-5 sm:mt-6">
         <div
           onClick={() => navigate("/scanner")}
-          className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-green-500 transition cursor-pointer group"
+          className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5 hover:border-green-500 transition cursor-pointer group"
         >
-          <div className="flex items-center gap-3">
-            <Camera className="text-green-400 group-hover:scale-110 transition-transform" />
-            <p className="text-sm text-gray-400">{t("dashboard.plantDoctor", "AI Plant Doctor")}</p>
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <Camera className="text-green-400 group-hover:scale-110 transition-transform shrink-0" size={20} />
+            <p className="text-xs sm:text-sm text-gray-400">{t("dashboard.plantDoctor", "AI Plant Doctor")}</p>
           </div>
 
-          <h2 className="text-2xl mt-2 text-green-400 font-semibold">
+          <h2 className="text-lg sm:text-2xl mt-2 text-green-400 font-semibold">
             Scan Crop for Disease
           </h2>
           <p className="text-xs text-slate-400 mt-1">{t("dashboard.scanDescription", "Instant vision-based leaf disease detection & remedy")}</p>
@@ -302,15 +302,15 @@ export default function Dashboard() {
 
         <div
           onClick={() => navigate("/mandi")}
-          className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-emerald-500 transition cursor-pointer group"
+          className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5 hover:border-emerald-500 transition cursor-pointer group"
         >
-          <div className="flex items-center gap-3">
-            <Store className="text-emerald-400 group-hover:scale-110 transition-transform" />
-            <p className="text-sm text-gray-400">{t("dashboard.mandiCard", "APMC Mandi Rates")}</p>
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <Store className="text-emerald-400 group-hover:scale-110 transition-transform shrink-0" size={20} />
+            <p className="text-xs sm:text-sm text-gray-400">{t("dashboard.mandiCard", "APMC Mandi Rates")}</p>
           </div>
 
-          <div className="flex items-baseline justify-between mt-2">
-            <h2 className="text-2xl text-emerald-400 font-semibold">
+          <div className="flex items-baseline justify-between mt-2 flex-wrap gap-1">
+            <h2 className="text-lg sm:text-2xl text-emerald-400 font-semibold">
               Live Market Prices
             </h2>
             <span className="text-xs text-slate-400">Compare Mandis →</span>
@@ -320,7 +320,7 @@ export default function Dashboard() {
       </div>
 
       {/* QUICK LINKS */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-8">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 mt-6 sm:mt-8">
         <QuickCard title={t("nav.farms", "Manage Farms")} onClick={() => navigate("/farms")} />
         <QuickCard title={t("nav.crops", "View Crops")} onClick={() => navigate("/crops")} />
         <QuickCard title={t("nav.finance", "Finance & Ledger")} onClick={() => navigate("/finance")} />
@@ -335,23 +335,23 @@ const Card = ({ title, value, icon }) => {
   const isLoading = value === "...";
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-green-500 transition">
-      <div className="flex items-center gap-3">
-        <div className={`text-green-400 ${isLoading ? "opacity-50" : ""}`}>
+    <div className="bg-white/5 border border-white/10 rounded-xl p-3 sm:p-5 hover:border-green-500 transition flex flex-col justify-between">
+      <div className="flex items-center gap-2 sm:gap-3">
+        <div className={`text-green-400 shrink-0 ${isLoading ? "opacity-50" : ""}`}>
           {icon}
         </div>
 
         {isLoading ? (
-          <div className="h-3 w-24 bg-white/10 rounded animate-pulse" />
+          <div className="h-3 w-16 sm:w-24 bg-white/10 rounded animate-pulse" />
         ) : (
-          <p className="text-sm text-gray-400">{title}</p>
+          <p className="text-xs sm:text-sm text-gray-400 truncate">{title}</p>
         )}
       </div>
 
       {isLoading ? (
-        <div className="h-6 w-16 bg-white/10 rounded animate-pulse mt-3" />
+        <div className="h-6 w-16 bg-white/10 rounded animate-pulse mt-2 sm:mt-3" />
       ) : (
-        <h2 className="text-2xl mt-2 text-green-400 font-semibold">{value}</h2>
+        <h2 className="text-base sm:text-2xl mt-2 text-green-400 font-semibold truncate">{value}</h2>
       )}
     </div>
   );

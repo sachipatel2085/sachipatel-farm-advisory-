@@ -108,18 +108,18 @@ const CropDetails = () => {
   });
 
   return (
-    <div className="p-4 sm:p-6 space-y-6 text-slate-200">
+    <div className="space-y-4 sm:space-y-6 text-slate-200 w-full min-w-0">
       <Breadcrumb currentName={crop.cropName} />
 
       <button
         onClick={() => navigate(-1)}
-        className="text-sm text-gray-400 hover:text-white"
+        className="text-xs sm:text-sm text-gray-400 hover:text-white"
       >
         ← Back
       </button>
 
       {/* HEADER */}
-      <div className="flex justify-between items-center flex-wrap gap-3">
+      <div className="flex justify-between items-center flex-wrap gap-2.5 sm:gap-3">
         <div>
           {loading ? (
             <>
@@ -128,11 +128,11 @@ const CropDetails = () => {
             </>
           ) : (
             <>
-              <h2 className="flex items-center gap-2 text-xl font-semibold">
-                <Sprout size={20} /> {crop.cropName}
+              <h2 className="flex items-center gap-2 text-lg sm:text-xl font-semibold">
+                <Sprout size={20} className="text-emerald-400 shrink-0" /> {crop.cropName}
               </h2>
-              <p className="flex items-center gap-1 text-sm text-gray-400">
-                <MapPin size={14} /> {crop.farmName}
+              <p className="flex items-center gap-1 text-xs sm:text-sm text-gray-400 mt-0.5">
+                <MapPin size={14} className="shrink-0" /> {crop.farmName}
               </p>
             </>
           )}
@@ -140,7 +140,7 @@ const CropDetails = () => {
 
         {!loading && (
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-full text-sm bg-green-500/20 text-green-400 capitalize">
+            <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400 capitalize">
               {crop.growthStage || "Vegetative"}
             </span>
           </div>
@@ -153,10 +153,10 @@ const CropDetails = () => {
       )}
 
       {/* TABS NAVIGATION */}
-      <div className="flex items-center gap-2 border-b border-white/10 pb-2 flex-wrap">
+      <div className="flex items-center gap-1.5 sm:gap-2 border-b border-white/10 pb-2 overflow-x-auto no-scrollbar flex-nowrap sm:flex-wrap">
         <button
           onClick={() => setActiveTab("overview")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition shrink-0 ${
             activeTab === "overview"
               ? "bg-green-500 text-white"
               : "text-gray-400 hover:text-white hover:bg-white/5"
@@ -167,7 +167,7 @@ const CropDetails = () => {
 
         <button
           onClick={() => setActiveTab("activities")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition shrink-0 ${
             activeTab === "activities"
               ? "bg-emerald-600 text-white shadow-lg shadow-emerald-500/20"
               : "text-gray-400 hover:text-white hover:bg-white/5"
@@ -184,7 +184,7 @@ const CropDetails = () => {
 
         <button
           onClick={() => setActiveTab("advisory")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition shrink-0 ${
             activeTab === "advisory"
               ? "bg-emerald-600 text-white shadow-lg shadow-emerald-500/20"
               : "text-gray-400 hover:text-white hover:bg-white/5"
@@ -197,7 +197,7 @@ const CropDetails = () => {
             }
           />
           Advisory & Care
-          <span className="ml-1 text-[11px] px-1.5 py-0.2 rounded-full bg-emerald-400/20 text-emerald-300">
+          <span className="ml-1 text-[10px] sm:text-[11px] px-1.5 py-0.2 rounded-full bg-emerald-400/20 text-emerald-300">
             Agronomy AI
           </span>
         </button>
@@ -245,38 +245,38 @@ const CropDetails = () => {
           </div>
 
           {/* FINANCE */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="p-4 rounded-xl border border-white/10 bg-white/5">
-              <p className="text-xs text-gray-400 mb-1">Total Income</p>
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+            <div className="p-2.5 sm:p-4 rounded-xl border border-white/10 bg-white/5 text-center sm:text-left">
+              <p className="text-[11px] sm:text-xs text-gray-400 mb-0.5 truncate">Total Income</p>
               {loading ? (
-                <div className="h-5 w-20 bg-white/10 rounded animate-pulse" />
+                <div className="h-4 sm:h-5 w-16 bg-white/10 rounded animate-pulse mx-auto sm:mx-0" />
               ) : (
-                <p className="text-green-400 font-semibold text-lg">
-                  ₹ {income.toLocaleString("en-IN")}
+                <p className="text-emerald-400 font-semibold text-sm sm:text-lg truncate">
+                  ₹{income.toLocaleString("en-IN")}
                 </p>
               )}
             </div>
-            <div className="p-4 rounded-xl border border-white/10 bg-white/5">
-              <p className="text-xs text-gray-400 mb-1">Total Expenses</p>
+            <div className="p-2.5 sm:p-4 rounded-xl border border-white/10 bg-white/5 text-center sm:text-left">
+              <p className="text-[11px] sm:text-xs text-gray-400 mb-0.5 truncate">Total Expenses</p>
               {loading ? (
-                <div className="h-5 w-20 bg-white/10 rounded animate-pulse" />
+                <div className="h-4 sm:h-5 w-16 bg-white/10 rounded animate-pulse mx-auto sm:mx-0" />
               ) : (
-                <p className="text-red-400 font-semibold text-lg">
-                  ₹ {expense.toLocaleString("en-IN")}
+                <p className="text-rose-400 font-semibold text-sm sm:text-lg truncate">
+                  ₹{expense.toLocaleString("en-IN")}
                 </p>
               )}
             </div>
-            <div className="p-4 rounded-xl border border-white/10 bg-white/5">
-              <p className="text-xs text-gray-400 mb-1">Net Balance</p>
+            <div className="p-2.5 sm:p-4 rounded-xl border border-white/10 bg-white/5 text-center sm:text-left">
+              <p className="text-[11px] sm:text-xs text-gray-400 mb-0.5 truncate">Net Balance</p>
               {loading ? (
-                <div className="h-5 w-20 bg-white/10 rounded animate-pulse" />
+                <div className="h-4 sm:h-5 w-16 bg-white/10 rounded animate-pulse mx-auto sm:mx-0" />
               ) : (
                 <p
-                  className={`font-semibold text-lg ${
+                  className={`font-semibold text-sm sm:text-lg truncate ${
                     profit >= 0 ? "text-emerald-400" : "text-rose-400"
                   }`}
                 >
-                  ₹ {profit.toLocaleString("en-IN")}
+                  ₹{profit.toLocaleString("en-IN")}
                 </p>
               )}
             </div>

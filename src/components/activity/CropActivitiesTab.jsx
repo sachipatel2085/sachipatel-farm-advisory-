@@ -146,21 +146,21 @@ export default function CropActivitiesTab({ cropId, crop }) {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center justify-between gap-3 bg-white/5 border border-white/10 p-2.5 rounded-xl text-xs">
-        <div className="flex items-center gap-1.5">
+      <div className="flex flex-wrap items-center justify-between gap-2 bg-white/5 border border-white/10 p-2 sm:p-2.5 rounded-xl text-xs">
+        <div className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar py-0.5">
           <button
             onClick={() => setFilterStatus("all")}
-            className={`px-3 py-1.5 rounded-lg font-medium transition ${
+            className={`px-2.5 sm:px-3 py-1.5 rounded-lg font-medium transition shrink-0 ${
               filterStatus === "all"
                 ? "bg-emerald-500 text-white"
                 : "text-gray-400 hover:text-white"
             }`}
           >
-            All Tasks ({stats.total})
+            All ({stats.total})
           </button>
           <button
             onClick={() => setFilterStatus("pending")}
-            className={`px-3 py-1.5 rounded-lg font-medium transition ${
+            className={`px-2.5 sm:px-3 py-1.5 rounded-lg font-medium transition shrink-0 ${
               filterStatus === "pending"
                 ? "bg-amber-500 text-black font-semibold"
                 : "text-amber-400 hover:text-white"
@@ -170,7 +170,7 @@ export default function CropActivitiesTab({ cropId, crop }) {
           </button>
           <button
             onClick={() => setFilterStatus("completed")}
-            className={`px-3 py-1.5 rounded-lg font-medium transition ${
+            className={`px-2.5 sm:px-3 py-1.5 rounded-lg font-medium transition shrink-0 ${
               filterStatus === "completed"
                 ? "bg-emerald-600 text-white"
                 : "text-emerald-400 hover:text-white"
@@ -182,10 +182,10 @@ export default function CropActivitiesTab({ cropId, crop }) {
 
         <button
           onClick={loadActivities}
-          className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition"
+          className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition shrink-0"
           title="Refresh"
         >
-          <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
+          <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
         </button>
       </div>
 

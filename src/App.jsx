@@ -26,13 +26,22 @@ import CommunityPostDetails from "./pages/CommunityPostDetails";
 function App() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useLayoutEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
+    const handleResize = () => {
+      const width = window.innerWidth;
+      const mobile = width < 768;
+      setIsMobile(mobile);
+      if (width >= 768 && width < 1024) {
+        setCollapsed(true);
+      } else if (width >= 1024) {
+        setCollapsed(false);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const PrivateRoute = ({ children }) => {
@@ -43,7 +52,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="flex min-h-screen bg-slate-900 text-white">
+      <div className="flex min-h-screen bg-slate-900 text-white overflow-x-hidden">
         {/* Sidebar */}
         <Sidebar
           collapsed={collapsed}
@@ -56,7 +65,7 @@ function App() {
         {/* Main */}
         <div
           className={`
-      flex-1 flex flex-col transition-all duration-300
+      flex-1 flex flex-col min-w-0 transition-all duration-300
       ${isMobile ? "ml-0" : collapsed ? "ml-16" : "ml-64"}
     `}
         >
@@ -66,7 +75,7 @@ function App() {
             mobileOpen={mobileOpen}
           />
 
-          <div className="flex-1 p-4 sm:p-6">
+          <main className="flex-1 p-3.5 sm:p-5 md:p-6 w-full max-w-7xl mx-auto min-w-0">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
@@ -126,7 +135,7 @@ function App() {
               <Route path="/community" element={<Community />} />
               <Route path="/community/:id" element={<CommunityPostDetails />} />
             </Routes>
-          </div>
+          </main>
         </div>
       </div>{" "}
       {mobileOpen && isMobile && (
