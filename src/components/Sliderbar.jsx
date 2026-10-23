@@ -193,7 +193,7 @@ const NavItem = ({ to, icon, label, active, collapsed, onClick }) => (
     <span className="flex-shrink-0">{icon}</span>
 
     {!collapsed && (
-      <span className="text-sm font-medium whitespace-nowrap">{label}</span>
+      <span className="text-sm font-medium whitespace-nowrap truncate">{label}</span>
     )}
   </Link>
 );

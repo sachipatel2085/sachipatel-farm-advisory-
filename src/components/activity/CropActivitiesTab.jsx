@@ -20,7 +20,7 @@ export default function CropActivitiesTab({ cropId, crop }) {
   const [generating, setGenerating] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all");
   const [showAddModal, setShowAddModal] = useState(false);
-  const [feedbackMsg, setFeedbackMsg] = useState("");
+  const [feedback, setFeedback] = useState(null); // { type: 'success' | 'warning', message: string }
 
   const loadActivities = async () => {
     setLoading(true);
@@ -61,15 +61,34 @@ export default function CropActivitiesTab({ cropId, crop }) {
 
   const handleGenerateSchedule = async () => {
     setGenerating(true);
-    setFeedbackMsg("");
+    setFeedback(null);
     try {
       const res = await cropActivityService.generateSchedule(cropId);
-      setFeedbackMsg(res.message || "Schedule generated successfully!");
+      if (res?.isAvailable === false) {
+        setFeedback({
+          type: "warning",
+          message:
+            res.message ||
+            `Standard schedule is not available for ${crop?.cropName || "this crop"}. General tasks have not been configured by an admin or moderator yet.`,
+        });
+      } else {
+        setFeedback({
+          type: "success",
+          message:
+            res.message ||
+            `Generated ${res.addedCount || 0} standard general crop tasks for ${crop?.cropName || "this crop"}.`,
+        });
+      }
       await loadActivities();
-      setTimeout(() => setFeedbackMsg(""), 5000);
+      setTimeout(() => setFeedback(null), 8000);
     } catch (err) {
       console.error("Generate schedule error:", err);
-      alert("Failed to generate schedule: " + (err.response?.data?.message || err.message));
+      setFeedback({
+        type: "warning",
+        message:
+          "Failed to generate schedule: " +
+          (err.response?.data?.message || err.message),
+      });
     } finally {
       setGenerating(false);
     }
@@ -137,10 +156,20 @@ export default function CropActivitiesTab({ cropId, crop }) {
           </div>
         </div>
 
-        {feedbackMsg && (
-          <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2">
-            <Sparkles size={14} className="flex-shrink-0" />
-            <span>{feedbackMsg}</span>
+        {feedback && (
+          <div
+            className={`p-3 rounded-xl border text-xs flex items-start gap-2.5 ${
+              feedback.type === "warning"
+                ? "bg-amber-500/10 border-amber-500/30 text-amber-200"
+                : "bg-emerald-500/10 border-emerald-500/30 text-emerald-300"
+            }`}
+          >
+            {feedback.type === "warning" ? (
+              <AlertCircle size={15} className="flex-shrink-0 text-amber-400 mt-0.5" />
+            ) : (
+              <Sparkles size={15} className="flex-shrink-0 text-emerald-400 mt-0.5" />
+            )}
+            <span className="leading-relaxed">{feedback.message}</span>
           </div>
         )}
       </div>

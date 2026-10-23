@@ -72,6 +72,34 @@ export default function CropAdvisoryTab({ cropId, crop }) {
     );
   }
 
+  // Crop does not have any advisory rules configured by Admin or Moderator
+  if (data && data.isAvailable === false) {
+    return (
+      <div className="space-y-6">
+        <div className="p-8 sm:p-10 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-center space-y-3 max-w-xl mx-auto">
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center mx-auto">
+            <AlertTriangle size={24} />
+          </div>
+          <h3 className="text-lg font-bold text-white">
+            Advisory is not available for {data.cropName}
+          </h3>
+          <p className="text-xs text-amber-200/90 leading-relaxed max-w-md mx-auto">
+            {data.statusMessage ||
+              `Live agronomic advisories have not been configured for ${data.cropName} by agricultural moderators or administrators yet.`}
+          </p>
+          <div className="pt-2 flex justify-center gap-3 text-xs">
+            <button
+              onClick={fetchAdvisory}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium transition"
+            >
+              <RefreshCw size={13} /> Check Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const advisories = data?.advisories || [];
 
   const urgentCount = advisories.filter((a) => a.priority === "red").length;
@@ -258,20 +286,24 @@ export default function CropAdvisoryTab({ cropId, crop }) {
         <div className="p-8 text-center bg-white/5 rounded-xl border border-white/10 space-y-2">
           <ShieldCheck size={36} className="mx-auto text-emerald-400/80 mb-2" />
           <p className="text-white font-medium text-base">
-            No advisory matches the selected filter
+            {data?.statusMessage || "No advisory matches the selected filter"}
           </p>
           <p className="text-gray-400 text-xs">
-            Try switching your priority or category filters to view other recommendations.
+            {data?.statusMessage
+              ? "New alerts will appear here automatically when this crop enters its next growth window."
+              : "Try switching your priority or category filters to view other recommendations."}
           </p>
-          <button
-            onClick={() => {
-              setSelectedPriority("all");
-              setSelectedCategory("all");
-            }}
-            className="mt-3 text-xs text-emerald-400 hover:underline inline-block"
-          >
-            Reset Filters
-          </button>
+          {!data?.statusMessage && (
+            <button
+              onClick={() => {
+                setSelectedPriority("all");
+                setSelectedCategory("all");
+              }}
+              className="mt-3 text-xs text-emerald-400 hover:underline inline-block"
+            >
+              Reset Filters
+            </button>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

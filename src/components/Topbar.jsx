@@ -15,22 +15,27 @@ import {
   CloudRain,
   Sun,
   Wind,
+  Shield,
+  LayoutDashboard,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
+import { useAuth } from "../context/Authcontext";
 import weatherService from "../services/weatherService";
 
 export default function Topbar({ isMobile, setMobileOpen, mobileOpen }) {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const { user, isAdmin, logout, token } = useAuth();
   const { language, setLanguage, t, languages } = useLanguage();
 
   const [alerts, setAlerts] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const notifRef = useRef(null);
   const langRef = useRef(null);
+  const profileRef = useRef(null);
 
   // Load weather alerts
   useEffect(() => {
@@ -55,13 +60,16 @@ export default function Topbar({ isMobile, setMobileOpen, mobileOpen }) {
       if (langRef.current && !langRef.current.contains(e.target)) {
         setShowLangMenu(false);
       }
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setShowProfileMenu(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    logout();
     navigate("/");
   };
 
@@ -211,23 +219,109 @@ export default function Topbar({ isMobile, setMobileOpen, mobileOpen }) {
           )}
         </div>
 
-        {/* Profile */}
-        <div className="flex items-center gap-2 text-xs text-gray-300">
-          <div className="w-8 h-8 rounded-full bg-slate-800 border border-white/10 flex items-center justify-center text-emerald-400">
-            <User size={15} />
-          </div>
-          <span className="hidden sm:inline font-medium">{token ? "Farmer" : "Guest"}</span>
-        </div>
-
-        {/* Auth Buttons */}
+        {/* User Profile Button with Dropdown Menu & Admin Navigation */}
         {token ? (
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-1.5 bg-rose-600/80 hover:bg-rose-600 px-3 py-1.5 rounded-xl text-white text-xs font-medium transition"
-          >
-            <LogOut size={14} />
-            <span className="hidden sm:inline">Logout</span>
-          </button>
+          <div className="relative" ref={profileRef}>
+            <button
+              onClick={() => setShowProfileMenu(!showProfileMenu)}
+              className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition text-left"
+              aria-label="User Profile Menu"
+            >
+              <div
+                className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs font-bold border shrink-0 ${
+                  isAdmin
+                    ? "bg-emerald-950/80 border-emerald-500/40 text-emerald-400"
+                    : "bg-slate-800 border-white/10 text-emerald-400"
+                }`}
+              >
+                {isAdmin ? <Shield size={14} /> : <User size={14} />}
+              </div>
+              <div className="hidden sm:flex flex-col">
+                <span className="text-xs font-semibold text-white truncate max-w-[90px]">
+                  {user?.name || "Farmer"}
+                </span>
+                <span className="text-[10px] text-gray-400 capitalize flex items-center gap-1 font-mono">
+                  {user?.role || "farmer"}
+                  {isAdmin && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  )}
+                </span>
+              </div>
+              <ChevronDown size={13} className="text-gray-400 shrink-0 hidden sm:block" />
+            </button>
+
+            {/* Profile Dropdown Menu */}
+            {showProfileMenu && (
+              <div className="absolute right-0 mt-2 w-64 bg-slate-900 border border-white/10 rounded-2xl shadow-2xl p-3 z-50 animate-in fade-in zoom-in-95 duration-150 space-y-2.5">
+                {/* User info banner */}
+                <div className="p-2.5 rounded-xl bg-white/[0.04] border border-white/5 space-y-1.5">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-full bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-bold text-sm">
+                      {user?.name ? user.name[0].toUpperCase() : "U"}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-bold text-white truncate">
+                        {user?.name || "Farmer"}
+                      </p>
+                      <p className="text-[11px] text-gray-400 truncate">
+                        {user?.phone || user?.email || "Account Active"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="pt-1.5 border-t border-white/5 flex items-center justify-between text-[11px]">
+                    <span className="text-gray-400">Current Role:</span>
+                    <span className="font-semibold uppercase tracking-wider text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      {user?.role || "farmer"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Navigation Actions */}
+                <div className="space-y-1">
+                  {/* SEPARATE ADMIN DASHBOARD NAVIGATION BUTTON */}
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      navigate("/admin");
+                    }}
+                    className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/30 transition group"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Shield size={15} className="text-emerald-400 group-hover:text-white" />
+                      Admin Dashboard
+                    </span>
+                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/30 font-bold uppercase tracking-wider">
+                      {isAdmin ? "ADMIN" : "PORTAL"}
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      navigate("/dashboard");
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-gray-300 hover:text-white hover:bg-white/5 transition"
+                  >
+                    <LayoutDashboard size={15} className="text-gray-400" />
+                    Farmer Dashboard
+                  </button>
+                </div>
+
+                <div className="border-t border-white/10 pt-1">
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      handleLogout();
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-rose-400 hover:bg-rose-500/10 transition"
+                  >
+                    <LogOut size={15} />
+                    Log Out
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         ) : (
           <div className="flex items-center gap-2">
             <button

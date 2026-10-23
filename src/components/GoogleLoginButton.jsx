@@ -44,8 +44,10 @@ const GoogleLoginButton = () => {
       // Store your application's JWT
       localStorage.setItem("token", data.token);
 
-      // Store user
-      localStorage.setItem("user", JSON.stringify(data.user));
+      // Store user safely
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
 
       // Redirect
       window.location.href = "/dashboard";

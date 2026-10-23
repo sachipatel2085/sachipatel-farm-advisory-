@@ -468,10 +468,24 @@ export default function Advisory() {
                 </div>
 
                 {/* Advisories for this Crop */}
-                {crop.filteredAdvisories.length === 0 ? (
-                  <p className="text-xs text-gray-500 italic py-2">
-                    No active advisories match the selected filters for this crop.
-                  </p>
+                {crop.isAvailable === false ? (
+                  <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-3">
+                    <AlertTriangle size={18} className="text-amber-400 shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="text-sm font-semibold text-white">
+                        Advisory is not available for {crop.cropName}
+                      </h4>
+                      <p className="text-xs text-amber-200/90 mt-0.5">
+                        {crop.statusMessage ||
+                          `Agronomic advisories for ${crop.cropName} have not been configured by agricultural moderators or administrators yet.`}
+                      </p>
+                    </div>
+                  </div>
+                ) : crop.filteredAdvisories.length === 0 ? (
+                  <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 text-gray-400 text-xs">
+                    {crop.statusMessage ||
+                      "No active advisories match the selected filters for this crop at the moment."}
+                  </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
                     {crop.filteredAdvisories.map((adv, idx) => (
