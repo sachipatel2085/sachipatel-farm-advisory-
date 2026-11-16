@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
-import { MapPin, Wheat } from "lucide-react";
+import { MapPin, Wheat, Plus, SlidersHorizontal, LandPlot } from "lucide-react";
 import CreateFarmModal from "./CreateFarm";
 
 const FarmList = () => {
@@ -56,39 +56,39 @@ const FarmList = () => {
     });
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-xl p-3.5 sm:p-5 space-y-4 sm:space-y-5">
+    <div className="bg-[#131d2e] border border-white/[0.08] rounded-xl p-3.5 sm:p-5 space-y-4 sm:space-y-5 shadow-md">
       {/* HEADER */}
       <div className="flex justify-between items-center flex-wrap gap-2.5 sm:gap-3">
         <h2 className="flex items-center gap-2 text-base sm:text-lg font-semibold text-white">
-          <Wheat size={18} className="text-emerald-400 shrink-0" /> Farms
+          <LandPlot size={18} className="text-emerald-400 shrink-0" /> My Farms & Land
         </h2>
 
         <div className="flex gap-2">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs sm:text-sm font-medium transition"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#1e2a3d] hover:bg-[#253754] text-gray-200 border border-white/10 rounded-lg text-xs sm:text-sm font-medium transition"
           >
-            ⚙️ Filters
+            <SlidersHorizontal size={14} /> Filters
           </button>
 
           <button
             onClick={() => setShowAdd(true)}
-            className="px-3.5 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg text-xs sm:text-sm font-semibold transition shadow-lg shadow-green-500/20"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs sm:text-sm font-semibold transition shadow-md shadow-emerald-600/20 active:scale-[0.99]"
           >
-            + Add Farm
+            <Plus size={15} /> Add Farm
           </button>
         </div>
       </div>
 
       {/* FILTERS */}
       {showFilters && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3 bg-white/5 border border-white/10 p-3 sm:p-4 rounded-xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3 bg-[#0b111e] border border-white/[0.08] p-3 sm:p-4 rounded-xl">
           <select
             value={areaFilter}
             onChange={(e) => setAreaFilter(e.target.value)}
-            className="px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-xs sm:text-sm text-gray-200"
+            className="px-3 py-2 bg-[#131d2e] border border-white/10 rounded-lg text-xs sm:text-sm text-gray-200"
           >
-            <option value="">All Area</option>
+            <option value="">All Area Sizes</option>
             <option value="small">Below 5 Acres</option>
             <option value="medium">5 - 15 Acres</option>
             <option value="large">Above 15 Acres</option>
@@ -97,11 +97,11 @@ const FarmList = () => {
           <select
             value={sortType}
             onChange={(e) => setSortType(e.target.value)}
-            className="px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-xs sm:text-sm text-gray-200"
+            className="px-3 py-2 bg-[#131d2e] border border-white/10 rounded-lg text-xs sm:text-sm text-gray-200"
           >
-            <option value="latest">Latest</option>
-            <option value="oldest">Oldest</option>
-            <option value="area">Area (High → Low)</option>
+            <option value="latest">Latest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="area">Area (Largest First)</option>
           </select>
         </div>
       )}
@@ -112,7 +112,7 @@ const FarmList = () => {
           ? [...Array(6)].map((_, i) => (
               <div
                 key={i}
-                className="bg-white/5 border border-white/10 rounded-xl p-5 animate-pulse"
+                className="bg-[#0f172a] border border-white/[0.06] rounded-xl p-5 animate-pulse"
               >
                 <div className="h-5 w-2/3 bg-white/10 rounded mb-3"></div>
                 <div className="h-4 w-20 bg-white/10 rounded mb-4"></div>
@@ -128,53 +128,57 @@ const FarmList = () => {
               <div
                 key={farm._id}
                 onClick={() => navigate(`/farms/${farm.slug || farm._id}`)}
-                className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-green-500 transition cursor-pointer"
+                className="bg-[#0f172a] border border-white/[0.08] hover:border-emerald-500/40 rounded-xl p-5 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md"
               >
                 {/* TOP */}
                 <div className="flex justify-between items-center">
-                  <h2 className="text-lg font-semibold">{farm.farmName}</h2>
+                  <h2 className="text-base sm:text-lg font-semibold text-white">{farm.farmName}</h2>
 
-                  <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full">
+                  <span className="text-xs bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 px-2.5 py-0.5 rounded-full font-medium">
                     {farm.totalArea} Acres
                   </span>
                 </div>
 
                 {/* LOCATION */}
-                <p className="text-sm text-gray-400 mt-2">
-                  📍 {farm.location?.village}, {farm.location?.district}
+                <p className="text-xs sm:text-sm text-gray-400 mt-2 flex items-center gap-1.5">
+                  <MapPin size={13} className="text-emerald-400 shrink-0" />
+                  <span>
+                    {farm.location?.village ? `${farm.location.village}, ` : ""}
+                    {farm.location?.district || "Location set"}
+                  </span>
                 </p>
 
                 {/* STATS */}
-                <div className="flex justify-between mt-4 text-sm">
+                <div className="flex justify-between mt-4 text-xs sm:text-sm pt-3 border-t border-white/[0.06]">
                   <div>
-                    <p className="text-gray-400">Crops</p>
-                    <p className="font-semibold">{farm.cropCount || "--"}</p>
+                    <p className="text-gray-400 text-xs">Active Crops</p>
+                    <p className="font-semibold text-white mt-0.5">{farm.cropCount || "--"}</p>
                   </div>
 
                   <div>
-                    <p className="text-gray-400">Status</p>
-                    <p className="text-green-400 font-semibold">Active</p>
+                    <p className="text-gray-400 text-xs">Status</p>
+                    <p className="text-emerald-400 font-semibold mt-0.5">Active</p>
                   </div>
                 </div>
 
                 {/* EXTRA DETAILS */}
-                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                <div className="mt-3 grid grid-cols-2 gap-3 text-xs bg-[#0b111e] p-2.5 rounded-lg border border-white/[0.04]">
                   <div>
-                    <p className="text-gray-400 text-xs">Soil</p>
-                    <p className="font-medium">{farm.soilType || "N/A"}</p>
+                    <p className="text-gray-400 text-[11px]">Soil</p>
+                    <p className="font-medium text-gray-200">{farm.soilType || "Not specified"}</p>
                   </div>
 
                   <div>
-                    <p className="text-gray-400 text-xs">Irrigation</p>
-                    <p className="font-medium">
-                      {farm.irrigationType || "N/A"}
+                    <p className="text-gray-400 text-[11px]">Irrigation</p>
+                    <p className="font-medium text-gray-200">
+                      {farm.irrigationType || "Rainfed"}
                     </p>
                   </div>
                 </div>
 
                 {/* FOOTER */}
-                <div className="mt-4 text-xs text-gray-500">
-                  Created: {new Date(farm.createdAt).toLocaleDateString()}
+                <div className="mt-3 text-[11px] text-gray-500">
+                  Added on: {new Date(farm.createdAt).toLocaleDateString()}
                 </div>
               </div>
             ))}

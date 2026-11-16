@@ -101,12 +101,12 @@ export default function ResultCard({
       )}
 
       {/* MAIN RESULT CONTAINER */}
-      <div className="bg-white/[0.03] border border-emerald-500/30 rounded-2xl p-4 sm:p-6 space-y-5 backdrop-blur-xl">
+      <div className="bg-[#131d2e] border border-white/[0.08] rounded-2xl p-4 sm:p-6 space-y-5 shadow-xl">
         {/* HEADER & SEVERITY */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400">
+              <span className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                 <Leaf size={22} />
               </span>
               <div>
@@ -124,13 +124,13 @@ export default function ResultCard({
 
           <div className="flex items-center gap-2 self-start sm:self-center flex-wrap">
             {(advisory?.category || result.category) && (
-              <span className="text-xs px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold bg-white/10 text-gray-200 border border-white/10">
+              <span className="text-xs px-2.5 py-1 rounded-md uppercase tracking-wider font-semibold bg-[#1e2a3d] text-gray-200 border border-white/10">
                 {advisory?.category || result.category}
               </span>
             )}
             {(advisory?.severity || result.severity) && (
               <span
-                className={`text-xs px-2.5 py-1 rounded-full uppercase tracking-wider font-bold border ${getSeverityBadge(
+                className={`text-xs px-2.5 py-1 rounded-md uppercase tracking-wider font-bold border ${getSeverityBadge(
                   advisory?.severity || result.severity
                 )}`}
               >
@@ -144,19 +144,19 @@ export default function ResultCard({
 
         {/* CONFIDENCE BAR (IF SCANNED VIA ML) */}
         {result.confidence !== undefined && (
-          <div className="space-y-1.5 bg-black/20 p-3.5 rounded-xl border border-white/5">
+          <div className="space-y-1.5 bg-[#0b111e] p-3.5 rounded-xl border border-white/[0.06]">
             <div className="flex justify-between text-xs text-gray-300">
               <span className="flex items-center gap-1.5">
                 <Activity size={14} className="text-emerald-400" />
-                Diagnostic Confidence
+                Detection Match
               </span>
-              <span className="font-bold text-emerald-400">
-                {result.confidence}%
+              <span className="font-semibold text-emerald-400">
+                {result.confidence}% Match
               </span>
             </div>
-            <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden border border-white/5">
+            <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500"
+                className="h-full bg-emerald-500 rounded-full transition-all duration-500"
                 style={{ width: `${Math.min(100, result.confidence)}%` }}
               />
             </div>
@@ -165,11 +165,11 @@ export default function ResultCard({
 
         {/* SYMPTOMS SECTION */}
         {symptoms.length > 0 && (
-          <div className="bg-slate-900/60 border border-white/10 rounded-xl p-4 space-y-2">
+          <div className="bg-[#0f172a] border border-white/[0.06] rounded-xl p-4 space-y-2">
             <h3 className="flex items-center gap-2 text-sm font-semibold text-emerald-400">
               <CheckCircle2 size={16} /> Key Visual Symptoms
             </h3>
-            <ul className="space-y-1.5 text-xs text-gray-300 list-disc list-inside leading-relaxed">
+            <ul className="space-y-1.5 text-xs sm:text-sm text-gray-300 list-disc list-inside leading-relaxed">
               {symptoms.map((symptom, idx) => (
                 <li key={idx} className="marker:text-emerald-400">
                   {symptom}
@@ -181,34 +181,35 @@ export default function ResultCard({
 
         {/* STRUCTURED DATABASE ADVISORY SECTIONS */}
         <div className="space-y-3.5">
-          {/* 1. CAUSE */}
-          <SectionCard
-            icon={<AlertTriangle size={17} className="text-amber-400" />}
-            title="Cause & Environmental Conditions"
-            content={advisory?.cause || legacySections.cause}
-            borderColor="border-amber-500/20"
-            bgHeader="bg-amber-500/10 text-amber-300"
-          />
-
-          {/* 2. CHEMICAL TREATMENT & DOSAGE */}
+          {/* 1. CHEMICAL TREATMENT & DOSAGE - Highlighted Primary Prescription */}
           {(advisory?.chemicalTreatment || legacySections.treatment) && (
             <SectionCard
-              icon={<FlaskConical size={17} className="text-rose-400" />}
-              title="Curative Chemical Treatment & Dosages (Per 15L Spray Pump)"
+              icon={<FlaskConical size={17} className="text-emerald-400" />}
+              title="Prescribed Medicine & Spray Dosage (Per 15L Spray Pump / टंकी)"
               content={advisory?.chemicalTreatment || legacySections.treatment}
-              borderColor="border-rose-500/20"
-              bgHeader="bg-rose-500/10 text-rose-300"
+              borderColor="border-emerald-500/30"
+              bgHeader="text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg w-fit"
+              highlight={true}
             />
           )}
+
+          {/* 2. CAUSE */}
+          <SectionCard
+            icon={<AlertTriangle size={17} className="text-amber-400" />}
+            title="Cause & Weather Conditions"
+            content={advisory?.cause || legacySections.cause}
+            borderColor="border-white/[0.06]"
+            bgHeader="text-amber-300"
+          />
 
           {/* 3. ORGANIC SOLUTION */}
           {(advisory?.organicSolution || legacySections.organic) && (
             <SectionCard
-              icon={<Sprout size={17} className="text-emerald-400" />}
-              title="Organic Remedies & Bio-Control Measures"
+              icon={<Sprout size={17} className="text-teal-400" />}
+              title="Organic Remedies & Natural Treatment"
               content={advisory?.organicSolution || legacySections.organic}
-              borderColor="border-emerald-500/20"
-              bgHeader="bg-emerald-500/10 text-emerald-300"
+              borderColor="border-white/[0.06]"
+              bgHeader="text-teal-300"
             />
           )}
 
@@ -216,25 +217,25 @@ export default function ResultCard({
           {(advisory?.prevention || legacySections.prevention) && (
             <SectionCard
               icon={<ShieldCheck size={17} className="text-sky-400" />}
-              title="Preventive Agronomic Measures"
+              title="Preventive Measures for Next Season"
               content={advisory?.prevention || legacySections.prevention}
-              borderColor="border-sky-500/20"
-              bgHeader="bg-sky-500/10 text-sky-300"
+              borderColor="border-white/[0.06]"
+              bgHeader="text-sky-300"
             />
           )}
         </div>
 
         {/* RECOMMENDED PRODUCTS TABLE */}
         {advisory?.recommendedProducts && advisory.recommendedProducts.length > 0 && (
-          <div className="bg-slate-900/80 border border-white/10 rounded-xl p-4 space-y-3">
+          <div className="bg-[#0f172a] border border-white/[0.06] rounded-xl p-4 space-y-3">
             <h3 className="flex items-center gap-2 text-sm font-semibold text-white">
-              <Package size={16} className="text-teal-400" /> Recommended Agricultural Formulations & Dosages
+              <Package size={16} className="text-emerald-400" /> Recommended Agricultural Products & Dosages
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {advisory.recommendedProducts.map((p, idx) => (
                 <div
                   key={idx}
-                  className="bg-white/5 border border-white/5 rounded-xl p-3 space-y-1"
+                  className="bg-[#16233b] border border-white/[0.06] rounded-xl p-3 space-y-1.5"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs font-semibold text-white truncate">
@@ -255,7 +256,7 @@ export default function ResultCard({
                     </span>
                   </div>
                   {p.dosage && (
-                    <p className="text-xs text-emerald-300 font-medium">
+                    <p className="text-xs text-emerald-300 font-semibold">
                       Dose: {p.dosage}
                     </p>
                   )}
@@ -272,15 +273,15 @@ export default function ResultCard({
 
         {/* LIST OF OTHER DISEASES SHOWN ON CONFIRM DIAGNOSIS PAGE */}
         {otherCandidates && otherCandidates.length > 0 && (
-          <div className="bg-black/30 border border-white/10 rounded-xl p-4 space-y-3">
+          <div className="bg-[#0b111e] border border-white/[0.06] rounded-xl p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-semibold text-white flex items-center gap-2">
                   <AlertTriangle size={15} className="text-amber-400" />
-                  Other Probable Diseases Detected
+                  Other Probable Conditions Detected
                 </h3>
                 <p className="text-[11px] text-gray-400 mt-0.5">
-                  These alternative diagnoses were detected during the confirm diagnosis step:
+                  If your plant symptoms don&apos;t match above, check these other possibilities:
                 </p>
               </div>
             </div>
@@ -289,18 +290,18 @@ export default function ResultCard({
               {otherCandidates.map((cand, idx) => (
                 <div
                   key={idx}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/5 transition"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3 rounded-xl bg-[#131d2e] hover:bg-[#1a273e] border border-white/[0.06] transition"
                 >
                   <div className="space-y-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-xs font-semibold text-white">
                         {cand.displayName || cand.disease}
                       </span>
-                      <span className="text-[10px] px-2 py-0.5 rounded font-mono bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+                      <span className="text-[10px] px-2 py-0.5 rounded font-medium bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
                         {cand.confidence}% Match
                       </span>
                       {cand.severity && (
-                        <span className="text-[10px] px-2 py-0.5 rounded uppercase font-bold bg-white/5 text-gray-300 border border-white/10">
+                        <span className="text-[10px] px-2 py-0.5 rounded uppercase font-semibold bg-white/5 text-gray-300 border border-white/10">
                           {cand.severity}
                         </span>
                       )}
@@ -315,9 +316,9 @@ export default function ResultCard({
                   {onSelectCandidate && (
                     <button
                       onClick={() => onSelectCandidate(cand)}
-                      className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600/80 hover:bg-emerald-500 text-white text-xs font-medium transition shrink-0 self-end sm:self-center shadow-md shadow-emerald-600/15"
+                      className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium transition shrink-0 self-end sm:self-center shadow-sm"
                     >
-                      View Diagnosis & Treatment <ArrowRight size={13} />
+                      View Treatment <ArrowRight size={13} />
                     </button>
                   )}
                 </div>
@@ -335,17 +336,18 @@ const SectionCard = ({
   icon,
   title,
   content,
-  borderColor = "border-white/10",
+  borderColor = "border-white/[0.06]",
   bgHeader = "text-emerald-400",
+  highlight = false,
 }) => {
   if (!content || !content.trim()) return null;
 
   return (
-    <div className={`bg-slate-900/70 border ${borderColor} rounded-xl p-4 space-y-2`}>
+    <div className={`bg-[#0f172a] border ${borderColor} rounded-xl p-4 space-y-2.5 ${highlight ? "bg-[#132238] border-l-4 border-l-emerald-500" : ""}`}>
       <h3 className={`flex items-center gap-2 text-xs sm:text-sm font-semibold ${bgHeader}`}>
         {icon} {title}
       </h3>
-      <p className="text-gray-300 text-xs sm:text-sm whitespace-pre-wrap leading-relaxed">
+      <p className="text-gray-200 text-xs sm:text-sm whitespace-pre-wrap leading-relaxed">
         {content.trim()}
       </p>
     </div>

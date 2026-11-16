@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { Leaf, BarChart3, IndianRupee, Brain } from "lucide-react";
+import { Sprout, BarChart3, IndianRupee, Stethoscope, Store, ArrowRight, ShieldCheck } from "lucide-react";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -38,71 +38,79 @@ export default function Home() {
   if (checking) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-slate-200 font-sans">
+    <div className="min-h-screen bg-[#0b111e] text-slate-200 font-sans">
       {/* HERO */}
-      <section className="text-center px-4 pt-24 pb-16">
-        <div className="max-w-2xl mx-auto">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold">
-            🌾 Smart Farm Advisory
-          </h1>
+      <section className="text-center px-4 pt-20 pb-16 max-w-4xl mx-auto">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs sm:text-sm font-medium mb-5">
+          <Sprout size={16} />
+          <span>Complete Agriculture Platform for Farmers</span>
+        </div>
 
-          <p className="mt-3 opacity-70 text-sm sm:text-base">
-            Grow smarter. Track crops. Maximize your profit.
-          </p>
+        <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+          Manage Your Farm, Crops &amp; Market Profits with Ease
+        </h1>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              to="/register"
-              className="px-5 py-3 rounded-full bg-green-500 text-white font-semibold hover:bg-green-600 transition"
-            >
-              Get Started
-            </Link>
+        <p className="mt-4 text-gray-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+          From leaf disease diagnosis and verified medicine spray dosages, to live APMC mandi rates and crop income tracking.
+        </p>
 
-            <Link
-              to="/login"
-              className="px-5 py-3 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition"
-            >
-              Login
-            </Link>
-          </div>
+        <div className="mt-8 flex flex-wrap justify-center gap-3.5">
+          <Link
+            to="/register"
+            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition shadow-md shadow-emerald-600/20 active:scale-[0.99]"
+          >
+            <span>Create Farmer Account</span>
+            <ArrowRight size={16} />
+          </Link>
+
+          <Link
+            to="/login"
+            className="px-6 py-3 rounded-xl bg-[#131d2e] hover:bg-[#1a273e] border border-white/10 text-gray-200 hover:text-white font-medium transition active:scale-[0.99]"
+          >
+            Sign In
+          </Link>
         </div>
       </section>
 
       {/* FEATURES */}
-      <section className="grid gap-5 px-5 sm:px-8 md:px-12 pb-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="grid gap-4 sm:gap-5 px-4 sm:px-8 md:px-12 max-w-6xl mx-auto pb-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Feature
-          icon={<Leaf />}
-          title="Farm Management"
-          desc="Manage farms easily"
+          icon={<Stethoscope className="text-emerald-400" size={24} />}
+          title="Plant Doctor"
+          desc="Take photo of crop leaf to identify diseases and get exact spray medicine doses per 15L pump."
         />
         <Feature
-          icon={<BarChart3 />}
-          title="Crop Tracking"
-          desc="Track growth smartly"
+          icon={<Store className="text-emerald-400" size={24} />}
+          title="Live Mandi Rates"
+          desc="Real-time daily prices across APMC mandis so you always sell your harvest at the best price."
         />
         <Feature
-          icon={<IndianRupee />}
-          title="Profit Control"
-          desc="Track income & cost"
+          icon={<Sprout className="text-emerald-400" size={24} />}
+          title="Crop & Advisory"
+          desc="Timely guidance for sowing, fertilizer applications, and irrigation schedules."
         />
         <Feature
-          icon={<Brain />}
-          title="AI Advisory"
-          desc="Smart farming guidance"
+          icon={<IndianRupee className="text-emerald-400" size={24} />}
+          title="Farm Finance"
+          desc="Track seed, fertilizer, and labour expenses against crop income to protect profit margins."
         />
       </section>
 
       {/* CTA */}
-      <section className="text-center py-12 px-4">
-        <h2 className="text-xl sm:text-2xl font-semibold">
-          Start Smart Farming Today
+      <section className="text-center py-12 px-4 max-w-3xl mx-auto border-t border-white/[0.08]">
+        <h2 className="text-xl sm:text-2xl font-bold text-white">
+          Join Farmers Growing with Better Advice
         </h2>
+        <p className="text-gray-400 text-xs sm:text-sm mt-2">
+          Free to use. No complicated setup required.
+        </p>
 
         <Link
           to="/register"
-          className="inline-block mt-5 bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition"
+          className="inline-flex items-center gap-2 mt-5 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2.5 rounded-xl font-semibold transition shadow-md shadow-emerald-600/20"
         >
-          Create Free Account
+          <span>Get Started Free</span>
+          <ArrowRight size={15} />
         </Link>
       </section>
     </div>
@@ -111,12 +119,12 @@ export default function Home() {
 
 /* Feature Card */
 const Feature = ({ icon, title, desc }) => (
-  <div className="bg-white/5 border border-white/10 p-6 rounded-xl text-center transition hover:-translate-y-1 hover:border-green-500">
-    <div className="mb-2 text-green-500 flex justify-center">
-      <div className="w-6 h-6">{icon}</div>
+  <div className="bg-[#131d2e] border border-white/[0.08] hover:border-emerald-500/40 p-5 rounded-2xl text-left transition-all duration-200 shadow-sm hover:shadow-md">
+    <div className="mb-3 p-2.5 rounded-xl bg-emerald-500/10 w-fit">
+      {icon}
     </div>
 
-    <h3 className="text-lg font-medium">{title}</h3>
-    <p className="text-sm opacity-70 mt-1">{desc}</p>
+    <h3 className="text-base font-semibold text-white">{title}</h3>
+    <p className="text-xs text-gray-400 mt-1.5 leading-relaxed">{desc}</p>
   </div>
 );

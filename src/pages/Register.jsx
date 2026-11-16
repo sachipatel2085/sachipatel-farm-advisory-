@@ -1,6 +1,7 @@
 import { useState } from "react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import { Sprout } from "lucide-react";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -41,86 +42,109 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-[calc(100dvh-5rem)] py-6 flex items-center justify-center bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-slate-200 px-3 sm:px-4">
+    <div className="min-h-[calc(100dvh-5rem)] py-8 flex items-center justify-center bg-[#0b111e] text-slate-200 px-3 sm:px-4">
       <form
         onSubmit={submit}
-        className="w-full max-w-lg bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 sm:p-8 space-y-4 shadow-lg"
+        className="w-full max-w-lg bg-[#131d2e] border border-white/[0.08] rounded-2xl p-6 sm:p-8 space-y-4 shadow-xl"
       >
-        <h2 className="text-2xl font-semibold text-center">Create Account</h2>
+        <div className="text-center space-y-1.5 mb-2">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mb-1">
+            <Sprout size={24} />
+          </div>
+          <h2 className="text-2xl font-bold text-white tracking-tight">Create Farmer Account</h2>
+          <p className="text-xs text-gray-400">
+            Join to manage your crops, scan plant diseases &amp; see APMC prices
+          </p>
+        </div>
 
         {/* NAME */}
-        <Input
-          name="name"
-          placeholder="Full Name"
-          onChange={handleChange}
-          required
-        />
+        <div>
+          <label className="text-xs font-medium text-gray-300 block mb-1">Full Name</label>
+          <Input
+            name="name"
+            placeholder="e.g. Ramesh Patel"
+            onChange={handleChange}
+            required
+          />
+        </div>
 
         {/* PHONE */}
-        <Input
-          name="phone"
-          placeholder="Phone Number"
-          onChange={handleChange}
-          required
-        />
+        <div>
+          <label className="text-xs font-medium text-gray-300 block mb-1">Phone Number</label>
+          <Input
+            name="phone"
+            placeholder="e.g. 9876543210"
+            onChange={handleChange}
+            required
+          />
+        </div>
 
         {/* EMAIL */}
-        <Input
-          name="email"
-          placeholder="Email (optional)"
-          onChange={handleChange}
-        />
+        <div>
+          <label className="text-xs font-medium text-gray-300 block mb-1">Email (Optional)</label>
+          <Input
+            name="email"
+            placeholder="email@example.com"
+            onChange={handleChange}
+          />
+        </div>
 
         {/* PASSWORD */}
-        <Input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-        />
+        <div>
+          <label className="text-xs font-medium text-gray-300 block mb-1">Password</label>
+          <Input
+            type="password"
+            name="password"
+            placeholder="Create a password"
+            onChange={handleChange}
+            required
+          />
+        </div>
 
         {/* LANGUAGE */}
         <div>
-          <label className="text-sm text-gray-400">Language</label>
+          <label className="text-xs font-medium text-gray-300 block mb-1">Preferred Language</label>
           <select
             name="language"
             onChange={handleChange}
-            className="w-full mt-1 px-4 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#0b111e] border border-white/10 text-white text-sm focus:outline-none focus:border-emerald-500 transition"
           >
             <option value="english">English</option>
-            <option value="hindi">Hindi</option>
-            <option value="gujarati">Gujarati</option>
+            <option value="hindi">Hindi (हिंदी)</option>
+            <option value="gujarati">Gujarati (ગુજરાતી)</option>
           </select>
         </div>
 
         {/* LOCATION GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <Input name="village" placeholder="Village" onChange={handleChange} />
-          <Input
-            name="district"
-            placeholder="District"
-            onChange={handleChange}
-          />
-          <Input name="state" placeholder="State" onChange={handleChange} />
+        <div>
+          <label className="text-xs font-medium text-gray-300 block mb-1">Farm Location</label>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <Input name="village" placeholder="Village" onChange={handleChange} />
+            <Input
+              name="district"
+              placeholder="District"
+              onChange={handleChange}
+            />
+            <Input name="state" placeholder="State" onChange={handleChange} />
+          </div>
         </div>
 
         {/* BUTTON */}
         <button
           type="submit"
-          className="w-full bg-green-500 hover:bg-green-600 py-2 rounded-lg font-medium transition"
+          className="w-full bg-emerald-600 hover:bg-emerald-500 py-2.5 rounded-xl font-semibold text-white text-sm transition shadow-md shadow-emerald-600/20 active:scale-[0.99] mt-2"
         >
-          Create Account
+          Register Account
         </button>
 
         {/* FOOTER */}
-        <p className="text-center text-sm text-gray-400">
+        <p className="text-center text-xs text-gray-400 pt-2">
           Already have an account?{" "}
           <span
             onClick={() => navigate("/login")}
-            className="text-green-400 cursor-pointer hover:underline"
+            className="text-emerald-400 font-semibold cursor-pointer hover:underline"
           >
-            Login
+            Sign in
           </span>
         </p>
       </form>
@@ -133,6 +157,6 @@ const Input = ({ type = "text", ...props }) => (
   <input
     type={type}
     {...props}
-    className="w-full px-4 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-green-500"
+    className="w-full px-3.5 py-2.5 rounded-xl bg-[#0b111e] border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-emerald-500 transition"
   />
 );

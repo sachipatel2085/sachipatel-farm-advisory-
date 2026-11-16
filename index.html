@@ -4,7 +4,20 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>farm-frontend</title>
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      (function() {
+        try {
+          const saved = localStorage.getItem("theme");
+          const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          const theme = saved === "light" || saved === "dark" ? saved : (prefersDark ? "dark" : "light");
+          document.documentElement.classList.add(theme);
+          const meta = document.querySelector('meta[name="color-scheme"]');
+          if (meta) meta.content = saved || "light dark";
+        } catch (e) {}
+      })();
+    </script>
+    <title>SmartFarm - Agricultural Platform</title>
   </head>
   <body>
     <div id="root"></div>

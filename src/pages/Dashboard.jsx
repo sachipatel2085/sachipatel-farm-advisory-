@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { useLanguage } from "../context/LanguageContext";
+import { useAuth } from "../context/Authcontext";
 import weatherService from "../services/weatherService";
 import WeatherAlertBanner from "../components/weather/WeatherAlertBanner";
 import WeatherWidget from "../components/weather/WeatherWidget";
@@ -10,12 +11,16 @@ import {
   Leaf,
   IndianRupee,
   LineChart,
-  Wheat,
   Plus,
   TrendingUp,
   Clock,
   Camera,
   Store,
+  Calendar,
+  Compass,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -30,6 +35,7 @@ import {
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState(null);
@@ -50,45 +56,23 @@ export default function Dashboard() {
         weatherService.getWeatherAlerts(),
       ]);
 
-      if (dashRes.status === "fulfilled") {
-        const data = dashRes.value.data;
-        setDashboardData(data);
+      if (dashRes.status === "fulfilled" && dashRes.value?.data) {
+        const d = dashRes.value.data;
+        setDashboardData(d);
 
         setStats({
-          farms: data.totals?.farms || 0,
-          crops: data.totals?.activeCrops || 0,
-          revenue: data.totals?.revenue || 0,
-          growth: data.totals?.growth || 0,
+          farms: d.totals?.farms || 0,
+          crops: d.totals?.crops || 0,
+          revenue: d.financials?.totalIncome || 0,
+          growth: d.financials?.profitMargin || 0,
         });
-      } else {
-        // Fallback to individual endpoints if /dashboard encounters an issue
-        try {
-          const [farmsRes, cropsRes, financeRes] = await Promise.all([
-            api.get("/farms"),
-            api.get("/crops"),
-            api.get("/finance/summary"),
-          ]);
-          const farms = farmsRes.data || [];
-          const crops = cropsRes.data || [];
-          const finance = financeRes.data || {};
-          const activeCrops = crops.filter((c) => c.status === "active");
-
-          setStats({
-            farms: farms.length,
-            crops: activeCrops.length,
-            revenue: finance.income || 0,
-            growth: finance.income > 0 ? Math.round((finance.profit / finance.income) * 100) : 0,
-          });
-        } catch (fallbackErr) {
-          console.error("Fallback load error:", fallbackErr);
-        }
       }
 
-      if (weatherRes.status === "fulfilled") {
+      if (weatherRes.status === "fulfilled" && weatherRes.value) {
         setWeatherData(weatherRes.value);
       }
     } catch (err) {
-      console.error("Dashboard load error:", err);
+      console.error("Dashboard data load error:", err);
     } finally {
       setLoading(false);
     }
@@ -105,76 +89,146 @@ export default function Dashboard() {
     loadDashboard();
   }, [navigate]);
 
-  const activeCropsCount = stats.crops;
-  const totalCropsCount = dashboardData?.totals?.crops || stats.crops || 1;
-  const activeRate = Math.min(100, Math.round((activeCropsCount / totalCropsCount) * 100));
-
   return (
-    <div className="space-y-5 sm:space-y-6 text-slate-200 w-full min-w-0">
-      {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h1 className="flex items-center gap-2 text-xl sm:text-2xl md:text-3xl font-semibold">
-            <Wheat size={22} className="text-emerald-400 shrink-0" /> {t("dashboard.title", "Farm Command Center")}
+    <div className="space-y-6 text-slate-100 w-full min-w-0">
+      {/* WELCOME BANNER */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 bg-[#131d2e] border border-white/10 rounded-2xl shadow-sm">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold border border-emerald-500/20">
+            <ShieldCheck size={13} />
+            Verified Farm Assistant
+          </div>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-white">
+            Welcome back, {user?.name || "Farmer"}
           </h1>
-          <p className="opacity-70 mt-1 text-xs sm:text-sm">
-            {t("dashboard.subtitle", "Real-time crop telemetry, financial trends & automated farm care")}
+          <p className="text-slate-400 text-xs sm:text-sm">
+            Here is your daily farm summary: active crops, weather warnings, and market prices.
           </p>
         </div>
 
-        {/* QUICK ACTION */}
-        <button
-          onClick={() => navigate("/farms")}
-          className="self-start sm:self-auto flex items-center gap-2 bg-green-500 hover:bg-green-600 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition shadow-lg shadow-green-500/20 shrink-0"
-        >
-          <Plus size={16} /> {t("farms.addFarm", "Add Farm")}
-        </button>
+        {/* PRIMARY CTA */}
+        <div className="flex items-center gap-2.5 self-start sm:self-auto shrink-0">
+          <button
+            onClick={() => navigate("/farms")}
+            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition shadow-md shadow-emerald-600/20"
+          >
+            <Plus size={16} /> Add New Farm
+          </button>
+        </div>
       </div>
 
       {/* WEATHER-TRIGGERED SMART ALERTS BANNER */}
       {weatherData?.alerts && weatherData.alerts.length > 0 && (
-        <div className="mt-4 sm:mt-6">
+        <div>
           <WeatherAlertBanner alerts={weatherData.alerts} location={weatherData.location} />
         </div>
       )}
 
-      {/* STATS */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 mt-4 sm:mt-6">
+      {/* 4 HIGH-CLARITY STATS CARDS */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
         <Card
-          title={t("dashboard.totalFarms", "Total Farms")}
-          value={loading ? "..." : stats.farms}
+          title="Total Farms"
+          value={loading ? "..." : `${stats.farms} Farms`}
           icon={<Tractor size={20} />}
+          accent="text-emerald-400"
         />
 
         <Card
-          title={t("dashboard.activeCrops", "Active Crops")}
-          value={loading ? "..." : stats.crops}
+          title="Active Crops"
+          value={loading ? "..." : `${stats.crops} Growing`}
           icon={<Leaf size={20} />}
+          accent="text-teal-400"
         />
 
         <Card
-          title={t("dashboard.revenue", "Revenue")}
+          title="Total Earnings"
           value={loading ? "..." : `₹${stats.revenue.toLocaleString("en-IN")}`}
           icon={<IndianRupee size={20} />}
+          accent="text-emerald-400"
         />
 
         <Card
-          title={t("dashboard.growth", "Profit Margin")}
+          title="Profit Margin"
           value={loading ? "..." : `${stats.growth}%`}
           icon={<TrendingUp size={20} />}
+          accent="text-sky-400"
         />
       </div>
 
-      {/* ANALYTICS + ACTIVITY + WEATHER */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 mt-6 sm:mt-8">
-        {/* LEFT SIDE (CHARTS & PERFORMANCE) */}
-        <div className="lg:col-span-2 space-y-4 sm:space-y-5">
-          {/* RECHARTS CASH FLOW CHART */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5 space-y-3">
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <h2 className="flex items-center gap-2 text-sm sm:text-base font-semibold text-white">
+      {/* 2 PROMINENT ACTION CARDS: PLANT DOCTOR & MANDI PRICES */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Card 1: Plant Health & Leaf Scanner */}
+        <div
+          onClick={() => navigate("/scanner")}
+          className="bg-[#131d2e] border border-white/10 hover:border-emerald-500/50 p-5 rounded-2xl transition cursor-pointer group shadow-sm flex flex-col justify-between"
+        >
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <Camera size={22} />
+              </div>
+              <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+                Instant Diagnosis
+              </span>
+            </div>
+
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
+                Plant Pests & Disease Scanner
+              </h2>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                Notice spots or pests on your crops? Take a photo of the leaf to get curative spray dosages per 15L pump and organic remedies.
+              </p>
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-white/5 flex items-center justify-between text-xs text-emerald-400 font-semibold mt-4">
+            <span>Open Leaf Camera</span>
+            <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
+
+        {/* Card 2: Live APMC Mandi Rates */}
+        <div
+          onClick={() => navigate("/mandi")}
+          className="bg-[#131d2e] border border-white/10 hover:border-emerald-500/50 p-5 rounded-2xl transition cursor-pointer group shadow-sm flex flex-col justify-between"
+        >
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <Store size={22} />
+              </div>
+              <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+                Daily Mandi Rates
+              </span>
+            </div>
+
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
+                Market Commodity Prices
+              </h2>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                Check current selling prices for Wheat, Cotton, Tomato, and other crops across your local mandis to find the highest bidder.
+              </p>
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-white/5 flex items-center justify-between text-xs text-emerald-400 font-semibold mt-4">
+            <span>View Today&apos;s Mandi Rates</span>
+            <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
+      </div>
+
+      {/* ANALYTICS + RECENT ACTIVITY + WEATHER */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6">
+        {/* LEFT: FINANCIAL CASH FLOW */}
+        <div className="lg:col-span-2 space-y-4">
+          <div className="bg-[#131d2e] border border-white/10 rounded-2xl p-4 sm:p-5 space-y-3 shadow-sm">
+            <div className="flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-white/5">
+              <h2 className="flex items-center gap-2 text-sm sm:text-base font-bold text-white">
                 <LineChart size={18} className="text-emerald-400 shrink-0" />
-                {t("dashboard.monthlyTrends", "Monthly Cash Flow (Income vs Expenses)")}
+                Monthly Cash Flow (Income vs Expenses)
               </h2>
               <span className="text-xs text-slate-400">Past 6 Months</span>
             </div>
@@ -182,7 +236,7 @@ export default function Dashboard() {
             <div className="h-[220px] sm:h-[260px] w-full pt-2">
               {loading ? (
                 <div className="h-full flex items-center justify-center text-xs text-slate-400 animate-pulse">
-                  Loading financial trends...
+                  Loading financial records...
                 </div>
               ) : dashboardData?.financialTrends && dashboardData.financialTrends.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
@@ -190,7 +244,7 @@ export default function Dashboard() {
                     data={dashboardData.financialTrends}
                     margin={{ top: 10, right: 10, left: -15, bottom: 0 }}
                   >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.2} />
                     <XAxis
                       dataKey="label"
                       stroke="#64748b"
@@ -200,82 +254,83 @@ export default function Dashboard() {
                     <YAxis
                       stroke="#64748b"
                       tick={{ fill: "#94a3b8", fontSize: 11 }}
-                      tickFormatter={(val) => `₹${val}`}
                       tickLine={false}
+                      tickFormatter={(val) => `₹${val}`}
                     />
                     <Tooltip
-                      content={({ active, payload, label }) => {
-                        if (active && payload && payload.length) {
-                          const income = payload.find((p) => p.dataKey === "income")?.value || 0;
-                          const expense = payload.find((p) => p.dataKey === "expense")?.value || 0;
-                          const netProfit = income - expense;
-                          return (
-                            <div className="bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs shadow-2xl space-y-1">
-                              <p className="font-semibold text-slate-200 border-b border-slate-700 pb-1">{label}</p>
-                              <p className="text-emerald-400 font-medium">Income: ₹{income.toLocaleString("en-IN")}</p>
-                              <p className="text-rose-400 font-medium">Expense: ₹{expense.toLocaleString("en-IN")}</p>
-                              <p className={`font-semibold ${netProfit >= 0 ? "text-emerald-300" : "text-rose-300"}`}>
-                                Net: ₹{netProfit.toLocaleString("en-IN")}
-                              </p>
-                            </div>
-                          );
-                        }
-                        return null;
+                      contentStyle={{
+                        backgroundColor: "#0f172a",
+                        borderColor: "#334155",
+                        borderRadius: "12px",
+                        fontSize: "12px",
+                        color: "#fff",
                       }}
+                      formatter={(val) => [`₹${val.toLocaleString("en-IN")}`]}
                     />
-                    <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "6px" }} />
+                    <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "8px" }} />
                     <Bar dataKey="income" name="Income" fill="#10b981" radius={[4, 4, 0, 0]} />
                     <Bar dataKey="expense" name="Expense" fill="#f43f5e" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="h-full flex items-center justify-center text-xs text-slate-400">
-                  No cash flow transactions recorded yet.
+                <div className="h-full flex flex-col items-center justify-center text-slate-400 text-xs text-center space-y-1">
+                  <p>No transaction history recorded yet.</p>
+                  <p className="text-[11px] text-slate-500">Record crop expenses or crop sales to see your live financial profit chart.</p>
                 </div>
               )}
             </div>
           </div>
-
-          {/* MINI ANALYTICS */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5">
-            <h2 className="flex items-center gap-2 text-sm sm:text-base font-semibold mb-4 text-white">
-              <Leaf size={18} className="text-emerald-400 shrink-0" /> Farm & Crop Performance
-            </h2>
-
-            <Progress label="Active Growing Crops Ratio" value={activeRate || 0} />
-            <Progress label="Harvested Batches" value={dashboardData?.cropStatus?.harvested ? 100 : 0} />
-            <Progress
-              label="Land Area Tracked"
-              value={dashboardData?.totals?.totalArea ? Math.min(100, dashboardData.totals.totalArea * 10) : 0}
-            />
-          </div>
         </div>
 
-        {/* RIGHT SIDE (DYNAMIC ACTIVITY FEED + LIVE WEATHER) */}
-        <div className="space-y-4 sm:space-y-5 flex flex-col">
-          {/* LIVE WEATHER TELEMETRY WIDGET */}
-          <WeatherWidget weatherData={weatherData} loading={loading} />
+        {/* RIGHT: WEATHER & RECENT ACTIVITY */}
+        <div className="space-y-4">
+          {/* WEATHER WIDGET */}
+          <WeatherWidget weatherData={weatherData} />
 
-          {/* DYNAMIC ACTIVITY FEED */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5 flex flex-col flex-1">
-            <h2 className="flex items-center gap-2 text-sm sm:text-base font-semibold mb-4 text-white">
-              <Clock size={18} className="text-emerald-400 shrink-0" /> {t("dashboard.recentActivity", "Recent Farm Activity")}
-            </h2>
+          {/* RECENT ACTIVITIES */}
+          <div className="bg-[#131d2e] border border-white/10 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-white/5">
+              <h3 className="font-bold text-white text-sm flex items-center gap-2">
+                <Clock size={16} className="text-emerald-400" />
+                Recent Farm Activities
+              </h3>
+              <button
+                onClick={() => navigate("/activities")}
+                className="text-xs text-emerald-400 hover:underline font-medium"
+              >
+                View All →
+              </button>
+            </div>
 
-            <div className="space-y-3 sm:space-y-4 text-sm flex-1">
-              {loading ? (
-                [...Array(4)].map((_, i) => (
-                  <div key={i} className="h-8 bg-white/5 rounded animate-pulse" />
-                ))
-              ) : dashboardData?.recentActivity && dashboardData.recentActivity.length > 0 ? (
-                dashboardData.recentActivity.map((act) => (
-                  <ActivityItem key={act.id} text={act.text} time={act.time} type={act.type} />
+            <div className="space-y-2">
+              {dashboardData?.recentActivities && dashboardData.recentActivities.length > 0 ? (
+                dashboardData.recentActivities.slice(0, 4).map((act, i) => (
+                  <div
+                    key={act._id || i}
+                    className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] transition flex items-center justify-between gap-2 text-xs"
+                  >
+                    <div className="space-y-0.5 min-w-0">
+                      <p className="font-semibold text-white truncate">{act.title}</p>
+                      <p className="text-[11px] text-slate-400 truncate">
+                        {act.cropName || "General Task"} • {new Date(act.dueDate || act.createdAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <span
+                      className={`text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase ${
+                        act.status === "completed"
+                          ? "bg-emerald-500/10 text-emerald-300"
+                          : "bg-amber-500/10 text-amber-300"
+                      }`}
+                    >
+                      {act.status || "Pending"}
+                    </span>
+                  </div>
                 ))
               ) : (
-                <div className="h-44 flex flex-col items-center justify-center text-slate-400 text-xs text-center space-y-1">
-                  <Clock size={24} className="text-slate-500 mb-1" />
-                  <p>No recent activity logs yet.</p>
-                  <p className="text-[11px] text-slate-500">Record a crop, harvest, or transaction to see live updates.</p>
+                <div className="py-6 flex flex-col items-center justify-center text-slate-400 text-xs text-center space-y-1">
+                  <CheckCircle2 size={22} className="text-emerald-500/40 mb-1" />
+                  <p className="text-white font-medium">All tasks up to date</p>
+                  <p className="text-[11px] text-slate-400">Schedule field tasks in your Tasks & Calendar.</p>
                 </div>
               )}
             </div>
@@ -283,142 +338,76 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ACTION WIDGETS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5 mt-5 sm:mt-6">
-        <div
-          onClick={() => navigate("/scanner")}
-          className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5 hover:border-emerald-500 transition cursor-pointer group"
-        >
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2.5 sm:gap-3">
-              <Camera className="text-emerald-400 group-hover:scale-110 transition-transform shrink-0" size={20} />
-              <p className="text-xs sm:text-sm text-gray-400 font-medium">Vision Diagnostics</p>
-            </div>
-            <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
-              3 Steps Guide
-            </span>
-          </div>
-
-          <h2 className="text-lg sm:text-2xl mt-2 text-emerald-400 font-semibold">
-            Plant Pests and Disease Detection
-          </h2>
-          <div className="flex items-center gap-1.5 mt-2 text-xs text-slate-300 flex-wrap">
-            <span className="font-medium text-emerald-300">Take Picture</span>
-            <span className="text-slate-500">→</span>
-            <span className="font-medium text-teal-300">See Diagnosis</span>
-            <span className="text-slate-500">→</span>
-            <span className="font-medium text-emerald-400">Get Medicine</span>
-          </div>
-        </div>
-
-        <div
-          onClick={() => navigate("/mandi")}
-          className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5 hover:border-emerald-500 transition cursor-pointer group"
-        >
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            <Store className="text-emerald-400 group-hover:scale-110 transition-transform shrink-0" size={20} />
-            <p className="text-xs sm:text-sm text-gray-400">{t("dashboard.mandiCard", "APMC Mandi Rates")}</p>
-          </div>
-
-          <div className="flex items-baseline justify-between mt-2 flex-wrap gap-1">
-            <h2 className="text-lg sm:text-2xl text-emerald-400 font-semibold">
-              Live Market Prices
-            </h2>
-            <span className="text-xs text-slate-400">Compare Mandis →</span>
-          </div>
-          <p className="text-xs text-slate-400 mt-1">{t("dashboard.mandiDescription", "Track prevailing modal prices and 14-day price trends")}</p>
-        </div>
-      </div>
-
-      {/* QUICK LINKS */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 mt-6 sm:mt-8">
-        <QuickCard title={t("nav.farms", "Manage Farms")} onClick={() => navigate("/farms")} />
-        <QuickCard title={t("nav.crops", "View Crops")} onClick={() => navigate("/crops")} />
-        <QuickCard title={t("nav.finance", "Finance & Ledger")} onClick={() => navigate("/finance")} />
-        <QuickCard title={t("nav.mandi", "Mandi Prices & Trends")} onClick={() => navigate("/mandi")} />
+      {/* QUICK SHORTCUT CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <QuickCard
+          title="My Farms"
+          subtitle="View field boundaries"
+          icon={<Tractor size={18} />}
+          onClick={() => navigate("/farms")}
+        />
+        <QuickCard
+          title="Active Crops"
+          subtitle="Harvest schedules"
+          icon={<Leaf size={18} />}
+          onClick={() => navigate("/crops")}
+        />
+        <QuickCard
+          title="Crop Planning"
+          subtitle="Rotation & seed advice"
+          icon={<Compass size={18} />}
+          onClick={() => navigate("/planning")}
+        />
+        <QuickCard
+          title="Tasks & Calendar"
+          subtitle="Spraying & irrigation"
+          icon={<Calendar size={18} />}
+          onClick={() => navigate("/activities")}
+        />
       </div>
     </div>
   );
 }
 
 /* STAT CARD */
-const Card = ({ title, value, icon }) => {
+const Card = ({ title, value, icon, accent = "text-emerald-400" }) => {
   const isLoading = value === "...";
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-xl p-3 sm:p-5 hover:border-green-500 transition flex flex-col justify-between">
-      <div className="flex items-center gap-2 sm:gap-3">
-        <div className={`text-green-400 shrink-0 ${isLoading ? "opacity-50" : ""}`}>
+    <div className="bg-[#131d2e] border border-white/10 rounded-2xl p-4 sm:p-5 hover:border-emerald-500/30 transition-all flex flex-col justify-between shadow-sm">
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-xs sm:text-sm text-slate-400 font-medium truncate">{title}</p>
+        <div className={`p-2 rounded-xl bg-white/5 ${accent} shrink-0`}>
           {icon}
         </div>
+      </div>
 
+      <div className="mt-3">
         {isLoading ? (
-          <div className="h-3 w-16 sm:w-24 bg-white/10 rounded animate-pulse" />
+          <div className="h-7 w-20 bg-white/10 rounded-lg animate-pulse" />
         ) : (
-          <p className="text-xs sm:text-sm text-gray-400 truncate">{title}</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight truncate">{value}</h2>
         )}
       </div>
-
-      {isLoading ? (
-        <div className="h-6 w-16 bg-white/10 rounded animate-pulse mt-2 sm:mt-3" />
-      ) : (
-        <h2 className="text-base sm:text-2xl mt-2 text-green-400 font-semibold truncate">{value}</h2>
-      )}
     </div>
   );
 };
 
-/* PROGRESS */
-const Progress = ({ label, value }) => (
-  <div className="mb-4">
-    <div className="flex justify-between text-xs text-gray-400">
-      <span>{label}</span>
-      <span>{value}%</span>
-    </div>
-
-    <div className="w-full h-2 bg-white/10 rounded-full mt-1">
-      <div
-        className="h-full bg-green-500 rounded-full transition-all duration-500"
-        style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
-      />
-    </div>
-  </div>
-);
-
-/* DYNAMIC ACTIVITY ITEM */
-const ActivityItem = ({ text, time, type }) => {
-  const isIncome = type === "income";
-  const isExpense = type === "expense";
-  const isHarvest = type === "harvest";
-
-  return (
-    <div className="flex justify-between items-start gap-2 text-xs border-b border-white/5 pb-2.5 last:border-0 last:pb-0">
-      <div className="flex items-start gap-2">
-        <span
-          className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${
-            isIncome
-              ? "bg-emerald-400"
-              : isExpense
-              ? "bg-rose-400"
-              : isHarvest
-              ? "bg-amber-400"
-              : "bg-blue-400"
-          }`}
-        />
-        <span className="text-slate-300 leading-relaxed">{text}</span>
-      </div>
-      <span className="text-slate-500 text-[11px] shrink-0 whitespace-nowrap">{time}</span>
-    </div>
-  );
-};
-
-/* QUICK NAV CARD */
-const QuickCard = ({ title, onClick }) => (
+/* QUICK SHORTCUT CARD */
+const QuickCard = ({ title, subtitle, icon, onClick }) => (
   <div
     onClick={onClick}
-    className="bg-white/5 border border-white/10 rounded-xl p-4 cursor-pointer hover:border-green-500 transition group"
+    className="bg-[#131d2e] border border-white/10 rounded-2xl p-4 hover:border-emerald-500/40 hover:bg-[#18253a] transition-all cursor-pointer flex items-center justify-between group shadow-sm"
   >
-    <p className="font-medium text-white group-hover:text-green-400 transition-colors">{title}</p>
-    <p className="text-xs text-gray-400 mt-1">Open →</p>
+    <div className="flex items-center gap-3 min-w-0">
+      <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+        {icon}
+      </div>
+      <div className="min-w-0">
+        <p className="font-semibold text-white text-xs sm:text-sm truncate">{title}</p>
+        {subtitle && <p className="text-[11px] text-slate-400 truncate mt-0.5">{subtitle}</p>}
+      </div>
+    </div>
+    <span className="text-slate-500 group-hover:text-emerald-400 group-hover:translate-x-0.5 transition-all text-xs font-bold shrink-0">→</span>
   </div>
 );

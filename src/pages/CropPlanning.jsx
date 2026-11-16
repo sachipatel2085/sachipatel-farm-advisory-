@@ -144,61 +144,61 @@ export default function CropPlanning() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
               <Compass size={20} />
             </div>
-            Crop Planning & Agronomic Calendar
+            Crop Planning & Sowing Guide
           </h1>
           <p className="text-xs sm:text-sm text-gray-400 mt-1">
-            Pre-sowing decisions, scientific crop rotation, input cost estimation, and seasonal windows.
+            Choose the right crop for your soil, plan crop rotation, and calculate seed and fertilizer costs.
           </p>
         </div>
       </div>
 
       {/* TABS NAVIGATION */}
-      <div className="flex items-center gap-2 border-b border-white/10 pb-2 overflow-x-auto">
+      <div className="flex items-center gap-2 border-b border-white/[0.08] pb-2 overflow-x-auto">
         <button
           onClick={() => setActiveTab("pre-sowing")}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition whitespace-nowrap ${
             activeTab === "pre-sowing"
-              ? "bg-emerald-600 text-white shadow-lg shadow-emerald-600/20"
+              ? "bg-emerald-600 text-white shadow-sm"
               : "text-gray-400 hover:text-white hover:bg-white/5"
           }`}
         >
-          <Compass size={16} /> Pre-Sowing Advisor
+          <Compass size={16} /> Which Crop to Plant?
         </button>
 
         <button
           onClick={() => setActiveTab("rotation")}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition whitespace-nowrap ${
             activeTab === "rotation"
-              ? "bg-emerald-600 text-white shadow-lg shadow-emerald-600/20"
+              ? "bg-emerald-600 text-white shadow-sm"
               : "text-gray-400 hover:text-white hover:bg-white/5"
           }`}
         >
-          <Repeat size={16} /> Crop Rotation Planner
+          <Repeat size={16} /> Crop Rotation
         </button>
 
         <button
           onClick={() => setActiveTab("cost-estimator")}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition whitespace-nowrap ${
             activeTab === "cost-estimator"
-              ? "bg-emerald-600 text-white shadow-lg shadow-emerald-600/20"
+              ? "bg-emerald-600 text-white shadow-sm"
               : "text-gray-400 hover:text-white hover:bg-white/5"
           }`}
         >
-          <Calculator size={16} /> Input Cost Estimator
+          <Calculator size={16} /> Cost Calculator
         </button>
 
         <button
           onClick={() => setActiveTab("calendar")}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition whitespace-nowrap ${
             activeTab === "calendar"
-              ? "bg-emerald-600 text-white shadow-lg shadow-emerald-600/20"
+              ? "bg-emerald-600 text-white shadow-sm"
               : "text-gray-400 hover:text-white hover:bg-white/5"
           }`}
         >
-          <CalendarDays size={16} /> Agronomic Sowing Calendar
+          <CalendarDays size={16} /> Sowing Calendar
         </button>
       </div>
 
@@ -208,10 +208,10 @@ export default function CropPlanning() {
       {activeTab === "pre-sowing" && (
         <div className="space-y-6">
           {/* Controls Bar */}
-          <div className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-4">
+          <div className="p-5 rounded-2xl bg-[#131d2e] border border-white/[0.08] space-y-4 shadow-md">
             <h3 className="font-semibold text-white text-base flex items-center gap-2">
               <Sliders size={18} className="text-emerald-400" />
-              Configure Farm Conditions
+              Your Farm Conditions
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 text-xs">

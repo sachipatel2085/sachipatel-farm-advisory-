@@ -172,12 +172,11 @@ const FarmDetails = () => {
         </div>
       )}
       {/* EXTRA INFO */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
-        <Stat title="Water Usage" value="1200L" />
-        <Stat title="Sunlight" value="Good" />
-        <div className="col-span-2 sm:col-span-1">
-          <Stat title="Status" value="Active" />
-        </div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
+        <Stat title="Total Area" value={`${farm.totalArea || "--"} Acres`} />
+        <Stat title="Soil Type" value={farm.soilType || "Not specified"} />
+        <Stat title="Irrigation Method" value={farm.irrigationType || "Rainfed"} />
+        <Stat title="Status" value="Active" green />
       </div>
       {/* CROPS */}
       <CropList farmId={farm?._id || id} />

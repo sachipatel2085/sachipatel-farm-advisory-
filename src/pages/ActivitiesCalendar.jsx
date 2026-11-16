@@ -197,45 +197,45 @@ export default function ActivitiesCalendar() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        <div className="p-4 rounded-xl border border-white/10 bg-white/5 flex flex-col justify-between">
+        <div className="p-4 rounded-xl border border-white/[0.08] bg-[#131d2e] flex flex-col justify-between shadow-sm">
           <div className="flex items-center justify-between text-gray-400 text-xs mb-1">
             <span>Total Tasks</span>
-            <CalendarIcon size={16} className="text-blue-400" />
+            <CalendarIcon size={16} className="text-emerald-400" />
           </div>
           <p className="text-2xl font-bold text-white">{stats.total}</p>
           <p className="text-[11px] text-gray-500 mt-1">Farm activities</p>
         </div>
 
-        <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-950/20 flex flex-col justify-between">
+        <div className="p-4 rounded-xl border border-amber-500/20 bg-[#131d2e] border-l-4 border-l-amber-500 flex flex-col justify-between shadow-sm">
           <div className="flex items-center justify-between text-amber-300 text-xs mb-1">
             <span>Due Today</span>
             <Clock size={16} className="text-amber-400" />
           </div>
           <p className="text-2xl font-bold text-amber-400">{stats.todayCount}</p>
-          <p className="text-[11px] text-amber-400/70 mt-1">Scheduled for today</p>
+          <p className="text-[11px] text-gray-400 mt-1">Scheduled for today</p>
         </div>
 
-        <div className="p-4 rounded-xl border border-rose-500/30 bg-rose-950/20 flex flex-col justify-between">
+        <div className="p-4 rounded-xl border border-rose-500/20 bg-[#131d2e] border-l-4 border-l-rose-500 flex flex-col justify-between shadow-sm">
           <div className="flex items-center justify-between text-rose-300 text-xs mb-1">
             <span>Overdue</span>
             <AlertTriangle size={16} className="text-rose-400" />
           </div>
           <p className="text-2xl font-bold text-rose-400">{stats.overdueCount}</p>
-          <p className="text-[11px] text-rose-400/70 mt-1">Immediate action needed</p>
+          <p className="text-[11px] text-gray-400 mt-1">Immediate action needed</p>
         </div>
 
-        <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-950/20 flex flex-col justify-between">
+        <div className="p-4 rounded-xl border border-emerald-500/20 bg-[#131d2e] border-l-4 border-l-emerald-500 flex flex-col justify-between shadow-sm">
           <div className="flex items-center justify-between text-emerald-300 text-xs mb-1">
             <span>Completed</span>
             <CheckCircle2 size={16} className="text-emerald-400" />
           </div>
           <p className="text-2xl font-bold text-emerald-400">{stats.completedCount}</p>
-          <p className="text-[11px] text-emerald-400/70 mt-1">Finished field jobs</p>
+          <p className="text-[11px] text-gray-400 mt-1">Finished field jobs</p>
         </div>
       </div>
 
       {/* Filter Toolbar */}
-      <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3 text-xs">
+      <div className="p-4 rounded-xl bg-[#131d2e] border border-white/[0.08] space-y-3 text-xs shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
           {/* Timeframe buttons */}
           <button

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../api/axios";
 import AddCropModal from "../components/AddCropModal";
 import { useNavigate } from "react-router-dom";
-import { Sprout, CalendarDays, Timer, Wheat } from "lucide-react";
+import { Sprout, CalendarDays, Timer, Wheat, Plus, SlidersHorizontal, MapPin } from "lucide-react";
 
 const CropList = ({ farmId }) => {
   const [crops, setCrops] = useState([]);
@@ -71,48 +71,48 @@ const CropList = ({ farmId }) => {
     Math.min(100, Math.round((age / duration) * 100));
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-xl p-3.5 sm:p-5 space-y-4 sm:space-y-5 text-slate-200">
+    <div className="bg-[#131d2e] border border-white/[0.08] rounded-xl p-3.5 sm:p-5 space-y-4 sm:space-y-5 text-slate-200 shadow-md">
       {/* HEADER */}
       <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3">
         <h2 className="flex items-center gap-2 text-base sm:text-lg font-semibold text-white">
-          <Wheat size={18} className="text-emerald-400 shrink-0" /> Crops
+          <Wheat size={18} className="text-emerald-400 shrink-0" /> My Crops
         </h2>
 
         <div className="flex gap-2 flex-wrap">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs sm:text-sm font-medium transition"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#1e2a3d] hover:bg-[#253754] text-gray-200 border border-white/10 rounded-lg text-xs sm:text-sm font-medium transition"
           >
-            ⚙️ Filters
+            <SlidersHorizontal size={14} /> Filters
           </button>
 
           <button
             onClick={() => setShowAdd(true)}
-            className="px-3.5 py-1.5 bg-green-500 hover:bg-green-600 rounded-lg text-xs sm:text-sm font-semibold transition shadow-lg shadow-green-500/20"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs sm:text-sm font-semibold transition shadow-md shadow-emerald-600/20 active:scale-[0.99]"
           >
-            + Add Crop
+            <Plus size={15} /> Add Crop
           </button>
         </div>
       </div>
 
       {/* FILTER PANEL */}
       {showFilters && (
-        <div className="bg-white/5 border border-white/10 p-3 sm:p-4 rounded-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+        <div className="bg-[#0b111e] border border-white/[0.08] p-3 sm:p-4 rounded-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10 text-xs sm:text-sm text-gray-200"
+            className="px-3 py-2 rounded-lg bg-[#131d2e] border border-white/10 text-xs sm:text-sm text-gray-200"
           >
             <option value="">All Status</option>
-            <option value="active">🌱 Active</option>
-            <option value="harvested">🌾 Harvested</option>
-            <option value="failed">❌ Failed</option>
+            <option value="active">Active</option>
+            <option value="harvested">Harvested</option>
+            <option value="failed">Failed</option>
           </select>
 
           <select
             value={seasonFilter}
             onChange={(e) => setSeasonFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10 text-xs sm:text-sm text-gray-200"
+            className="px-3 py-2 rounded-lg bg-[#131d2e] border border-white/10 text-xs sm:text-sm text-gray-200"
           >
             <option value="">All Seasons</option>
             {[...new Set(crops.map((c) => c.season))].map((s) => (
@@ -123,7 +123,7 @@ const CropList = ({ farmId }) => {
           <select
             value={cropFilter}
             onChange={(e) => setCropFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10 text-xs sm:text-sm text-gray-200"
+            className="px-3 py-2 rounded-lg bg-[#131d2e] border border-white/10 text-xs sm:text-sm text-gray-200"
           >
             <option value="">All Crops</option>
             {[...new Set(crops.map((c) => c.cropName))].map((c) => (
@@ -134,7 +134,7 @@ const CropList = ({ farmId }) => {
           <select
             value={sortType}
             onChange={(e) => setSortType(e.target.value)}
-            className="px-3 py-2 rounded-lg bg-slate-800 border border-white/10 text-xs sm:text-sm text-gray-200"
+            className="px-3 py-2 rounded-lg bg-[#131d2e] border border-white/10 text-xs sm:text-sm text-gray-200"
           >
             <option value="latest">Latest</option>
             <option value="oldest">Oldest</option>
@@ -148,7 +148,7 @@ const CropList = ({ farmId }) => {
           ? [...Array(6)].map((_, i) => (
               <div
                 key={i}
-                className="bg-white/5 border border-white/10 rounded-xl p-4 animate-pulse"
+                className="bg-[#0f172a] border border-white/[0.06] rounded-xl p-4 animate-pulse"
               >
                 {/* TITLE */}
                 <div className="h-4 w-2/3 bg-white/10 rounded mb-3"></div>
@@ -180,22 +180,22 @@ const CropList = ({ farmId }) => {
                 <div
                   key={crop._id}
                   onClick={() => navigate(`/crops/${crop.slug || crop._id}`)}
-                  className="bg-white/5 border border-white/10 rounded-xl p-4 hover:border-green-500 transition cursor-pointer"
+                  className="bg-[#0f172a] border border-white/[0.08] hover:border-emerald-500/40 rounded-xl p-4 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md"
                 >
                   {/* HEADER */}
                   <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-2 font-medium">
-                      <Sprout size={16} />
+                    <div className="flex items-center gap-2 font-medium text-white">
+                      <Sprout size={16} className="text-emerald-400" />
                       {crop.cropName}
                     </div>
 
                     <span
-                      className={`text-xs px-2 py-1 rounded-full ${
+                      className={`text-xs px-2.5 py-0.5 rounded-full capitalize font-medium ${
                         crop.status === "active"
-                          ? "bg-green-500/20 text-green-400"
+                          ? "bg-emerald-500/20 text-emerald-300"
                           : crop.status === "harvested"
-                            ? "bg-yellow-500/20 text-yellow-400"
-                            : "bg-red-500/20 text-red-400"
+                            ? "bg-amber-500/20 text-amber-300"
+                            : "bg-rose-500/20 text-rose-300"
                       }`}
                     >
                       {crop.status}
@@ -203,35 +203,36 @@ const CropList = ({ farmId }) => {
                   </div>
 
                   {/* FARM */}
-                  <p className="text-xs text-gray-400 mt-1">
-                    📍 {crop.farmName}
+                  <p className="text-xs text-gray-400 mt-1.5 flex items-center gap-1">
+                    <MapPin size={12} className="text-emerald-400 shrink-0" />
+                    <span>{crop.farmName}</span>
                   </p>
 
                   {/* PROGRESS */}
                   <div className="mt-3">
                     <div className="flex justify-between text-xs text-gray-400">
-                      <span>Growth</span>
-                      <span>{prog}%</span>
+                      <span>Growth Stage</span>
+                      <span className="text-emerald-400 font-medium">{prog}%</span>
                     </div>
 
-                    <div className="w-full h-2 bg-white/10 rounded-full mt-1">
+                    <div className="w-full h-1.5 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
                       <div
-                        className="h-full bg-green-500 rounded-full"
+                        className="h-full bg-emerald-500 rounded-full"
                         style={{ width: `${prog}%` }}
                       />
                     </div>
                   </div>
 
                   {/* STATS */}
-                  <div className="flex justify-between mt-3 text-xs text-gray-400">
+                  <div className="flex justify-between mt-3 pt-2.5 border-t border-white/[0.06] text-xs text-gray-400">
                     <div className="flex items-center gap-1">
-                      <CalendarDays size={12} />
-                      {crop.cropAgeDays} days
+                      <CalendarDays size={13} className="text-gray-500" />
+                      <span>{crop.cropAgeDays} days planted</span>
                     </div>
 
                     <div className="flex items-center gap-1">
-                      <Timer size={12} />
-                      {crop.expectedDurationDays} days
+                      <Timer size={13} className="text-gray-500" />
+                      <span>{crop.expectedDurationDays} total days</span>
                     </div>
                   </div>
                 </div>

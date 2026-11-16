@@ -125,16 +125,14 @@ export default function ActivityItem({
 
   return (
     <div
-      className={`rounded-xl border transition-all duration-200 p-3.5 sm:p-4 backdrop-blur-sm ${
+      className={`rounded-xl border transition-all duration-200 p-3.5 sm:p-4 ${
         isCompleted
-          ? "bg-white/[0.02] border-white/5 opacity-65"
+          ? "bg-[#0b111e] border-white/[0.04] opacity-60"
           : isOverdue
-          ? "bg-rose-950/20 border-rose-500/40 hover:border-rose-500/60 shadow-lg shadow-rose-950/20"
-          : hasWarning
-          ? "bg-amber-950/15 border-amber-500/30 hover:border-amber-500/50"
-          : isToday
-          ? "bg-amber-950/20 border-amber-500/30 hover:border-amber-500/50"
-          : "bg-white/5 border-white/10 hover:border-white/20"
+          ? "bg-[#131d2e] border-white/[0.08] border-l-4 border-l-rose-500 shadow-md"
+          : hasWarning || isToday
+          ? "bg-[#131d2e] border-white/[0.08] border-l-4 border-l-amber-500 shadow-md"
+          : "bg-[#131d2e] border border-white/[0.08] hover:border-emerald-500/40 shadow-sm"
       }`}
     >
       <div className="flex items-start gap-3">

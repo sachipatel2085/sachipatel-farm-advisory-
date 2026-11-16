@@ -132,24 +132,23 @@ export default function DiseaseScanner() {
     <div className="space-y-6 text-white w-full max-w-5xl mx-auto min-w-0 py-2 sm:py-4">
       {/* HERO SECTION */}
       <div className="text-center mb-5 sm:mb-6">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs sm:text-sm mb-3">
-          <Database size={15} />
-          Universal Plant Health Diagnostic Suite
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs sm:text-sm mb-3 font-medium">
+          <Stethoscope size={15} />
+          Plant Doctor & Crop Health
         </div>
 
-        <h1 className="text-2xl sm:text-4xl font-bold tracking-tight">
+        <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-white">
           Plant Pests and Disease Detection
         </h1>
 
-        <p className="text-gray-400 mt-2 sm:mt-3 text-xs sm:text-sm max-w-2xl mx-auto">
-          Instant vision-based leaf inspection and verified agronomic care.
-          Compare visual symptoms, confirm diagnosis, and get exact chemical & organic medicine dosages.
+        <p className="text-gray-400 mt-2 text-xs sm:text-sm max-w-2xl mx-auto">
+          Scan your infected crop leaf to identify diseases, compare symptoms, and get exact medicine spray mixtures per 15L water pump.
         </p>
       </div>
 
       {/* 3-STEP USER WORKFLOW GUIDE: Take Picture -> See Diagnosis -> Get Medicine */}
-      <div className="bg-white/5 border border-white/10 rounded-2xl p-3.5 sm:p-4 shadow-xl">
-        <div className="flex items-center justify-between max-w-3xl mx-auto text-xs sm:text-sm">
+      <div className="bg-[#131d2e] border border-white/[0.08] rounded-2xl p-4 shadow-lg">
+        <div className="flex items-center justify-between max-w-2xl mx-auto text-xs sm:text-sm">
           {/* Step 1: Take Picture */}
           <div
             onClick={() => {
@@ -160,14 +159,14 @@ export default function DiseaseScanner() {
                 setSelectedCandidate(null);
               }
             }}
-            className="flex items-center gap-2 cursor-pointer group"
+            className="flex items-center gap-2.5 cursor-pointer group"
             title="Step 1: Take Picture"
           >
             <div
               className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all ${
                 step === "camera" || step === "preview"
-                  ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30 ring-2 ring-emerald-500/40"
-                  : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                  ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
+                  : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
               }`}
             >
               1
@@ -182,7 +181,7 @@ export default function DiseaseScanner() {
               >
                 Take Picture
               </p>
-              <p className="text-[10px] text-gray-500 hidden sm:block">Camera or Gallery</p>
+              <p className="text-[11px] text-gray-500 hidden sm:block">Camera or Gallery</p>
             </div>
           </div>
 
@@ -195,18 +194,18 @@ export default function DiseaseScanner() {
                 setStep("confirm");
               }
             }}
-            className={`flex items-center gap-2 ${
-              result ? "cursor-pointer" : "cursor-default opacity-60"
+            className={`flex items-center gap-2.5 ${
+              result ? "cursor-pointer" : "cursor-default opacity-50"
             }`}
             title="Step 2: Confirm Diagnosis"
           >
             <div
               className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all ${
                 step === "confirm"
-                  ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30 ring-2 ring-emerald-500/40"
+                  ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
                   : step === "diagnosis"
-                  ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                  : "bg-white/10 text-gray-400"
+                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                  : "bg-white/5 text-gray-400 border border-white/10"
               }`}
             >
               2
@@ -217,9 +216,9 @@ export default function DiseaseScanner() {
                   step === "confirm" ? "text-emerald-400" : "text-gray-300"
                 }`}
               >
-                Confirm Diagnosis
+                Confirm Symptoms
               </p>
-              <p className="text-[10px] text-gray-500 hidden sm:block">Compare Symptoms</p>
+              <p className="text-[11px] text-gray-500 hidden sm:block">Compare Symptoms</p>
             </div>
           </div>
 
@@ -227,16 +226,16 @@ export default function DiseaseScanner() {
 
           {/* Step 3: Get Medicine */}
           <div
-            className={`flex items-center gap-2 ${
-              step === "diagnosis" ? "opacity-100" : "opacity-60"
+            className={`flex items-center gap-2.5 ${
+              step === "diagnosis" ? "opacity-100" : "opacity-50"
             }`}
             title="Step 3: Get Medicine & Treatment"
           >
             <div
               className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all ${
                 step === "diagnosis"
-                  ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30 ring-2 ring-emerald-500/40"
-                  : "bg-white/10 text-gray-400"
+                  ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
+                  : "bg-white/5 text-gray-400 border border-white/10"
               }`}
             >
               3
@@ -249,20 +248,9 @@ export default function DiseaseScanner() {
               >
                 Get Medicine
               </p>
-              <p className="text-[10px] text-gray-500 hidden sm:block">Spray Dosages</p>
+              <p className="text-[11px] text-gray-500 hidden sm:block">Spray & Dosages</p>
             </div>
           </div>
-        </div>
-
-        {/* GUIDELINE BANNER */}
-        <div className="text-center mt-2.5 pt-2 border-t border-white/5 text-[11px] sm:text-xs text-gray-400 flex items-center justify-center gap-1.5 flex-wrap">
-          <Sparkles size={13} className="text-emerald-400 shrink-0" />
-          <span>Recommended Flow:</span>
-          <span className="text-emerald-300 font-medium">Take picture</span>
-          <span>→</span>
-          <span className="text-teal-300 font-medium">See diagnosis</span>
-          <span>→</span>
-          <span className="text-emerald-400 font-medium">Get medicine</span>
         </div>
       </div>
 
@@ -290,33 +278,44 @@ export default function DiseaseScanner() {
       )}
 
       {/* MAIN CONTAINER */}
-      <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden">
+      <div className="bg-[#131d2e] border border-white/[0.08] rounded-2xl shadow-xl overflow-hidden">
         {/* ============================================================== */}
         {/* STEP 1: CAMERA CAPTURE / UPLOAD                                */}
         {/* ============================================================== */}
         {step === "camera" && (
-          <div className="p-6 lg:p-10">
-            <div className="max-w-2xl mx-auto space-y-6">
+          <div className="p-5 sm:p-8 lg:p-10">
+            <div className="max-w-xl mx-auto space-y-6">
               <div className="text-center space-y-2">
-                <h2 className="text-2xl sm:text-3xl font-semibold">
-                  Take Picture of Crop Leaf
+                <h2 className="text-xl sm:text-2xl font-bold text-white">
+                  Take a Clear Photo of the Leaf
                 </h2>
                 <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">
-                  Capture or upload a clear, focused photo of the infected crop leaf or pest damage.
-                  Our vision diagnostics will identify probable diseases for you to confirm.
+                  Hold your camera steady over the damaged or spotted crop leaf, or select a photo from your gallery.
                 </p>
               </div>
 
               {/* PHOTOGRAPHY RECOMMENDATIONS */}
-              <div className="bg-black/25 border border-white/10 rounded-2xl p-4 sm:p-5">
-                <h3 className="font-semibold text-xs sm:text-sm mb-3 text-emerald-400 flex items-center gap-1.5">
-                  <ShieldCheck size={16} /> Photography Recommendations
+              <div className="bg-[#0b111e] border border-white/[0.06] rounded-xl p-4">
+                <h3 className="font-semibold text-xs sm:text-sm mb-2.5 text-emerald-400 flex items-center gap-1.5">
+                  <ShieldCheck size={16} /> Tips for Accurate Detection
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-300">
-                  <div>✔ Capture under natural daylight</div>
-                  <div>✔ Center infected spots in frame</div>
-                  <div>✔ Avoid blurry or distant leaves</div>
-                  <div>✔ Include both upper and lower leaf sides</div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                    <span>Good natural daylight</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                    <span>Center the infected spot</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                    <span>Keep camera in focus</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                    <span>Check top & underside of leaf</span>
+                  </div>
                 </div>
               </div>
 
@@ -324,15 +323,15 @@ export default function DiseaseScanner() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                 <button
                   onClick={() => setCameraOpen(true)}
-                  className="flex items-center justify-center gap-2 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 transition font-semibold text-sm shadow-lg shadow-emerald-600/20"
+                  className="flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 transition font-semibold text-sm text-white shadow-md shadow-emerald-600/20 active:scale-[0.99]"
                 >
                   <ScanLine size={18} />
                   Open Camera
                 </button>
 
-                <label className="flex items-center justify-center gap-2 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 transition cursor-pointer border border-white/10 font-semibold text-sm">
+                <label className="flex items-center justify-center gap-2 py-3 rounded-xl bg-[#1e2c45] hover:bg-[#253754] text-gray-200 transition cursor-pointer border border-white/10 font-medium text-sm active:scale-[0.99]">
                   <Upload size={18} />
-                  Upload from Gallery
+                  Choose from Gallery
                   <input
                     type="file"
                     accept="image/*"
@@ -360,16 +359,16 @@ export default function DiseaseScanner() {
 
         {/* LOADING STATE */}
         {loading && (
-          <div className="py-20 flex flex-col items-center">
+          <div className="py-16 sm:py-20 flex flex-col items-center">
             <div className="relative">
-              <div className="w-16 h-16 rounded-full border-4 border-emerald-500/20"></div>
+              <div className="w-14 h-14 rounded-full border-4 border-emerald-500/20"></div>
               <div className="absolute inset-0 rounded-full border-4 border-emerald-500 border-t-transparent animate-spin"></div>
             </div>
-            <h3 className="mt-6 text-base font-semibold">
-              Scanning Leaf & Identifying Probable Diseases
+            <h3 className="mt-5 text-sm sm:text-base font-semibold text-white">
+              Checking Leaf Symptoms & Finding Probable Diseases...
             </h3>
-            <p className="text-gray-400 text-xs mt-2 text-center max-w-md">
-              Analyzing pixel colors and visual symptoms against our authoritative plant disease database...
+            <p className="text-gray-400 text-xs mt-1.5 text-center max-w-sm px-4">
+              Comparing visual patterns against our verified agricultural disease database.
             </p>
           </div>
         )}
@@ -382,29 +381,28 @@ export default function DiseaseScanner() {
             {/* STEP HEADER */}
             <div className="text-center max-w-2xl mx-auto space-y-2">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold border border-emerald-500/20">
-                <Stethoscope size={14} /> Step 2: Confirm Diagnosis
+                <Stethoscope size={14} /> Step 2: Confirm Symptoms
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold">
-                Probable Diseases Detected
+              <h2 className="text-xl sm:text-2xl font-bold text-white">
+                Which disease looks like your crop?
               </h2>
               <p className="text-xs sm:text-sm text-gray-300">
-                Compare the visual symptoms below with your infected plant leaf,
-                then click <strong>&quot;See Diagnosis&quot;</strong> on the disease that matches your crop.
+                Compare the symptoms below with your plant leaf, then click <strong>&quot;See Diagnosis & Medicine&quot;</strong> on the matching disease.
               </p>
             </div>
 
             {/* SCANNED LEAF PREVIEW BAR */}
             {image && (
-              <div className="flex items-center gap-4 p-3 rounded-2xl bg-black/30 border border-white/10 max-w-2xl mx-auto">
+              <div className="flex items-center gap-3.5 p-3 rounded-xl bg-[#0b111e] border border-white/[0.08] max-w-2xl mx-auto">
                 <img
                   src={typeof image === "string" ? image : URL.createObjectURL(image)}
                   alt="Scanned crop"
-                  className="w-16 h-16 rounded-xl object-cover border border-white/10 shrink-0"
+                  className="w-14 h-14 rounded-lg object-cover border border-white/10 shrink-0"
                 />
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-semibold text-white">Your Scanned Leaf</p>
                   <p className="text-[11px] text-gray-400 truncate">
-                    Vision analysis detected {candidatesList.length} candidate diagnoses.
+                    Found {candidatesList.length} possible matching conditions.
                   </p>
                 </div>
                 <button
@@ -436,10 +434,10 @@ export default function DiseaseScanner() {
                 return (
                   <div
                     key={candidate.disease || idx}
-                    className={`rounded-2xl p-5 border transition-all flex flex-col justify-between space-y-4 ${
+                    className={`rounded-xl p-5 border transition-all flex flex-col justify-between space-y-4 ${
                       isTopMatch
-                        ? "bg-emerald-950/20 border-emerald-500/40 shadow-lg shadow-emerald-950/40"
-                        : "bg-white/[0.03] border-white/10 hover:border-white/20"
+                        ? "bg-[#18263f] border-emerald-500/50 shadow-md shadow-emerald-950/40"
+                        : "bg-[#0f172a] border-white/[0.08] hover:border-white/20"
                     }`}
                   >
                     <div className="space-y-3">
@@ -448,7 +446,7 @@ export default function DiseaseScanner() {
                         <div>
                           {isTopMatch && (
                             <span className="inline-block text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 mb-1.5">
-                              Highest Match
+                              Most Likely Match
                             </span>
                           )}
                           <h3 className="text-lg font-bold text-white tracking-wide">
@@ -463,7 +461,7 @@ export default function DiseaseScanner() {
 
                         {/* CONFIDENCE BADGE */}
                         <div className="text-right shrink-0">
-                          <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">
+                          <span className="text-xs font-semibold text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">
                             {candidate.confidence}% Match
                           </span>
                         </div>
@@ -496,9 +494,9 @@ export default function DiseaseScanner() {
                     {/* SELECT & SEE DIAGNOSIS BUTTON */}
                     <button
                       onClick={() => handleSelectDiagnosis(candidate)}
-                      className={`w-full py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 shadow-md ${
+                      className={`w-full py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 shadow-sm ${
                         isTopMatch
-                          ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/25"
+                          ? "bg-emerald-600 hover:bg-emerald-500 text-white"
                           : "bg-white/10 hover:bg-white/15 text-white border border-white/10"
                       }`}
                     >
@@ -521,7 +519,7 @@ export default function DiseaseScanner() {
                 className="text-xs text-gray-400 hover:text-white inline-flex items-center gap-1.5 transition"
               >
                 <ArrowLeft size={13} />
-                <span>Not matching any symptoms? Scan a different leaf</span>
+                <span>Symptoms don&apos;t match? Take another photo</span>
               </button>
             </div>
           </div>

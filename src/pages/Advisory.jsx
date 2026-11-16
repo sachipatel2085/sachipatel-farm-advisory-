@@ -144,20 +144,20 @@ export default function Advisory() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-              <Sparkles size={20} />
+            <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <Leaf size={20} />
             </div>
-            Farm Advisory & Care
+            Crop Care & Advisory
           </h1>
           <p className="text-xs sm:text-sm text-gray-400 mt-1">
-            Personalized crop management, real-time protection alerts, and agronomic guidance.
+            Timely protection alerts, spray recommendations, and fertilizer guidance for your crops.
           </p>
         </div>
 
         <button
           onClick={fetchAdvisories}
           disabled={loading}
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs sm:text-sm text-gray-300 hover:text-white transition disabled:opacity-50"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#1e2a3d] hover:bg-[#253754] border border-white/10 text-xs sm:text-sm text-gray-200 transition disabled:opacity-50"
         >
           <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
           Refresh Advisory
@@ -180,40 +180,40 @@ export default function Advisory() {
 
       {/* STATS OVERVIEW CARDS */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-        <div className="p-4 rounded-xl border border-white/10 bg-white/5 flex flex-col justify-between">
+        <div className="p-4 rounded-xl border border-white/[0.08] bg-[#131d2e] flex flex-col justify-between shadow-sm">
           <div className="flex items-center justify-between text-gray-400 text-xs mb-2">
             <span>Active Crops</span>
-            <Sprout size={16} className="text-green-400" />
+            <Sprout size={16} className="text-emerald-400" />
           </div>
           <p className="text-2xl font-bold text-white">
             {loading ? "..." : stats.totalCrops || crops.length}
           </p>
-          <p className="text-[11px] text-gray-500 mt-1">Under observation</p>
+          <p className="text-[11px] text-gray-500 mt-1">Under care</p>
         </div>
 
-        <div className="p-4 rounded-xl border border-white/10 bg-white/5 flex flex-col justify-between">
+        <div className="p-4 rounded-xl border border-white/[0.08] bg-[#131d2e] flex flex-col justify-between shadow-sm">
           <div className="flex items-center justify-between text-gray-400 text-xs mb-2">
-            <span>Total Guidance</span>
-            <Sparkles size={16} className="text-emerald-400" />
+            <span>Total Advisories</span>
+            <Leaf size={16} className="text-emerald-400" />
           </div>
           <p className="text-2xl font-bold text-emerald-400">
             {loading ? "..." : stats.totalAdvisories || 0}
           </p>
-          <p className="text-[11px] text-gray-500 mt-1">Generated actions</p>
+          <p className="text-[11px] text-gray-500 mt-1">Available guidance</p>
         </div>
 
-        <div className="p-4 rounded-xl border border-rose-500/30 bg-rose-950/20 flex flex-col justify-between">
+        <div className="p-4 rounded-xl border border-rose-500/20 bg-[#131d2e] border-l-4 border-l-rose-500 flex flex-col justify-between shadow-sm">
           <div className="flex items-center justify-between text-rose-300 text-xs mb-2">
-            <span>Critical Alerts</span>
+            <span>Urgent Alerts</span>
             <AlertTriangle size={16} className="text-rose-400" />
           </div>
           <p className="text-2xl font-bold text-rose-400">
             {loading ? "..." : stats.urgentAlerts || 0}
           </p>
-          <p className="text-[11px] text-rose-400/70 mt-1">Requires immediate attention</p>
+          <p className="text-[11px] text-gray-400 mt-1">Immediate spray / action</p>
         </div>
 
-        <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-950/20 flex flex-col justify-between">
+        <div className="p-4 rounded-xl border border-amber-500/20 bg-[#131d2e] border-l-4 border-l-amber-500 flex flex-col justify-between shadow-sm">
           <div className="flex items-center justify-between text-amber-300 text-xs mb-2">
             <span>Action Needed</span>
             <Clock size={16} className="text-amber-400" />
@@ -221,23 +221,23 @@ export default function Advisory() {
           <p className="text-2xl font-bold text-amber-400">
             {loading ? "..." : stats.pendingActions || 0}
           </p>
-          <p className="text-[11px] text-amber-400/70 mt-1">This week's schedule</p>
+          <p className="text-[11px] text-gray-400 mt-1">This week&apos;s schedule</p>
         </div>
 
-        <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-950/20 flex flex-col justify-between col-span-2 sm:col-span-1">
+        <div className="p-4 rounded-xl border border-emerald-500/20 bg-[#131d2e] border-l-4 border-l-emerald-500 flex flex-col justify-between col-span-2 sm:col-span-1 shadow-sm">
           <div className="flex items-center justify-between text-emerald-300 text-xs mb-2">
-            <span>Good Practices</span>
+            <span>Best Practices</span>
             <ShieldCheck size={16} className="text-emerald-400" />
           </div>
           <p className="text-2xl font-bold text-emerald-400">
             {loading ? "..." : stats.goodPractices || 0}
           </p>
-          <p className="text-[11px] text-emerald-400/70 mt-1">Recommended practices</p>
+          <p className="text-[11px] text-gray-400 mt-1">Recommended practices</p>
         </div>
       </div>
 
       {/* FILTER & CONTROLS TOOLBAR */}
-      <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+      <div className="p-4 rounded-xl bg-[#131d2e] border border-white/[0.08] space-y-3 shadow-sm">
         <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
           {/* Search bar */}
           <div className="relative flex-1">
@@ -414,7 +414,7 @@ export default function Advisory() {
             filteredCrops.map((crop) => (
               <div
                 key={crop.cropId}
-                className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6 space-y-5"
+                className="rounded-2xl border border-white/[0.08] bg-[#131d2e] p-5 sm:p-6 space-y-5 shadow-lg"
               >
                 {/* Crop Header Summary */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/10 pb-4">

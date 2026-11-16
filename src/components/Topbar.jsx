@@ -14,6 +14,7 @@ import {
   ThermometerSnowflake,
   CloudRain,
   Sun,
+  Moon,
   Wind,
   Shield,
   LayoutDashboard,
@@ -21,12 +22,14 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import { useAuth } from "../context/Authcontext";
+import { useTheme } from "../context/ThemeContext";
 import weatherService from "../services/weatherService";
 
 export default function Topbar({ isMobile, setMobileOpen, mobileOpen }) {
   const navigate = useNavigate();
   const { user, isAdmin, logout, token } = useAuth();
   const { language, setLanguage, t, languages } = useLanguage();
+  const { resolvedTheme, toggleTheme } = useTheme();
 
   const [alerts, setAlerts] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -104,13 +107,27 @@ export default function Topbar({ isMobile, setMobileOpen, mobileOpen }) {
           </button>
         )}
 
-        <h2 className="text-sm sm:text-base md:text-xl font-semibold text-white truncate max-w-[140px] sm:max-w-none">
-          {t("dashboard.title", "Farm Command Center")}
+        <h2 className="text-sm sm:text-base md:text-xl font-bold text-white tracking-tight truncate max-w-[140px] sm:max-w-none">
+          {t("dashboard.title", "My Farm Dashboard")}
         </h2>
       </div>
 
       {/* Right */}
       <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+        {/* Light / Dark Mode Toggle */}
+        <button
+          onClick={toggleTheme}
+          className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition cursor-pointer"
+          aria-label={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
+          title={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
+        >
+          {resolvedTheme === "dark" ? (
+            <Sun size={16} className="text-amber-400 hover:rotate-45 transition-transform" />
+          ) : (
+            <Moon size={16} className="text-indigo-500 hover:-rotate-12 transition-transform" />
+          )}
+        </button>
+
         {/* Language Selector Dropdown */}
         <div className="relative" ref={langRef}>
           <button

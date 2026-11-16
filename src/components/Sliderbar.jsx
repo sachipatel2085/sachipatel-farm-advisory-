@@ -80,8 +80,9 @@ export default function Sidebar({
           </button>
 
           {!collapsed || isMobile ? (
-            <span className="ml-3 text-lg font-semibold whitespace-nowrap">
-              SmartFarm
+            <span className="ml-3 text-base font-bold text-white flex items-center gap-2 tracking-wide">
+              <Sprout size={19} className="text-emerald-400" />
+              <span>SmartFarm</span>
             </span>
           ) : null}
         </div>
@@ -182,10 +183,10 @@ const NavItem = ({ to, icon, label, active, collapsed, onClick }) => (
     className={`
       flex items-center gap-3
       px-3 py-2.5
-      rounded-lg
-      transition-all duration-200
+      rounded-xl
+      transition-all duration-150
 
-      ${active ? "bg-green-500 text-white" : "text-gray-300 hover:bg-white/10"}
+      ${active ? "bg-emerald-600 text-white font-semibold shadow-sm" : "text-slate-300 hover:bg-[#16233b] hover:text-white font-medium"}
 
       ${collapsed ? "justify-center" : ""}
     `}
@@ -193,7 +194,7 @@ const NavItem = ({ to, icon, label, active, collapsed, onClick }) => (
     <span className="flex-shrink-0">{icon}</span>
 
     {!collapsed && (
-      <span className="text-sm font-medium whitespace-nowrap truncate">{label}</span>
+      <span className="text-sm whitespace-nowrap truncate">{label}</span>
     )}
   </Link>
 );
