@@ -287,17 +287,28 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5 mt-5 sm:mt-6">
         <div
           onClick={() => navigate("/scanner")}
-          className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5 hover:border-green-500 transition cursor-pointer group"
+          className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5 hover:border-emerald-500 transition cursor-pointer group"
         >
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            <Camera className="text-green-400 group-hover:scale-110 transition-transform shrink-0" size={20} />
-            <p className="text-xs sm:text-sm text-gray-400">{t("dashboard.plantDoctor", "AI Plant Doctor")}</p>
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <Camera className="text-emerald-400 group-hover:scale-110 transition-transform shrink-0" size={20} />
+              <p className="text-xs sm:text-sm text-gray-400 font-medium">Vision Diagnostics</p>
+            </div>
+            <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
+              3 Steps Guide
+            </span>
           </div>
 
-          <h2 className="text-lg sm:text-2xl mt-2 text-green-400 font-semibold">
-            Scan Crop for Disease
+          <h2 className="text-lg sm:text-2xl mt-2 text-emerald-400 font-semibold">
+            Plant Pests and Disease Detection
           </h2>
-          <p className="text-xs text-slate-400 mt-1">{t("dashboard.scanDescription", "Instant vision-based leaf disease detection & remedy")}</p>
+          <div className="flex items-center gap-1.5 mt-2 text-xs text-slate-300 flex-wrap">
+            <span className="font-medium text-emerald-300">Take Picture</span>
+            <span className="text-slate-500">→</span>
+            <span className="font-medium text-teal-300">See Diagnosis</span>
+            <span className="text-slate-500">→</span>
+            <span className="font-medium text-emerald-400">Get Medicine</span>
+          </div>
         </div>
 
         <div

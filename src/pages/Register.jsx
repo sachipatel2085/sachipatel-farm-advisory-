@@ -41,7 +41,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-slate-200 px-4">
+    <div className="min-h-[calc(100dvh-5rem)] py-6 flex items-center justify-center bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-slate-200 px-3 sm:px-4">
       <form
         onSubmit={submit}
         className="w-full max-w-lg bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 sm:p-8 space-y-4 shadow-lg"

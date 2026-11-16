@@ -139,16 +139,20 @@ const FarmDetails = () => {
       {/* ANALYTICS */}
       {analytics && (
         <div className="space-y-3 sm:space-y-4">
-          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
             <Stat title="Total Crops" value={analytics.totalCrops} />
             <Stat title="Farm Health" value={`${analytics.avgHealth}%`} />
-            <Stat title="Total Yield" value={`${analytics.totalYield} kg`} />
+            <div className="col-span-2 sm:col-span-1">
+              <Stat title="Total Yield" value={`${analytics.totalYield} kg`} />
+            </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
             <Stat title="Income" value={`₹${analytics.totalIncome}`} green />
             <Stat title="Expense" value={`₹${analytics.totalExpense}`} red />
-            <Stat title="Profit" value={`₹${analytics.profit}`} green />
+            <div className="col-span-2 sm:col-span-1">
+              <Stat title="Profit" value={`₹${analytics.profit}`} green />
+            </div>
           </div>
 
           {/* PROGRESS */}
@@ -168,10 +172,12 @@ const FarmDetails = () => {
         </div>
       )}
       {/* EXTRA INFO */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
         <Stat title="Water Usage" value="1200L" />
         <Stat title="Sunlight" value="Good" />
-        <Stat title="Status" value="Active" />
+        <div className="col-span-2 sm:col-span-1">
+          <Stat title="Status" value="Active" />
+        </div>
       </div>
       {/* CROPS */}
       <CropList farmId={farm?._id || id} />

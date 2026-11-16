@@ -261,7 +261,7 @@ export default function AdminGeneralTasks({ onTasksUpdated }) {
         </div>
 
         {/* Search */}
-        <div className="relative min-w-[200px]">
+        <div className="relative w-full md:w-64 shrink-0">
           <Search size={14} className="absolute left-3 top-2.5 text-gray-400" />
           <input
             type="text"

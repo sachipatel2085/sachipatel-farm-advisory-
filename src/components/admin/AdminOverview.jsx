@@ -200,7 +200,8 @@ export default function AdminOverview({
           )}
         </div>
 
-        <div className="overflow-x-auto no-scrollbar">
+        {/* DESKTOP TABLE VIEW */}
+        <div className="hidden md:block overflow-x-auto no-scrollbar">
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-white/10 text-gray-400">
@@ -264,6 +265,47 @@ export default function AdminOverview({
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* MOBILE CARD VIEW */}
+        <div className="block md:hidden space-y-2.5">
+          {recentUsers.length === 0 ? (
+            <p className="py-6 text-center text-gray-400 text-xs">
+              No recent farmer signups recorded yet.
+            </p>
+          ) : (
+            recentUsers.map((u) => (
+              <div
+                key={u._id}
+                className="p-3 rounded-xl bg-white/[0.03] border border-white/5 space-y-2"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold text-xs uppercase shrink-0">
+                      {u.name?.charAt(0) || "U"}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-medium text-white text-xs truncate">{u.name}</p>
+                      <p className="text-[10px] text-gray-400 truncate">{u.phone || u.email || "—"}</p>
+                    </div>
+                  </div>
+                  <RoleBadge role={u.role} />
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] text-gray-400 pt-1 border-t border-white/5">
+                  <span>🏡 {u.farmCount} | 🌾 {u.cropCount}</span>
+                  {onSelectUserToEdit && (
+                    <button
+                      onClick={() => onSelectUserToEdit(u)}
+                      className="px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] text-gray-300 transition"
+                    >
+                      Change Role
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

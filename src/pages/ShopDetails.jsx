@@ -140,43 +140,58 @@ export default function ShopDetails() {
             ledger.map((l, i) => (
               <div
                 key={i}
-                className="grid sm:grid-cols-6 gap-2 items-center bg-white/5 p-3 rounded-lg hover:bg-white/10"
+                className="grid grid-cols-2 sm:grid-cols-6 gap-2 sm:gap-2 items-center bg-white/5 p-3 rounded-xl hover:bg-white/10 transition border border-white/5"
               >
-                <span className="text-xs text-gray-400">
-                  {new Date(l.date).toLocaleDateString()}
-                </span>
+                <div className="sm:block">
+                  <span className="sm:hidden text-[10px] text-gray-500 block uppercase font-mono">Date</span>
+                  <span className="text-xs text-gray-300">
+                    {new Date(l.date).toLocaleDateString()}
+                  </span>
+                </div>
 
-                <span>{l.note}</span>
+                <div className="col-span-2 sm:col-span-1">
+                  <span className="sm:hidden text-[10px] text-gray-500 block uppercase font-mono">Note</span>
+                  <span className="text-xs sm:text-sm font-medium text-white">{l.note}</span>
+                </div>
 
-                <span className="text-red-400">
-                  {l.type === "debit" ? `₹${l.amount}` : "-"}
-                </span>
+                <div>
+                  <span className="sm:hidden text-[10px] text-gray-500 block uppercase font-mono">Debit</span>
+                  <span className="text-xs sm:text-sm text-red-400 font-semibold">
+                    {l.type === "debit" ? `₹${l.amount}` : "—"}
+                  </span>
+                </div>
 
-                <span className="text-green-400">
-                  {l.type === "credit" ? `₹${l.amount}` : "-"}
-                </span>
+                <div>
+                  <span className="sm:hidden text-[10px] text-gray-500 block uppercase font-mono">Credit</span>
+                  <span className="text-xs sm:text-sm text-green-400 font-semibold">
+                    {l.type === "credit" ? `₹${l.amount}` : "—"}
+                  </span>
+                </div>
 
-                <span
-                  className={`font-semibold ${
-                    l.balance >= 0 ? "text-red-400" : "text-green-400"
-                  }`}
-                >
-                  {l.balance >= 0
-                    ? `-₹${l.balance}`
-                    : `+₹${Math.abs(l.balance)}`}
-                </span>
+                <div>
+                  <span className="sm:hidden text-[10px] text-gray-500 block uppercase font-mono">Balance</span>
+                  <span
+                    className={`text-xs sm:text-sm font-semibold ${
+                      l.balance >= 0 ? "text-red-400" : "text-green-400"
+                    }`}
+                  >
+                    {l.balance >= 0
+                      ? `-₹${l.balance}`
+                      : `+₹${Math.abs(l.balance)}`}
+                  </span>
+                </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 justify-end sm:justify-start col-span-2 sm:col-span-1 pt-1 sm:pt-0 border-t border-white/5 sm:border-t-0">
                   <button
                     onClick={() => setEditItem(l)}
-                    className="px-2 py-1 text-xs bg-blue-500 hover:bg-blue-600 rounded"
+                    className="px-2.5 py-1 text-xs bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 rounded-lg transition"
                   >
                     Edit
                   </button>
 
                   <button
                     onClick={() => handleDelete(l)}
-                    className="px-2 py-1 text-xs bg-red-500 hover:bg-red-600 rounded"
+                    className="px-2.5 py-1 text-xs bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 rounded-lg transition"
                   >
                     Delete
                   </button>

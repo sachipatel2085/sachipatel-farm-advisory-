@@ -53,7 +53,7 @@ export default function FinancePage() {
   return (
     <div className="space-y-4 sm:space-y-6 text-slate-200 w-full min-w-0">
       {/* ===== SUMMARY ===== */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         {loading ? (
           [1, 2, 3].map((i) => (
             <div

@@ -245,7 +245,7 @@ const CropDetails = () => {
           </div>
 
           {/* FINANCE */}
-          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
             <div className="p-2.5 sm:p-4 rounded-xl border border-white/10 bg-white/5 text-center sm:text-left">
               <p className="text-[11px] sm:text-xs text-gray-400 mb-0.5 truncate">Total Income</p>
               {loading ? (
@@ -266,7 +266,7 @@ const CropDetails = () => {
                 </p>
               )}
             </div>
-            <div className="p-2.5 sm:p-4 rounded-xl border border-white/10 bg-white/5 text-center sm:text-left">
+            <div className="col-span-2 sm:col-span-1 p-2.5 sm:p-4 rounded-xl border border-white/10 bg-white/5 text-center sm:text-left">
               <p className="text-[11px] sm:text-xs text-gray-400 mb-0.5 truncate">Net Balance</p>
               {loading ? (
                 <div className="h-4 sm:h-5 w-16 bg-white/10 rounded animate-pulse mx-auto sm:mx-0" />

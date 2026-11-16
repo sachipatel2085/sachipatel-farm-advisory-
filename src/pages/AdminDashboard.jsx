@@ -11,6 +11,7 @@ import AdminOverview from "../components/admin/AdminOverview";
 import AdminUsers from "../components/admin/AdminUsers";
 import AdminAdvisoryRules from "../components/admin/AdminAdvisoryRules";
 import AdminGeneralTasks from "../components/admin/AdminGeneralTasks";
+import AdminDiseases from "../components/admin/AdminDiseases";
 import AdminCommunityModeration from "../components/admin/AdminCommunityModeration";
 import AdminDiagnostics from "../components/admin/AdminDiagnostics";
 import ClaimAdminModal from "../components/admin/ClaimAdminModal";
@@ -67,6 +68,7 @@ export default function AdminDashboard() {
     users: "User Management",
     advisory: "Advisory Rules Engine",
     "general-tasks": "General Crop Tasks",
+    diseases: "Plant Disease Advisories",
     community: "Community Moderation",
     telemetry: "System Diagnostics",
   };
@@ -154,6 +156,11 @@ export default function AdminDashboard() {
           {/* VIEW 3B: GENERAL CROP TASKS */}
           {activeTab === "general-tasks" && (
             <AdminGeneralTasks onTasksUpdated={fetchOverview} />
+          )}
+
+          {/* VIEW 3C: PLANT DISEASE ADVISORIES */}
+          {activeTab === "diseases" && (
+            <AdminDiseases onDiseasesUpdated={fetchOverview} />
           )}
 
           {/* VIEW 4: COMMUNITY MODERATION */}

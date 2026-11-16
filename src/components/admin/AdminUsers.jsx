@@ -131,7 +131,8 @@ export default function AdminUsers({
           </p>
         </div>
 
-        <div className="overflow-x-auto no-scrollbar">
+        {/* DESKTOP TABLE VIEW (MD+ SCREENS) */}
+        <div className="hidden md:block overflow-x-auto no-scrollbar">
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-white/10 text-gray-400">
@@ -214,6 +215,64 @@ export default function AdminUsers({
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* MOBILE CARD VIEW (Phone screens < 768px) */}
+        <div className="block md:hidden space-y-3">
+          {usersLoading ? (
+            [...Array(4)].map((_, i) => (
+              <div key={i} className="h-24 bg-white/5 rounded-xl border border-white/5 animate-pulse" />
+            ))
+          ) : usersData?.users?.length === 0 ? (
+            <div className="py-8 text-center text-gray-400 text-xs">
+              No users match the search and filter criteria.
+            </div>
+          ) : (
+            usersData?.users?.map((u) => (
+              <div
+                key={u._id}
+                className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2.5"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold text-xs uppercase shrink-0">
+                      {u.name?.charAt(0) || "U"}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-white text-xs truncate">{u.name}</p>
+                      <p className="text-[10px] text-gray-400 truncate">{u.phone || u.email || "—"}</p>
+                    </div>
+                  </div>
+                  <RoleBadge role={u.role} />
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] text-gray-400 pt-1 border-t border-white/5">
+                  <span>🏡 {u.farmCount} farms • 🌾 {u.cropCount} crops</span>
+                  <span className="truncate max-w-[120px]">{u.location?.district || u.location?.village || "—"}</span>
+                </div>
+
+                <div className="flex items-center justify-end gap-2 pt-1 border-t border-white/5">
+                  <button
+                    onClick={() => {
+                      setSelectedUserToEdit(u);
+                      setEditRoleValue(u.role);
+                    }}
+                    className="px-3 py-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 text-xs font-medium transition"
+                  >
+                    Edit Role
+                  </button>
+                  <button
+                    onClick={() => setSelectedUserToDelete(u)}
+                    disabled={u.role === "admin"}
+                    className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs transition disabled:opacity-30"
+                    title="Delete User"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
         {/* Pagination Controls */}

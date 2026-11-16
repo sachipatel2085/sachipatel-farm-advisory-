@@ -5,6 +5,7 @@ import {
   Users,
   Sparkles,
   Calendar,
+  Activity,
   MessageSquare,
   Cpu,
   ArrowLeft,
@@ -46,6 +47,12 @@ export default function AdminSidebar({
       label: "General Crop Tasks",
       icon: <Calendar size={18} />,
       badge: kpis.totalGeneralTasks > 0 ? kpis.totalGeneralTasks : null,
+    },
+    {
+      id: "diseases",
+      label: "Plant Disease Advisories",
+      icon: <Activity size={18} />,
+      badge: kpis.totalDiseaseAdvisories > 0 ? kpis.totalDiseaseAdvisories : null,
     },
     {
       id: "community",

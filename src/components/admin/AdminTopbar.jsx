@@ -21,7 +21,7 @@ export default function AdminTopbar({
           <Menu size={20} />
         </button>
 
-        <h2 className="text-sm sm:text-base md:text-lg font-bold text-white capitalize flex items-center gap-2">
+        <h2 className="text-sm sm:text-base md:text-lg font-bold text-white capitalize flex items-center gap-2 truncate max-w-[140px] sm:max-w-none">
           {currentTitle}
         </h2>
       </div>

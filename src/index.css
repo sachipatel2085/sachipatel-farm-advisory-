@@ -1,6 +1,68 @@
 @import "tailwindcss";
 
-/* add in global.css */
+/* Modern Mobile & Responsive Reset */
+html {
+  height: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100%;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-wrap: anywhere;
+  -webkit-overflow-scrolling: touch;
+  background-color: #0b1329;
+}
+
+#root {
+  min-height: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Media never overflows its parent container */
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Minimum touch target size on coarse pointer devices (WCAG 2.5.5 / 2.5.8) */
+@media (pointer: coarse) {
+  button,
+  a[role="button"],
+  input:not([type="checkbox"], [type="radio"]),
+  select,
+  textarea {
+    min-height: 40px;
+    touch-action: manipulation;
+  }
+}
+
+/* Scrollbar Utility for smooth horizontal scrolling pills/tabs on mobile */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Safe area insets for mobile notches and bottom home indicators */
+.safe-top {
+  padding-top: max(0.75rem, env(safe-area-inset-top, 0px));
+}
+
+.safe-bottom {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+}
+
+/* Helper Buttons */
 .btn {
   background: #374151;
   padding: 8px 16px;

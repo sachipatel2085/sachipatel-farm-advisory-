@@ -145,9 +145,9 @@ export default function ActivityCalendarView({
       </div>
 
       {/* 7 Days Grid */}
-      <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden p-3 sm:p-4">
+      <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden p-1.5 sm:p-4">
         {/* Day Name Header */}
-        <div className="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-gray-400 pb-2 mb-1 border-b border-white/10">
+        <div className="grid grid-cols-7 gap-1 text-center text-[10px] sm:text-xs font-semibold text-gray-400 pb-2 mb-1 border-b border-white/10">
           <span>Sun</span>
           <span>Mon</span>
           <span>Tue</span>
@@ -172,7 +172,7 @@ export default function ActivityCalendarView({
                   setSelectedDayStr(cell.dateStr);
                   if (onSelectDate) onSelectDate(cell.dateStr);
                 }}
-                className={`min-h-[75px] sm:min-h-[95px] p-1.5 sm:p-2 rounded-xl border flex flex-col justify-between cursor-pointer transition-all ${
+                className={`min-h-[55px] sm:min-h-[95px] p-1 sm:p-2 rounded-xl border flex flex-col justify-between cursor-pointer transition-all ${
                   isSelected
                     ? "border-emerald-500 bg-emerald-500/10 shadow-lg shadow-emerald-500/10"
                     : isToday

@@ -104,7 +104,7 @@ export default function Topbar({ isMobile, setMobileOpen, mobileOpen }) {
           </button>
         )}
 
-        <h2 className="text-sm sm:text-base md:text-xl font-semibold text-white truncate max-w-[150px] xs:max-w-[220px] sm:max-w-none">
+        <h2 className="text-sm sm:text-base md:text-xl font-semibold text-white truncate max-w-[140px] sm:max-w-none">
           {t("dashboard.title", "Farm Command Center")}
         </h2>
       </div>
